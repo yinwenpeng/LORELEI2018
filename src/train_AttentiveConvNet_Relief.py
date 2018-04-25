@@ -134,9 +134,7 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=5
 #     diversify_reg= Diversify_Reg(U_a.T)+Diversify_Reg(conv_W_into_matrix)
 
     cost=loss#+Div_reg*diversify_reg#+L2_weight*L2_reg
-
     grads = T.grad(cost, params)    # create a list of gradients for all model parameters
-
     accumulator=[]
     for para_i in params:
         eps_p=np.zeros_like(para_i.get_value(borrow=True),dtype=theano.config.floatX)
