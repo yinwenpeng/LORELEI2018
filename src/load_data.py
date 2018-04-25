@@ -1,5 +1,8 @@
 import codecs
 import numpy as np
+import string
+from string import punctuation
+from nltk.stem import WordNetLemmatizer
 
 def load_word2vec():
     word2vec = {}
@@ -50,6 +53,15 @@ def transfer_wordlist_2_idlist_with_maxlen(token_list, vocab_map, maxlen):
         mask_list=mask_list[:maxlen]
     return idlist, mask_list
 
+
+def clean_text_to_wordlist(text):
+    #remove punctuation
+    clean_text = ''.join(c for c in text if c not in punctuation)
+    wordlist =  clean_text.split()
+    wordnet_lemmatizer = WordNetLemmatizer()
+    return [wordnet_lemmatizer.lemmatize(word) for word in wordlist]
+
+
 def load_reliefweb_dataset(maxlen=40):
     root="/save/wenpeng/datasets/LORELEI/"
     files=['ReliefWeb.train.balanced.txt', 'ReliefWeb.test.balanced.txt', 'ReliefWeb.test.balanced.txt']
@@ -67,7 +79,7 @@ def load_reliefweb_dataset(maxlen=40):
         for line in readfile:
             parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
             label=int(parts[0])  # keep label be 0 or 1
-            sentence_wordlist=parts[2].split()
+            sentence_wordlist=clean_text_to_wordlist(parts[2].strip())
 
             labels.append(label)
             sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
