@@ -2262,12 +2262,18 @@ def f1_two_col_array(vec1, vec2):
     return 2*recall*precision/(1e-8+recall+precision)
 
 def average_f1_two_array_by_col(arr1, arr2):
+    #pred, gold
     col_size = arr1.shape[1]
-    f1 = 0.0
+    mean_f1 = 0.0
+    weight_f1=0.0
+    sum_gold = 0
     for i in range(col_size):
         f1_i = f1_two_col_array(arr1[:,i], arr2[:,i])
-        f1+=f1_i
-    return f1/col_size
+        class_size = sum(arr2[:,i])
+        sum_gold+=class_size
+        weight_f1+=f1_i*class_size
+        mean_f1+=f1_i
+    return mean_f1/col_size, weight_f1/sum_gold
 
 
 def elementwise_is_zero(mat):

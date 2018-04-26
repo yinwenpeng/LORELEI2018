@@ -134,7 +134,8 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
 
 
     # max_acc_dev=0.0
-    max_acc_test=0.0
+    max_meanf1_test=0.0
+    max_weightf1_test=0.0
     train_indices = range(train_size)
 
     while epoch < n_epochs:
@@ -173,10 +174,12 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
                 all_gold_labels = np.concatenate(all_gold_labels)
 
 
-                test_accuracy=average_f1_two_array_by_col(all_pred_labels, all_gold_labels)
-                if test_accuracy > max_acc_test:
-                    max_acc_test=test_accuracy
-                print '\t\t\t\t\t\t\t\tcurrent testbacc:', test_accuracy, '\t\tmax_acc_test:', max_acc_test
+                test_mean_f1, test_weight_f1 =average_f1_two_array_by_col(all_pred_labels, all_gold_labels)
+                if test_weight_f1 > max_weightf1_test:
+                    max_weightf1_test=test_weight_f1
+                if test_mean_f1 > max_meanf1_test:
+                    max_meanf1_test=test_mean_f1
+                print '\t\t\t\t\t\t\t\tcurrent f1s:', test_mean_f1, test_weight_f1, '\t\tmax_f1:', max_meanf1_test, max_weightf1_test
 
 
         print 'Epoch ', epoch, 'uses ', (time.time()-mid_time)/60.0, 'min'
