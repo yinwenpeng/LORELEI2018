@@ -51,10 +51,10 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     vocab_size=  len(word2id)+1 # add one zero pad index
 
     rand_values=rng.normal(0.0, 0.01, (vocab_size, emb_size))   #generate a matrix by Gaussian distribution
-    # rand_values[0]=np.array(np.zeros(emb_size),dtype=theano.config.floatX)
-    # id2word = {y:x for x,y in word2id.iteritems()}
-    # word2vec=load_word2vec()
-    # rand_values=load_word2vec_to_init(rand_values, id2word, word2vec)
+    rand_values[0]=np.array(np.zeros(emb_size),dtype=theano.config.floatX)
+    id2word = {y:x for x,y in word2id.iteritems()}
+    word2vec=load_word2vec()
+    rand_values=load_word2vec_to_init(rand_values, id2word, word2vec)
     embeddings=theano.shared(value=np.array(rand_values,dtype=theano.config.floatX), borrow=True)   #wrap up the python variable "rand_values" into theano variable
 
 
