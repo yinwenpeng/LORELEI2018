@@ -91,3 +91,68 @@ def load_reliefweb_dataset(maxlen=40):
         print '\t\t\t size:', len(labels)
     print 'dataset loaded over, totally ', len(word2id), 'words'
     return all_sentences, all_masks, all_labels, word2id
+
+
+def load_BBN_dataset(maxlen=40):
+    root="/save/wenpeng/datasets/LORELEI/SF-BBN-Mark-split/"
+    files=['train.mark.12classes.txt', 'dev.mark.12classes.txt', 'test.mark.12classes.txt']
+    word2id={}  # store vocabulary, each word map to a id
+    all_sentences=[]
+    all_masks=[]
+    all_labels=[]
+    for i in range(len(files)):
+        print 'loading file:', root+files[i], '...'
+
+        sents=[]
+        sents_masks=[]
+        labels=[]
+        readfile=codecs.open(root+files[i], 'r', 'utf-8')
+        for line in readfile:
+            parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+            label=int(parts[0])  # keep label be 0 or 1
+            sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+
+            labels.append(label)
+            sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
+            sents.append(sent_idlist)
+            sents_masks.append(sent_masklist)
+        all_sentences.append(sents)
+        all_masks.append(sents_masks)
+        all_labels.append(labels)
+        print '\t\t\t size:', len(labels)
+    print 'dataset loaded over, totally ', len(word2id), 'words'
+    return all_sentences, all_masks, all_labels, word2id
+
+
+
+def load_BBN_multi_labels_dataset(maxlen=40):
+    root="/save/wenpeng/datasets/LORELEI/SF-BBN-Mark-split/"
+    files=['train.mark.multi.12labels.txt', 'dev.mark.multi.12labels.txt', 'test.mark.multi.12labels.txt']
+    word2id={}  # store vocabulary, each word map to a id
+    all_sentences=[]
+    all_masks=[]
+    all_labels=[]
+    for i in range(len(files)):
+        print 'loading file:', root+files[i], '...'
+
+        sents=[]
+        sents_masks=[]
+        labels=[]
+        readfile=codecs.open(root+files[i], 'r', 'utf-8')
+        for line in readfile:
+            parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+            label=[0]*12
+            for label_id in parts[0].strip().split():  # keep label be 0 or 1
+                label[int(label_id)] =1
+            sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+
+            labels.append(label)
+            sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
+            sents.append(sent_idlist)
+            sents_masks.append(sent_masklist)
+        all_sentences.append(sents)
+        all_masks.append(sents_masks)
+        all_labels.append(labels)
+        print '\t\t\t size:', len(labels)
+    print 'dataset loaded over, totally ', len(word2id), 'words'
+    return all_sentences, all_masks, all_labels, word2id

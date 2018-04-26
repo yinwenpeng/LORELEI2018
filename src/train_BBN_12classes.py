@@ -17,12 +17,12 @@ from theano.tensor.signal import downsample
 from random import shuffle
 from theano.tensor.nnet.bn import batch_normalization
 
-from load_data import  load_word2vec,load_word2vec_to_init, load_reliefweb_dataset
+from load_data import  load_word2vec,load_word2vec_to_init, load_BBN_dataset
 from common_functions import store_model_to_file,Conv_with_Mask, create_conv_para, L2norm_paraList, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, Gradient_Cost_Para, GRU_Batch_Tensor_Input_with_Mask, create_LSTM_para
 
 
 
-def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=50, filter_size=[3,5], maxSentLen=300, hidden_size=[300,300]):
+def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=10, filter_size=[3,5], maxSentLen=40, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
@@ -32,16 +32,16 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=5
     rng = np.random.RandomState(seed)    #random seed, control the model generates the same results
     srng = T.shared_randomstreams.RandomStreams(rng.randint(seed))
 
-    all_sentences, all_masks, all_labels, word2id=load_reliefweb_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
+    all_sentences, all_masks, all_labels, word2id=load_BBN_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
     train_sents=np.asarray(all_sentences[0], dtype='int32')
     train_masks=np.asarray(all_masks[0], dtype=theano.config.floatX)
     train_labels=np.asarray(all_labels[0], dtype='int32')
     train_size=len(train_labels)
 
-    # dev_sents=all_sentences[1]
-    # dev_masks=all_masks[1]
-    # dev_labels=all_labels[1]
-    # dev_size=len(dev_labels)
+    dev_sents=np.asarray(all_sentences[1], dtype='int32')
+    dev_masks=np.asarray(all_masks[1], dtype=theano.config.floatX)
+    dev_labels=np.asarray(all_labels[1], dtype='int32')
+    dev_size=len(dev_labels)
 
     test_sents=np.asarray(all_sentences[2], dtype='int32')
     test_masks=np.asarray(all_masks[2], dtype=theano.config.floatX)
@@ -88,10 +88,10 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=5
     LR_input = T.concatenate([sent_embeddings,sent_embeddings2], axis=1)
     LR_input_size = hidden_size[0]*2
     #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative
-    U_a = create_ensemble_para(rng, 8, LR_input_size) # the weight matrix hidden_size*2
-    LR_b = theano.shared(value=np.zeros((8,),dtype=theano.config.floatX),name='LR_b', borrow=True)  #bias for each target class
+    U_a = create_ensemble_para(rng, 12, LR_input_size) # the weight matrix hidden_size*2
+    LR_b = theano.shared(value=np.zeros((12,),dtype=theano.config.floatX),name='LR_b', borrow=True)  #bias for each target class
     LR_para=[U_a, LR_b]
-    layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=8, W=U_a, b=LR_b) #basically it is a multiplication between weight matrix and input feature vector
+    layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=12, W=U_a, b=LR_b) #basically it is a multiplication between weight matrix and input feature vector
     loss=layer_LR.negative_log_likelihood(labels)  #for classification task, we usually used negative log likelihood as loss, the lower the better.
 
     params = [embeddings]+NN_para+LR_para   # put all model parameters together

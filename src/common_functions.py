@@ -2252,6 +2252,24 @@ def Adam(cost, params, lr=0.001, b1=0.1, b2=0.001, e=1e-8):
         updates.append((p, p_t))
     updates.append((i, i_t))
     return updates
+
+def f1_two_col_array(vec1, vec2):
+    overlap = sum(vec1*vec2)
+    pos1 = sum(vec1)
+    pos2 = sum(vec2)
+    recall = overlap*1.0/(1e-8+pos1)
+    precision = overlap * 1.0/ (1e-8+pos2)
+    return 2*recall*precision/(1e-8+recall+precision)
+
+def average_f1_two_array_by_col(arr1, arr2):
+    col_size = arr1.shape[1]
+    f1 = 0.0
+    for i in range(col_size):
+        f1_i = f1_two_col_array(arr1[:,i], arr2[:,i])
+        f1+=f1_i
+    return f1/col_size
+
+
 def elementwise_is_zero(mat):
     #if 0 to be 1.0, otherwise 0.0
     a = T.where( mat < 0, 1, mat)
