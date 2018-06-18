@@ -4,6 +4,7 @@ import codecs
 '''
 set(['crimeviolence', 'med', 'search', 'food', 'out-of-domain', 'infra', 'water', 'shelter',
 'regimechange', 'evac', 'terrorism', 'utils'])
+    {u'med': 3, u'search': 4, u'food': 1, u'utils': 6, u'infra': 2, u'water': 7, u'shelter': 5, u'evac': 0}
 '''
 def split_bbn():
 
@@ -19,8 +20,8 @@ def split_bbn():
             topic2filename[topic] = id2filename.get(i)
         readfile.close()
     #split raw dataset
-    type2label_id = {'crimeviolence':0, 'med':1, 'search':2, 'food':3, 'out-of-domain':4, 'infra':5, 'water':6, 'shelter':7,
-    'regimechange':8, 'evac':9, 'terrorism':10, 'utils':11}
+    type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2, 'water':7, 'shelter':5,
+    'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
     tree = ET.parse(root_path+'LEIDOS_HADR_SF.xml')
     root = tree.getroot()
     write_train = codecs.open(root_path+'train.mark.12classes.txt', 'w', 'utf-8')
@@ -65,8 +66,10 @@ def split_bbn_multi_label():
             topic2filename[topic] = id2filename.get(i)
         readfile.close()
     #split raw dataset
-    type2label_id = {'crimeviolence':0, 'med':1, 'search':2, 'food':3, 'out-of-domain':4, 'infra':5, 'water':6, 'shelter':7,
-    'regimechange':8, 'evac':9, 'terrorism':10, 'utils':11}
+    # type2label_id = {'crimeviolence':0, 'med':1, 'search':2, 'food':3, 'out-of-domain':4, 'infra':5, 'water':6, 'shelter':7,
+    # 'regimechange':8, 'evac':9, 'terrorism':10, 'utils':11}
+    type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2, 'water':7, 'shelter':5,
+    'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
     tree = ET.parse(root_path+'LEIDOS_HADR_SF.xml')
     root = tree.getroot()
     write_train = codecs.open(root_path+'train.mark.multi.12labels.txt', 'w', 'utf-8')
@@ -94,7 +97,23 @@ def split_bbn_multi_label():
     write_test.close()
     print 'all done'
 
+def generate_full_BBN_multi():
+    root_path = '/save/wenpeng/datasets/LORELEI/SF-BBN-Mark-split/'
+    files = ['train.mark.multi.12labels.txt','dev.mark.multi.12labels.txt','test.mark.multi.12labels.txt']
+    writefile = codecs.open(root_path+'full_BBN_multi.txt', 'w', 'utf-8')
+    co=0
+    for fil in files:
+        readfile = codecs.open(root_path+fil, 'r', 'utf-8')
+        for line in readfile:
+            writefile.write(line.strip()+'\n')
+            co+=1
+        readfile.close()
+    writefile.close()
+    print 'generate_full_BBN_multi over, size:', co
+
+
 
 if __name__ == '__main__':
     # split_bbn()
-    split_bbn_multi_label()
+    # split_bbn_multi_label()
+    generate_full_BBN_multi()

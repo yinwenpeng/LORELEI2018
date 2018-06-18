@@ -17,11 +17,14 @@ from theano.tensor.signal import downsample
 from random import shuffle
 from theano.tensor.nnet.bn import batch_normalization
 
-from load_data import  load_word2vec,load_word2vec_to_init, load_BBN_multi_labels_dataset
-from common_functions import store_model_to_file,Attentive_Conv_for_Pair, create_conv_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, Gradient_Cost_Para, GRU_Batch_Tensor_Input_with_Mask, create_LSTM_para
+from load_data import  load_word2vec,load_word2vec_to_init, load_reliefweb_E30_dataset
+from common_functions import store_model_to_file,Conv_with_Mask, Attentive_Conv_for_Pair,create_conv_para, create_HiddenLayer_para, average_f1_two_array_by_col, create_ensemble_para, Gradient_Cost_Para
 
+'''
+0.0632352433714 0.0703
+'''
 
-def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=10, filter_size=[3,5,7], maxSentLen=40, hidden_size=[300,300]):
+def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=50, filter_size=[3,5,7], maxSentLen=300, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
@@ -31,16 +34,16 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     rng = np.random.RandomState(seed)    #random seed, control the model generates the same results
     srng = T.shared_randomstreams.RandomStreams(rng.randint(seed))
 
-    all_sentences, all_masks, all_labels, word2id=load_BBN_multi_labels_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
+    all_sentences, all_masks, all_labels, word2id=load_reliefweb_E30_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
     train_sents=np.asarray(all_sentences[0], dtype='int32')
     train_masks=np.asarray(all_masks[0], dtype=theano.config.floatX)
     train_labels=np.asarray(all_labels[0], dtype='int32')
     train_size=len(train_labels)
 
-    dev_sents=np.asarray(all_sentences[1], dtype='int32')
-    dev_masks=np.asarray(all_masks[1], dtype=theano.config.floatX)
-    dev_labels=np.asarray(all_labels[1], dtype='int32')
-    dev_size=len(dev_labels)
+    # dev_sents=all_sentences[1]
+    # dev_masks=all_masks[1]
+    # dev_labels=all_labels[1]
+    # dev_size=len(dev_labels)
 
     test_sents=np.asarray(all_sentences[2], dtype='int32')
     test_masks=np.asarray(all_masks[2], dtype=theano.config.floatX)
@@ -48,10 +51,9 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     test_size=len(test_labels)
 
     vocab_size=  len(word2id)+1 # add one zero pad index
-    print 'vocab_size:', vocab_size
-    exit(0)
 
     rand_values=rng.normal(0.0, 0.01, (vocab_size, emb_size))   #generate a matrix by Gaussian distribution
+    #here, we leave code for loading word2vec to initialize words
     rand_values[0]=np.array(np.zeros(emb_size),dtype=theano.config.floatX)
     id2word = {y:x for x,y in word2id.iteritems()}
     word2vec=load_word2vec()
@@ -62,13 +64,14 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     #now, start to build the input form of the model
     sents_id_matrix=T.imatrix('sents_id_matrix')
     sents_mask=T.fmatrix('sents_mask')
-    labels=T.imatrix('labels')  #batch*12
+    labels=T.imatrix('labels')
     ######################
     # BUILD ACTUAL MODEL #
     ######################
     print '... building the model'
 
     common_input=embeddings[sents_id_matrix.flatten()].reshape((batch_size,maxSentLen, emb_size)).dimshuffle(0,2,1) #the input format can be adapted into CNN or GRU or LSTM
+
     conv_W, conv_b=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[0]))
     conv_W_context, conv_b_context=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, 1))
     # conv_W2, conv_b2=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[1]))
@@ -122,17 +125,13 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     LR_input = sent_embeddings#T.concatenate([sent_embeddings,sent_embeddings2], axis=1)
     LR_input_size = hidden_size[0]
     #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative
-    U_a = create_ensemble_para(rng, 12, LR_input_size) # the weight matrix hidden_size*2
-    LR_b = theano.shared(value=np.zeros((12,),dtype=theano.config.floatX),name='LR_b', borrow=True)  #bias for each target class
+    U_a = create_ensemble_para(rng, 8, LR_input_size) # the weight matrix hidden_size*2
+    LR_b = theano.shared(value=np.zeros((8,),dtype=theano.config.floatX),name='LR_b', borrow=True)  #bias for each target class
     LR_para=[U_a, LR_b]
-    layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=12, W=U_a, b=LR_b) #basically it is a multiplication between weight matrix and input feature vector
+    layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=8, W=U_a, b=LR_b) #basically it is a multiplication between weight matrix and input feature vector
     score_matrix = T.nnet.sigmoid(layer_LR.before_softmax)  #batch * 12
     prob_pos = T.where( labels < 1, 1.0-score_matrix, score_matrix)
-
     loss = -T.mean(T.log(prob_pos))
-
-
-    # loss=layer_LR.negative_log_likelihood(labels)  #for classification task, we usually used negative log likelihood as loss, the lower the better.
 
     params = [embeddings]+NN_para+LR_para   # put all model parameters together
     cost=loss#+Div_reg*diversify_reg#+L2_weight*L2_reg
@@ -142,6 +141,8 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     testing
     '''
     binarize_prob = T.where( score_matrix > 0.5, 1, 0)
+
+
 
     #train_model = theano.function([sents_id_matrix, sents_mask, labels], cost, updates=updates, on_unused_input='ignore')
     train_model = theano.function([sents_id_matrix, sents_mask, labels], cost, updates=updates, allow_input_downcast=True, on_unused_input='ignore')
@@ -168,7 +169,6 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     test_batch_start=list(np.arange(n_test_batches)*batch_size)+[test_size-batch_size]
 
 
-    # max_acc_dev=0.0
     max_meanf1_test=0.0
     max_weightf1_test=0.0
     train_indices = range(train_size)
@@ -183,16 +183,30 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
             iter = (epoch - 1) * n_train_batches + iter_accu +1
             iter_accu+=1
             train_id_batch = train_indices[batch_id:batch_id+batch_size]
-
             cost_i+= train_model(
                                 train_sents[train_id_batch],
                                 train_masks[train_id_batch],
                                 train_labels[train_id_batch])
+                                # train_labels[train_id_batch])
 
             #after each 1000 batches, we test the performance of the model on all test data
             if  iter%20==0:
                 print 'Epoch ', epoch, 'iter '+str(iter)+' average cost: '+str(cost_i/iter), 'uses ', (time.time()-past_time)/60.0, 'min'
                 past_time = time.time()
+
+                # error_sum=0.0
+                # for test_batch_id in test_batch_start: # for each test batch
+                #     error_i, pred_labels=test_model(
+                #                 test_sents[test_batch_id:test_batch_id+batch_size],
+                #                 test_masks[test_batch_id:test_batch_id+batch_size])
+                #     pred_labels=list(pred_labels)
+                #     error_sum+=error_i
+                #
+                # test_accuracy=1.0-error_sum/(len(test_batch_start))
+                # if test_accuracy > max_acc_test:
+                #     max_acc_test=test_accuracy
+                # print '\t\t\t\t\t\t\t\tcurrent testbacc:', test_accuracy, '\t\tmax_acc_test:', max_acc_test
+
 
                 error_sum=0.0
                 all_pred_labels = []
@@ -202,6 +216,15 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
                                 test_sents[test_batch_id:test_batch_id+batch_size],
                                 test_masks[test_batch_id:test_batch_id+batch_size])
                     gold_labels = test_labels[test_batch_id:test_batch_id+batch_size]
+
+                    # gold_labels_matrix = []
+                    # for lab in gold_labels:
+                    #     vec = [0]*8
+                    #     vec[lab]=1
+                    #     gold_labels_matrix.append(vec)
+                    #
+                    # gold_labels_matrix = np.asarray(gold_labels_matrix, dtype='int32')
+                    # gold_labels = test_labels[test_batch_id:test_batch_id+batch_size]
 
                     all_pred_labels.append(pred_labels)
                     all_gold_labels.append(gold_labels)

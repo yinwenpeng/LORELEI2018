@@ -17,11 +17,12 @@ from theano.tensor.signal import downsample
 from random import shuffle
 from theano.tensor.nnet.bn import batch_normalization
 
-from load_data import  load_word2vec,load_word2vec_to_init, load_BBN_multi_labels_dataset
-from common_functions import store_model_to_file,Attentive_Conv_for_Pair, create_conv_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, Gradient_Cost_Para, GRU_Batch_Tensor_Input_with_Mask, create_LSTM_para
+from load_data import  load_word2vec,load_word2vec_to_init, load_BBN_8_labels_testOn_E30_dataset
+from common_functions import store_model_to_file,Conv_with_Mask, create_conv_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, Gradient_Cost_Para, GRU_Batch_Tensor_Input_with_Mask, create_LSTM_para
 
 
-def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=10, filter_size=[3,5,7], maxSentLen=40, hidden_size=[300,300]):
+
+def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=10, filter_size=[3,5], maxSentLen=40, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
@@ -31,7 +32,7 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     rng = np.random.RandomState(seed)    #random seed, control the model generates the same results
     srng = T.shared_randomstreams.RandomStreams(rng.randint(seed))
 
-    all_sentences, all_masks, all_labels, word2id=load_BBN_multi_labels_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
+    all_sentences, all_masks, all_labels, word2id=load_BBN_8_labels_testOn_E30_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
     train_sents=np.asarray(all_sentences[0], dtype='int32')
     train_masks=np.asarray(all_masks[0], dtype=theano.config.floatX)
     train_labels=np.asarray(all_labels[0], dtype='int32')
@@ -48,8 +49,6 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     test_size=len(test_labels)
 
     vocab_size=  len(word2id)+1 # add one zero pad index
-    print 'vocab_size:', vocab_size
-    exit(0)
 
     rand_values=rng.normal(0.0, 0.01, (vocab_size, emb_size))   #generate a matrix by Gaussian distribution
     rand_values[0]=np.array(np.zeros(emb_size),dtype=theano.config.floatX)
@@ -69,58 +68,24 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     print '... building the model'
 
     common_input=embeddings[sents_id_matrix.flatten()].reshape((batch_size,maxSentLen, emb_size)).dimshuffle(0,2,1) #the input format can be adapted into CNN or GRU or LSTM
-    conv_W, conv_b=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[0]))
-    conv_W_context, conv_b_context=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, 1))
-    # conv_W2, conv_b2=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[1]))
-    # conv_W_context2, conv_b_context2=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, 1))
-    # conv_W3, conv_b3=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[2]))
-    # conv_W_context3, conv_b_context3=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, 1))
-    NN_para = [conv_W, conv_b, conv_W_context]#,conv_W2, conv_b2,conv_W_context2]#,   conv_W3, conv_b3,conv_W_context3]
 
-    attentive_conv_layer = Attentive_Conv_for_Pair(rng,
-            origin_input_tensor3=common_input,
-            origin_input_tensor3_r = common_input,
-            input_tensor3=common_input,
-            input_tensor3_r = common_input,
+    conv_W, conv_b=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[0]))
+    conv_W2, conv_b2=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[1]))
+    NN_para = [conv_W, conv_b, conv_W2, conv_b2]
+    conv_model = Conv_with_Mask(rng, input_tensor3=common_input,
              mask_matrix = sents_mask,
-             mask_matrix_r = sents_mask,
              image_shape=(batch_size, 1, emb_size, maxSentLen),
-             image_shape_r = (batch_size, 1, emb_size, maxSentLen),
-             filter_shape=(hidden_size[0], 1, emb_size, filter_size[0]),
-             filter_shape_context=(hidden_size[0], 1,emb_size, 1),
-             W=conv_W, b=conv_b,
-             W_context=conv_W_context, b_context=conv_b_context)
-    sent_embeddings = attentive_conv_layer.attentive_maxpool_vec_l
-    # attentive_conv_layer2 = Attentive_Conv_for_Pair(rng,
-    #         origin_input_tensor3=common_input,
-    #         origin_input_tensor3_r = common_input,
-    #         input_tensor3=common_input,
-    #         input_tensor3_r = common_input,
-    #          mask_matrix = sents_mask,
-    #          mask_matrix_r = sents_mask,
-    #          image_shape=(batch_size, 1, emb_size, maxSentLen),
-    #          image_shape_r = (batch_size, 1, emb_size, maxSentLen),
-    #          filter_shape=(hidden_size[0], 1, emb_size, filter_size[1]),
-    #          filter_shape_context=(hidden_size[0], 1,emb_size, 1),
-    #          W=conv_W2, b=conv_b2,
-    #          W_context=conv_W_context2, b_context=conv_b_context2)
-    # sent_embeddings2 = attentive_conv_layer2.attentive_maxpool_vec_l
-    # attentive_conv_layer3 = Attentive_Conv_for_Pair(rng,
-    #         origin_input_tensor3=common_input,
-    #         origin_input_tensor3_r = common_input,
-    #         input_tensor3=common_input,
-    #         input_tensor3_r = common_input,
-    #          mask_matrix = sents_mask,
-    #          mask_matrix_r = sents_mask,
-    #          image_shape=(batch_size, 1, emb_size, maxSentLen),
-    #          image_shape_r = (batch_size, 1, emb_size, maxSentLen),
-    #          filter_shape=(hidden_size[0], 1, emb_size, filter_size[2]),
-    #          filter_shape_context=(hidden_size[0], 1,emb_size, 1),
-    #          W=conv_W3, b=conv_b3,
-    #          W_context=conv_W_context3, b_context=conv_b_context3)
-    # sent_embeddings3 = attentive_conv_layer3.attentive_maxpool_vec_l
-    LR_input = sent_embeddings#T.concatenate([sent_embeddings,sent_embeddings2], axis=1)
-    LR_input_size = hidden_size[0]
+             filter_shape=(hidden_size[0], 1, emb_size, filter_size[0]), W=conv_W, b=conv_b)    #mutiple mask with the conv_out to set the features by UNK to zero
+    sent_embeddings=conv_model.maxpool_vec #(batch_size, hidden_size) # each sentence then have an embedding of length hidden_size
+
+    conv_model2 = Conv_with_Mask(rng, input_tensor3=common_input,
+             mask_matrix = sents_mask,
+             image_shape=(batch_size, 1, emb_size, maxSentLen),
+             filter_shape=(hidden_size[0], 1, emb_size, filter_size[1]), W=conv_W2, b=conv_b2)    #mutiple mask with the conv_out to set the features by UNK to zero
+    sent_embeddings2=conv_model2.maxpool_vec #(batch_size, hidden_size) # each sentence then have an embedding of length hidden_size
+
+    LR_input = T.concatenate([sent_embeddings,sent_embeddings2], axis=1)
+    LR_input_size = hidden_size[0]*2
     #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative
     U_a = create_ensemble_para(rng, 12, LR_input_size) # the weight matrix hidden_size*2
     LR_b = theano.shared(value=np.zeros((12,),dtype=theano.config.floatX),name='LR_b', borrow=True)  #bias for each target class

@@ -18,10 +18,11 @@ from random import shuffle
 from theano.tensor.nnet.bn import batch_normalization
 
 from load_data import  load_word2vec,load_word2vec_to_init, load_BBN_multi_labels_dataset
-from common_functions import store_model_to_file,Attentive_Conv_for_Pair, create_conv_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, Gradient_Cost_Para, GRU_Batch_Tensor_Input_with_Mask, create_LSTM_para
+from common_functions import store_model_to_file,Conv_with_Mask, create_GRU_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, LSTM_Batch_Tensor_Input_with_Mask, Gradient_Cost_Para, GRU_Batch_Tensor_Input_with_Mask, create_LSTM_para
 
 
-def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=10, filter_size=[3,5,7], maxSentLen=40, hidden_size=[300,300]):
+
+def evaluate_lenet5(learning_rate=0.001, n_epochs=100, emb_size=300, batch_size=10, filter_size=[3,5], maxSentLen=40, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
@@ -48,8 +49,6 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     test_size=len(test_labels)
 
     vocab_size=  len(word2id)+1 # add one zero pad index
-    print 'vocab_size:', vocab_size
-    exit(0)
 
     rand_values=rng.normal(0.0, 0.01, (vocab_size, emb_size))   #generate a matrix by Gaussian distribution
     rand_values[0]=np.array(np.zeros(emb_size),dtype=theano.config.floatX)
@@ -69,56 +68,18 @@ def evaluate_lenet5(learning_rate=0.02, n_epochs=100, emb_size=300, batch_size=1
     print '... building the model'
 
     common_input=embeddings[sents_id_matrix.flatten()].reshape((batch_size,maxSentLen, emb_size)).dimshuffle(0,2,1) #the input format can be adapted into CNN or GRU or LSTM
-    conv_W, conv_b=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[0]))
-    conv_W_context, conv_b_context=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, 1))
-    # conv_W2, conv_b2=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[1]))
-    # conv_W_context2, conv_b_context2=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, 1))
-    # conv_W3, conv_b3=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, filter_size[2]))
-    # conv_W_context3, conv_b_context3=create_conv_para(rng, filter_shape=(hidden_size[0], 1, emb_size, 1))
-    NN_para = [conv_W, conv_b, conv_W_context]#,conv_W2, conv_b2,conv_W_context2]#,   conv_W3, conv_b3,conv_W_context3]
 
-    attentive_conv_layer = Attentive_Conv_for_Pair(rng,
-            origin_input_tensor3=common_input,
-            origin_input_tensor3_r = common_input,
-            input_tensor3=common_input,
-            input_tensor3_r = common_input,
-             mask_matrix = sents_mask,
-             mask_matrix_r = sents_mask,
-             image_shape=(batch_size, 1, emb_size, maxSentLen),
-             image_shape_r = (batch_size, 1, emb_size, maxSentLen),
-             filter_shape=(hidden_size[0], 1, emb_size, filter_size[0]),
-             filter_shape_context=(hidden_size[0], 1,emb_size, 1),
-             W=conv_W, b=conv_b,
-             W_context=conv_W_context, b_context=conv_b_context)
-    sent_embeddings = attentive_conv_layer.attentive_maxpool_vec_l
-    # attentive_conv_layer2 = Attentive_Conv_for_Pair(rng,
-    #         origin_input_tensor3=common_input,
-    #         origin_input_tensor3_r = common_input,
-    #         input_tensor3=common_input,
-    #         input_tensor3_r = common_input,
-    #          mask_matrix = sents_mask,
-    #          mask_matrix_r = sents_mask,
-    #          image_shape=(batch_size, 1, emb_size, maxSentLen),
-    #          image_shape_r = (batch_size, 1, emb_size, maxSentLen),
-    #          filter_shape=(hidden_size[0], 1, emb_size, filter_size[1]),
-    #          filter_shape_context=(hidden_size[0], 1,emb_size, 1),
-    #          W=conv_W2, b=conv_b2,
-    #          W_context=conv_W_context2, b_context=conv_b_context2)
-    # sent_embeddings2 = attentive_conv_layer2.attentive_maxpool_vec_l
-    # attentive_conv_layer3 = Attentive_Conv_for_Pair(rng,
-    #         origin_input_tensor3=common_input,
-    #         origin_input_tensor3_r = common_input,
-    #         input_tensor3=common_input,
-    #         input_tensor3_r = common_input,
-    #          mask_matrix = sents_mask,
-    #          mask_matrix_r = sents_mask,
-    #          image_shape=(batch_size, 1, emb_size, maxSentLen),
-    #          image_shape_r = (batch_size, 1, emb_size, maxSentLen),
-    #          filter_shape=(hidden_size[0], 1, emb_size, filter_size[2]),
-    #          filter_shape_context=(hidden_size[0], 1,emb_size, 1),
-    #          W=conv_W3, b=conv_b3,
-    #          W_context=conv_W_context3, b_context=conv_b_context3)
-    # sent_embeddings3 = attentive_conv_layer3.attentive_maxpool_vec_l
+    # U1, W1, b1=create_GRU_para(rng, emb_size, hidden_size[0])
+    # NN_para=[U1, W1, b1]     #U1 includes 3 matrices, W1 also includes 3 matrices b1 is bias
+    # gru_layer=GRU_Batch_Tensor_Input_with_Mask(common_input, sents_mask,  hidden_size[0], U1, W1, b1)
+    # sent_embeddings=gru_layer.output_sent_rep  # (batch_size, hidden_size)
+
+    LSTM_para_dict=create_LSTM_para(rng, emb_size, hidden_size[0])
+    NN_para=LSTM_para_dict.values() # .values returns a list of parameters
+    lstm_layer=LSTM_Batch_Tensor_Input_with_Mask(common_input, sents_mask,  hidden_size[0], LSTM_para_dict)
+    sent_embeddings=lstm_layer.output_sent_rep  # (batch_size, hidden_size)
+
+
     LR_input = sent_embeddings#T.concatenate([sent_embeddings,sent_embeddings2], axis=1)
     LR_input_size = hidden_size[0]
     #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative

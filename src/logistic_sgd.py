@@ -143,6 +143,9 @@ class LogisticRegression(object):
         log_likelihood=-T.mean(T.log(self.p_y_given_x)[T.arange(y.shape[0]), y])
         return log_likelihood
 
+    def negative_log_likelihood_specific_label(self, label_index):
+        log_likelihood=-T.mean(T.log(self.p_y_given_x)[:, label_index])
+        return log_likelihood
 
     #wenpeng define cross-entropy for logistic_sgd
     def cross_entropy_regularization(self, y, params):

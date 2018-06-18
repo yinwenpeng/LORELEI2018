@@ -90,6 +90,10 @@ def create_LSTM_para(rng, word_dim, hidden_dim):
 
     return params
 
+def create_LR_para(rng,LR_input_size, class_size):
+    U_a = create_ensemble_para(rng, class_size, LR_input_size)
+    LR_b = theano.shared(value=numpy.zeros((class_size,),dtype=theano.config.floatX),name='LR_b', borrow=True)  #bias for each target class
+    return U_a, LR_b
 def create_ensemble_para(rng, fan_in, fan_out):
 #         W=rng.normal(0.0, 0.01, (fan_out,fan_in))
 #
@@ -255,8 +259,8 @@ class Attentive_Conv_for_Pair(object):
         #construct interaction matrix
         input_tensor3 = input_tensor3*mask_matrix.dimshuffle(0,'x',1)
         input_tensor3_r = input_tensor3_r*mask_matrix_r.dimshuffle(0,'x',1) #(batch, hidden, r_len)
-        dot_tensor3 = T.batched_dot(input_tensor3.dimshuffle(0,2,1),input_tensor3_r) #(batch, l_len, r_len)
 
+        dot_tensor3 = T.batched_dot(input_tensor3.dimshuffle(0,2,1),input_tensor3_r) #(batch, l_len, r_len)
         l_max_cos = 1.0/(1.0+T.max(T.nnet.relu(dot_tensor3), axis=2))#1.0/T.exp(T.max(T.nnet.sigmoid(dot_tensor3), axis=2)) #(batch, l_len)
         r_max_cos = 1.0/(1.0+T.max(T.nnet.relu(dot_tensor3), axis=1))#1.0/T.exp(T.max(T.nnet.sigmoid(dot_tensor3), axis=1)) #(batch, r_len)
 
@@ -735,7 +739,6 @@ class Conv_with_Mask(object):
         zero_pad_tensor4_1 = T.zeros((input_tensor3.shape[0], 1, input_tensor3.shape[1], pad_size), dtype=theano.config.floatX)+1e-8  # to get rid of nan in CNN gradient
         input = T.concatenate([zero_pad_tensor4_1,input_tensor3.dimshuffle(0,'x',1,2),
                     zero_pad_tensor4_1], axis=3)        #(batch_size, 1, emb_size, maxsenlen+width-1)
-
         self.input = input
         self.W = W
         self.b = b
@@ -1037,7 +1040,7 @@ class GRU_Batch_Tensor_Input_with_Mask(object):
         self.output_tensor=s.dimshuffle(2,1,0)  #(batch, emb_size, sentlength) again
 
         self.output_sent_rep=self.output_tensor[:,:,-1] #it means we choose the last hidden state of gru as the sentence representation, this is a matrix, as it is for batch of sentences
-
+        self.maxpooling_vec = T.max(self.output_tensor, axis=2)
 class Bd_LSTM_Batch_Tensor_Input_with_Mask(object):
     # Bidirectional GRU Layer.
     def __init__(self, X, Mask, hidden_dim, fwd_params, bwd_params):
@@ -1988,6 +1991,14 @@ def compute_simi_feature_matrix_with_column(input_l_matrix, column, length_l, le
 
     return simi_matrix#[:length_l, :length_r]
 
+def normalize_matrix_rowwise(M):
+    norm1=T.sqrt(1e-8+T.sum(M**2, axis=1))
+    return M/(1e-8+norm1.dimshuffle(0,'x'))
+
+def normalize_tensor3_colwise(TT):
+    norm1=T.sqrt(1e-8+T.sum(TT**2, axis=1)) #(batch, len)
+    return TT/(1e-8+norm1.dimshuffle(0,'x',1))
+
 def cosine_row_wise_twoMatrix(M1, M2):
     #assume both (batch, hidden))
     dot=T.sum(M1*M2, axis=1) #(batch)
@@ -2262,19 +2273,50 @@ def f1_two_col_array(vec1, vec2):
     return 2*recall*precision/(1e-8+recall+precision)
 
 def average_f1_two_array_by_col(arr1, arr2):
-    #pred, gold
+    '''
+    we do not consider label 9: nothing
+    '''
     col_size = arr1.shape[1]
-    mean_f1 = 0.0
-    weight_f1=0.0
-    sum_gold = 0
+    f1_list = []
+    class_size_list = []
     for i in range(col_size):
-        f1_i = f1_two_col_array(arr1[:,i], arr2[:,i])
-        class_size = sum(arr2[:,i])
-        sum_gold+=class_size
-        weight_f1+=f1_i*class_size
-        mean_f1+=f1_i
-    return mean_f1/col_size, weight_f1/sum_gold
+        if i !=9:
+            f1_i = f1_two_col_array(arr1[:,i], arr2[:,i])
+            class_size = sum(arr2[:,i])
+            f1_list.append(f1_i)
+            class_size_list.append(class_size)
 
+    print 'f1_list:', f1_list
+    print 'class_size_list:', class_size_list
+
+    mean_f1 = sum(f1_list)/len(f1_list)
+    weighted_f1 = sum([x*y for x,y in zip(f1_list,class_size_list)])/sum(class_size_list)
+    # print 'mean_f1, weighted_f1:', mean_f1, weighted_f1
+    # exit(0)
+    return mean_f1, weighted_f1
+
+def average_f1_two_array_by_col_firstK(arr1, arr2, k):
+    '''
+    we do not consider label 9: nothing
+    '''
+    col_size = arr1.shape[1]
+    f1_list = []
+    class_size_list = []
+    for i in range(col_size):
+        if i <k:
+            f1_i = f1_two_col_array(arr1[:,i], arr2[:,i])
+            class_size = sum(arr2[:,i])
+            f1_list.append(f1_i)
+            class_size_list.append(class_size)
+
+    print 'f1_list:', f1_list
+    print 'class_size_list:', class_size_list
+
+    mean_f1 = sum(f1_list)/len(f1_list)
+    weighted_f1 = sum([x*y for x,y in zip(f1_list,class_size_list)])/sum(class_size_list)
+    # print 'mean_f1, weighted_f1:', mean_f1, weighted_f1
+    # exit(0)
+    return mean_f1, weighted_f1
 
 def elementwise_is_zero(mat):
     #if 0 to be 1.0, otherwise 0.0

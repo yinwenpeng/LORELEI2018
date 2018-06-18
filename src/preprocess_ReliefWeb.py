@@ -21,7 +21,7 @@ def reformat_reliefweb_json2txt():
     label2id={}
     id2amout=defaultdict(int)
     for i in range(size):
-        label_list = relief_data[i]['labels']
+        label_list = relief_data[i]['labels']   # we found only one label per text
         label = label_list[0]
         text = denoise_text(relief_data[i]['body'])
         print label, label2id
@@ -37,6 +37,7 @@ def reformat_reliefweb_json2txt():
 def split_reliefweb_train_test():
     '''
     {0: 664, 1: 4042, 2: 736, 3: 3854, 4: 1149, 5: 1133, 6: 1512, 7: 633}) 13723
+    {u'med': 3, u'search': 4, u'food': 1, u'utils': 6, u'infra': 2, u'water': 7, u'shelter': 5, u'evac': 0}
     '''
     readfile = codecs.open('/save/wenpeng/datasets/LORELEI/ReliefWeb_id_label_text.txt', 'r', 'utf-8')
     write_train = codecs.open('/save/wenpeng/datasets/LORELEI/ReliefWeb.train.txt', 'w', 'utf-8')
