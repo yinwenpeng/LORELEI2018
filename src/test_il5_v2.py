@@ -22,7 +22,7 @@ from common_functions import create_LR_para,normalize_matrix_rowwise,normalize_t
 
 
 
-def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
+def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=200, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
@@ -43,22 +43,28 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     train_labels=np.asarray(all_labels[0], dtype='int32')
     train_size=len(train_labels)
 
-    dev_sents=np.asarray(all_sentences[1], dtype='int32')
-    dev_masks=np.asarray(all_masks[1], dtype=theano.config.floatX)
-    dev_labels=np.asarray(all_labels[1], dtype='int32')
+    train_sents2=np.asarray(all_sentences[1], dtype='int32')
+    train_masks2=np.asarray(all_masks[1], dtype=theano.config.floatX)
+    train_labels2=np.asarray(all_labels[1], dtype='int32')
+    train_size2=len(train_labels2)
+
+
+    dev_sents=np.asarray(all_sentences[2], dtype='int32')
+    dev_masks=np.asarray(all_masks[2], dtype=theano.config.floatX)
+    dev_labels=np.asarray(all_labels[2], dtype='int32')
     dec_other_labels = np.asarray(all_other_labels, dtype='int32')
     dev_size=len(dev_labels)
     '''
     combine train and dev
     '''
-    train_sents=np.concatenate([train_sents,dev_sents],axis=0)
-    train_masks=np.concatenate([train_masks,dev_masks],axis=0)
-    train_labels=np.concatenate([train_labels,dev_labels],axis=0)
-    train_size=train_size+dev_size
+    train_sents=np.concatenate([train_sents,train_sents2,dev_sents],axis=0)
+    train_masks=np.concatenate([train_masks,train_masks2,dev_masks],axis=0)
+    train_labels=np.concatenate([train_labels,train_labels2,dev_labels],axis=0)
+    train_size=train_size+train_size2+dev_size
 
-    test_sents=np.asarray(all_sentences[2], dtype='int32')
-    test_masks=np.asarray(all_masks[2], dtype=theano.config.floatX)
-    test_labels=np.asarray(all_labels[2], dtype='int32')
+    test_sents=np.asarray(all_sentences[3], dtype='int32')
+    test_masks=np.asarray(all_masks[3], dtype=theano.config.floatX)
+    test_labels=np.asarray(all_labels[3], dtype='int32')
     test_size=len(test_labels)
 
     vocab_size=  len(word2id)+1 # add one zero pad index
@@ -119,34 +125,7 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
              filter_shape=(hidden_size[0], 1, emb_size, filter_size[1]), W=conv_W2, b=conv_b2)    #mutiple mask with the conv_out to set the features by UNK to zero
     sent_embeddings2=conv_model2.maxpool_vec #(batch_size, hidden_size) # each sentence then have an embedding of length hidden_size
 
-    LR_input = T.concatenate([sent_embeddings,sent_embeddings2, bow_emb], axis=1)
-    LR_input_size = hidden_size[0]*2+emb_size
-    #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative
-    # U_a = create_ensemble_para(rng, 12, LR_input_size) # the weight matrix hidden_size*2
-    # LR_b = theano.shared(value=np.zeros((12,),dtype=theano.config.floatX),name='LR_b', borrow=True)  #bias for each target class
-    # LR_para=[U_a, LR_b]
-    # layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=12, W=U_a, b=LR_b) #basically it is a multiplication between weight matrix and input feature vector
-    # score_matrix = T.nnet.sigmoid(layer_LR.before_softmax)  #batch * 12
-    # prob_pos = T.where( labels < 1, 1.0-score_matrix, score_matrix)
-    # loss = -T.mean(T.log(prob_pos))
 
-
-    # U_a = create_ensemble_para(rng, 12+12, LR_input_size) # the weight matrix hidden_size*2
-    # LR_b = theano.shared(value=np.zeros((12+12,),dtype=theano.config.floatX),name='LR_b', borrow=True)  #bias for each target class
-    U_a, LR_b = create_LR_para(rng,LR_input_size, 12)
-    LR_para=[U_a, LR_b]
-    layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=12, W=U_a, b=LR_b) #basically it is a multiplication between weight matrix and input feature vector
-    score_matrix = T.nnet.sigmoid(layer_LR.before_softmax)  #batch * 12
-    prob_pos = T.where( labels < 1, 1.0-score_matrix, score_matrix)
-    loss = -T.mean(T.log(prob_pos))
-
-    other_U_a, other_LR_b = create_LR_para(rng,LR_input_size, 12)
-    other_LR_para=[other_U_a, other_LR_b]
-    other_layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=12, W=other_U_a, b=other_LR_b)
-    other_prob_matrix = T.nnet.softmax(other_layer_LR.before_softmax.reshape((batch_size*4,3)) )
-    other_prob_tensor3 = other_prob_matrix.reshape((batch_size, 4, 3))
-    other_prob = other_prob_tensor3[T.repeat(T.arange(batch_size), 4), T.tile(T.arange(4), (batch_size)), other_labels.flatten()]
-    other_field_loss = -T.mean(T.log(other_prob))
     '''
     GRU
     '''
@@ -157,23 +136,7 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     gru_sent_embeddings=gru_layer.output_sent_rep  # (batch_size, hidden_size)
 
 
-    LR_att_input = T.concatenate([gru_sent_embeddings,bow_emb], axis=1)
-    LR_att_input_size = hidden_size[0]+emb_size
-    #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative
-    U_att_a, LR_att_b = create_LR_para(rng,LR_att_input_size, 12)
-    LR_att_para=[U_att_a, LR_att_b]
-    layer_att_LR=LogisticRegression(rng, input=LR_att_input, n_in=LR_att_input_size, n_out=12, W=U_att_a, b=LR_att_b) #basically it is a multiplication between weight matrix and input feature vector
-    att_score_matrix = T.nnet.sigmoid(layer_att_LR.before_softmax)  #batch * 12
-    att_prob_pos = T.where( labels < 1, 1.0-att_score_matrix, att_score_matrix)
-    att_loss = -T.mean(T.log(att_prob_pos))
 
-    att_other_U_a, att_other_LR_b = create_LR_para(rng,LR_att_input_size, 12)
-    att_other_LR_para=[att_other_U_a, att_other_LR_b]
-    att_other_layer_att_LR=LogisticRegression(rng, input=LR_att_input, n_in=LR_att_input_size, n_out=12, W=att_other_U_a, b=att_other_LR_b)
-    att_other_prob_matrix = T.nnet.softmax(att_other_layer_att_LR.before_softmax.reshape((batch_size*4,3)) )
-    att_other_prob_tensor3 = att_other_prob_matrix.reshape((batch_size, 4, 3))
-    att_other_prob = att_other_prob_tensor3[T.repeat(T.arange(batch_size), 4), T.tile(T.arange(4), (batch_size)), other_labels.flatten()]
-    att_other_field_loss = -T.mean(T.log(att_other_prob))
     '''
     ACNN
     '''
@@ -206,23 +169,7 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
              W=conv_att_W2, b=conv_att_b2,
              W_context=conv_W_context2, b_context=conv_b_context2)
     sent_att_embeddings2 = attentive_conv_layer2.attentive_maxpool_vec_l
-    acnn_LR_input = T.concatenate([sent_att_embeddings,sent_att_embeddings2, bow_emb], axis=1)
-    acnn_LR_input_size = hidden_size[0]*2+emb_size
-    #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative
-    acnn_U_a, acnn_LR_b = create_LR_para(rng,acnn_LR_input_size, 12)
-    acnn_LR_para=[acnn_U_a, acnn_LR_b]
-    acnn_layer_LR=LogisticRegression(rng, input=acnn_LR_input, n_in=acnn_LR_input_size, n_out=12, W=acnn_U_a, b=acnn_LR_b) #basically it is a multiplication between weight matrix and input feature vector
-    acnn_score_matrix = T.nnet.sigmoid(acnn_layer_LR.before_softmax)  #batch * 12
-    acnn_prob_pos = T.where( labels < 1, 1.0-acnn_score_matrix, acnn_score_matrix)
-    acnn_loss = -T.mean(T.log(acnn_prob_pos))
 
-    acnn_other_U_a, acnn_other_LR_b = create_LR_para(rng,acnn_LR_input_size, 12)
-    acnn_other_LR_para=[acnn_other_U_a, acnn_other_LR_b]
-    acnn_other_layer_LR=LogisticRegression(rng, input=acnn_LR_input, n_in=acnn_LR_input_size, n_out=12, W=acnn_other_U_a, b=acnn_other_LR_b)
-    acnn_other_prob_matrix = T.nnet.softmax(acnn_other_layer_LR.before_softmax.reshape((batch_size*4,3)) )
-    acnn_other_prob_tensor3 = acnn_other_prob_matrix.reshape((batch_size, 4, 3))
-    acnn_other_prob = acnn_other_prob_tensor3[T.repeat(T.arange(batch_size), 4), T.tile(T.arange(4), (batch_size)), other_labels.flatten()]
-    acnn_other_field_loss = -T.mean(T.log(acnn_other_prob))
 
     '''
     dataless cosine
@@ -242,20 +189,44 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     top_k_score_matrix = T.nnet.sigmoid(top_k_cosine_scores)
 
 
-    params = multiCNN_para+LR_para  + GRU_NN_para + LR_att_para  +ACNN_para +acnn_LR_para# put all model parameters together
-    cost=loss+att_loss+acnn_loss+   1e-4*((conv_W**2).sum()+(conv_W2**2).sum())
+
+
+
+    acnn_LR_input = T.concatenate([cosine_score_matrix,top_k_score_matrix,sent_embeddings,sent_embeddings2, gru_sent_embeddings,sent_att_embeddings,sent_att_embeddings2, bow_emb], axis=1)
+    acnn_LR_input_size = hidden_size[0]*5+emb_size+2*type_size
+    #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative
+    acnn_U_a, acnn_LR_b = create_LR_para(rng,acnn_LR_input_size, 12)
+    acnn_LR_para=[acnn_U_a, acnn_LR_b]
+    acnn_layer_LR=LogisticRegression(rng, input=acnn_LR_input, n_in=acnn_LR_input_size, n_out=12, W=acnn_U_a, b=acnn_LR_b) #basically it is a multiplication between weight matrix and input feature vector
+    acnn_score_matrix = T.nnet.sigmoid(acnn_layer_LR.before_softmax)  #batch * 12
+    acnn_prob_pos = T.where( labels < 1, 1.0-acnn_score_matrix, acnn_score_matrix)
+    acnn_loss = -T.mean(T.log(acnn_prob_pos))
+
+    acnn_other_U_a, acnn_other_LR_b = create_LR_para(rng,acnn_LR_input_size, 16)
+    acnn_other_LR_para=[acnn_other_U_a, acnn_other_LR_b]
+    acnn_other_layer_LR=LogisticRegression(rng, input=acnn_LR_input, n_in=acnn_LR_input_size, n_out=16, W=acnn_other_U_a, b=acnn_other_LR_b)
+    acnn_other_prob_matrix = T.nnet.softmax(acnn_other_layer_LR.before_softmax.reshape((batch_size*4,4)) )
+    acnn_other_prob_tensor3 = acnn_other_prob_matrix.reshape((batch_size, 4, 4))
+    acnn_other_prob = acnn_other_prob_tensor3[T.repeat(T.arange(batch_size), 4), T.tile(T.arange(4), (batch_size)), other_labels.flatten()]
+    acnn_other_field_loss = -T.mean(T.log(acnn_other_prob))
+
+
+
+
+    params = multiCNN_para  + GRU_NN_para   +ACNN_para +acnn_LR_para# put all model parameters together
+    cost=acnn_loss+   1e-4*((conv_W**2).sum()+(conv_W2**2).sum())
     updates =   Gradient_Cost_Para(cost,params, learning_rate)
 
 
-    other_paras = params + other_LR_para+att_other_LR_para+acnn_other_LR_para
-    cost_other = cost  +  other_field_loss+att_other_field_loss+acnn_other_field_loss
+    other_paras = params+acnn_other_LR_para
+    cost_other = cost  + acnn_other_field_loss
     other_updates =   Gradient_Cost_Para(cost_other,other_paras, learning_rate)
 
     '''
     testing
     '''
 
-    ensemble_NN_scores = T.max(T.concatenate([att_score_matrix.dimshuffle('x',0,1), score_matrix.dimshuffle('x',0,1), acnn_score_matrix.dimshuffle('x',0,1)],axis=0),axis=0)
+    ensemble_NN_scores = acnn_score_matrix#T.max(T.concatenate([att_score_matrix.dimshuffle('x',0,1), score_matrix.dimshuffle('x',0,1), acnn_score_matrix.dimshuffle('x',0,1)],axis=0),axis=0)
     # '''
     # majority voting, does not work
     # '''
@@ -273,13 +244,13 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     '''
     sum up prob, works
     '''
-    ensemble_scores = 0.6*ensemble_NN_scores+0.4*0.5*(cosine_score_matrix+top_k_score_matrix)
+    ensemble_scores = ensemble_NN_scores#0.6*ensemble_NN_scores+0.4*0.5*(cosine_score_matrix+top_k_score_matrix)
     binarize_prob = T.where(ensemble_scores > 0.3, 1, 0)
 
 
     #train_model = theano.function([sents_id_matrix, sents_mask, labels], cost, updates=updates, on_unused_input='ignore')
     train_model = theano.function([sents_id_matrix, sents_mask, labels, des_id_matrix, des_mask], cost, updates=updates, allow_input_downcast=True, on_unused_input='ignore')
-    other_model = theano.function([sents_id_matrix, sents_mask, labels,other_labels], cost_other, updates=other_updates,allow_input_downcast=True, on_unused_input='ignore')
+    other_model = theano.function([sents_id_matrix, sents_mask, labels,des_id_matrix, des_mask,other_labels], cost_other, updates=other_updates,allow_input_downcast=True, on_unused_input='ignore')
     test_model = theano.function([sents_id_matrix, sents_mask, des_id_matrix, des_mask], binarize_prob, allow_input_downcast=True, on_unused_input='ignore')
 
     ###############
@@ -334,6 +305,8 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
                                     dev_sents[dev_id_batch],
                                     dev_masks[dev_id_batch],
                                     dev_labels[dev_id_batch],
+                                    label_sent,
+                                    label_mask,
                                     dec_other_labels[dev_id_batch]
                                     )
 

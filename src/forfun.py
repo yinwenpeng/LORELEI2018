@@ -7,33 +7,28 @@ import time
 import math
 import codecs
 import numpy as np
+import json
+
+def load_fasttext_word2vec_given_file(vec):
 
 
-def load_fasttext_word2vec_given_file(filepath, dim):
-    word2vec = {}
+    writefile = codecs.open('system_output.json' ,'w', 'utf-8')
+    lis=[]
+    for i in range(100):
+    	dic={}
+    	dic['haha']='yes'
+    	dic['val'] = vec[i]
+    	lis.append(dic)
+    json.dump(lis, writefile)
+    writefile.close()
 
-    print filepath, "==> loading 300d word2vec"
-#     with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data/glove/glove.6B." + str(dim) + "d.txt")) as f:
-    f=codecs.open(filepath, 'r', 'utf-8', errors='ignore')#glove.6B.300d.txt, word2vec_words_300d.txt, glove.840B.300d.txt
-    line_co = 0
-    for line in f:
-        l = line.split()
-        # print l
-        if len(l)==dim+1:
-            value_list = map(float, l[1:])
-            # norm = LA.norm(np.asarray(value_list))
-            # word2vec[l[0]] = [value/norm for value in value_list]
-            word2vec[l[0]] = value_list
-            line_co+=1
-            # if line_co % 100:
-            print 'line_co:', line_co, l[0]
-            # if line_co > 100:
-            #     break
+# ruby LoReHLT_Frame_Scorer.rb -p LoReHLT17 -L /save/wenpeng/datasets/LORELEI/il5_setE_monolingual_text/ltf/ -R /save/wenpeng/datasets/LORELEI/il5_unseq/setE/data/annotation/situation_frame/ -s /save/wenpeng/datasets/LORELEI/il5_system_output_forfun.json -f /save/wenpeng/datasets/LORELEI/official_scorer/reflist.txt -F /save/wenpeng/datasets/LORELEI/official_scorer/reflist.txt -o /save/wenpeng/datasets/LORELEI/official_scorer/Scores
 
-    print "==> word2vec is loaded over"
+ruby LoReHLT_Frame_Scorer.rb -p LoReHLT17 -L /shared/corpora/corporaWeb/lorelei/evaluation-20170804/il5/setE/data/monolingual_text/ltf/ -R /shared/corpora/corporaWeb/lorelei/evaluation-20170804/il5_unseq/setE/data/annotation/situation_frame/ -s /home/wyin3/LORELEI/il5_system_output_forfun.json -f /home/wyin3/LORELEI/official_scorer/reflist.txt -F /home/wyin3/LORELEI/official_scorer/reflist.txt -o /home/wyin3/LORELEI/official_scorer/Scores
 
-    return word2vec
+ruby LoReHLT_Frame_Scorer.rb -p LoReHLT17 -L /Users/yinwenpeng/Downloads/LORELEI/ltf/ltf -R /Users/yinwenpeng/Downloads/LORELEI/situation_frame/situation_frame/ -s /Users/yinwenpeng/Downloads/LORELEI/il5_system_output_forfun.json -f /Users/yinwenpeng/Downloads/LORELEI/wp_filelist.txt -F /Users/yinwenpeng/Downloads/LORELEI/annotated_filelist_SF.tab -o /Users/yinwenpeng/Downloads/LORELEI/Scores
 
 
+gem install nokogiri -v '1.8.3' --source 'https://rubygems.org/
 if __name__ == '__main__':
-    load_fasttext_word2vec_given_file('/save/wenpeng/datasets/LORELEI/multi-lingual-emb/il5_300d_word2vec.txt', 300)
+    load_fasttext_word2vec_given_file(range(100))

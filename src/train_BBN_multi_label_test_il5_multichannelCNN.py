@@ -43,6 +43,12 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     dev_labels=np.asarray(all_labels[1], dtype='int32')
     dev_size=len(dev_labels)
 
+    train_sents=np.concatenate([train_sents,dev_sents],axis=0)
+    train_masks=np.concatenate([train_masks,dev_masks],axis=0)
+    train_labels=np.concatenate([train_labels,dev_labels],axis=0)
+    train_size=train_size+dev_size
+
+
     test_sents=np.asarray(all_sentences[2], dtype='int32')
     test_masks=np.asarray(all_masks[2], dtype=theano.config.floatX)
     test_labels=np.asarray(all_labels[2], dtype='int32')

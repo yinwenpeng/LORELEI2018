@@ -62,8 +62,8 @@ def load_fasttext_multiple_word2vec_given_file(filepath_list, dim):
                 line_co+=1
                 # if line_co % 500000:
                 #     print 'line_co:', line_co
-                if line_co > 1000000:
-                    break
+                # if line_co > 10000:
+                #     break
 
         print "==> word2vec is loaded over"
 
@@ -318,14 +318,14 @@ def load_BBN_dataset(maxlen=40):
 def load_SF_type_descriptions(word2id, type_size, describ_max_len):
     # type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2, 'water':7, 'shelter':5,
     # 'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
-    type2des = {0:'evacuation evacuate landslide flood volcano earthquake',
-                        1:'food hunger starvation starve',
-                        2:'infrastructure  damage house collapse water pipe burst no electricity road',
-                        3: 'medical assistance sick flu dysentery patient insufficiency',
-                        4: 'search house collapse  person  missing  buried',
-                        5: 'shelter house collapse homeless',
-                        6: 'utilities energy sanitation electricity',
-                        7: 'water food hunger starvation starve water pollution',
+    type2des = {0:'evacuation evacuate landslide flood volcano earthquake hurricane',
+                        1:'food hunger starvation starve bread earthquake hurricane refugees',
+                        2:'infrastructure  damage house collapse water pipe burst no electricity road earthquake hurricane',
+                        3: 'medical assistance sick flu dysentery patient insufficiency earthquake',
+                        4: 'search house collapse  person  missing  buried earthquake hurricane',
+                        5: 'shelter house collapse homeless earthquake hurricane refugees',
+                        6: 'utilities energy sanitation electricity earthquake hurricane',
+                        7: 'water food hunger starvation starve water pollution earthquake refugees',
                         8: 'crime violence robbery snoring looting burning plunder shooting blow up explode attack arrest kill shot police incident',
                         9: 'none nothing',
                         10: 'regime, change coup overthrow subversion resign subvert turn over rebel army',
@@ -387,10 +387,218 @@ def load_il6_with_BBN(maxlen=40):
         print 'dataset loaded over, totally ', len(word2id), 'words'
     return all_sentences, all_masks, all_labels, word2id
 
+def load_Thai(word2id, maxlen):
+    root="/save/wenpeng/datasets/LORELEI/Thai/"
+    # files=['SF-BBN-Mark-split/train.mark.multi.12labels.txt', 'SF-BBN-Mark-split/dev.mark.multi.12labels.txt', 'il5_labeled_as_training_seg_level.txt']
+    files='thai-setE-as-test-input_ner_filtered.txt'#['SF-BBN-Mark-split/full_BBN_multi.txt', 'il5_translated_seg_level_as_training_all_fields.txt', 'il5_labeled_as_training_seg_level.txt']
+    # word2id={}  # store vocabulary, each word map to a id
+    all_sentences=[]
+    all_masks=[]
+    # all_labels=[]
+    # all_other_labels = []
+    # for i in range(len(files)):
+    print 'loading file:', root+files, '...'
+    #
+    #     sents=[]
+    #     sents_masks=[]
+    #     labels=[]
+    co =0
+    readfile=codecs.open(root+files, 'r', 'utf-8')
+    for line in readfile:
+        parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+        # label=[0]*12
+        # for label_id in parts[0].strip().split():  # keep label be 0 or 1
+        #     label[int(label_id)] =1
+        sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+        # if i == 1:
+        #     all_other_labels.append(map(int, parts[3].strip().split()))
+
+        # labels.append(label)
+        sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
+        all_sentences.append(sent_idlist)
+        all_masks.append(sent_masklist)
+        co+=1
+        # if co == 120:
+        #     break
+
+
+    print '\t\t\t size:', len(all_sentences)
+    print 'dataset loaded over, totally ', len(word2id), 'words'
+    return all_sentences, all_masks, word2id#, all_labels, all_other_labels,word2id
+
+def load_train_for_Thai(maxlen=40):
+    root="/save/wenpeng/datasets/LORELEI/"
+    # files=['SF-BBN-Mark-split/train.mark.multi.12labels.txt', 'SF-BBN-Mark-split/dev.mark.multi.12labels.txt', 'il5_labeled_as_training_seg_level.txt']
+    files=['SF-BBN-Mark-split/full_BBN_multi.txt', 'il5_translated_seg_level_as_training_all_fields.txt']
+    word2id={}  # store vocabulary, each word map to a id
+    all_sentences=[]
+    all_masks=[]
+    all_labels=[]
+    all_other_labels = []
+    for i in range(len(files)):
+        print 'loading file:', root+files[i], '...'
+
+        sents=[]
+        sents_masks=[]
+        labels=[]
+
+        readfile=codecs.open(root+files[i], 'r', 'utf-8')
+        for line in readfile:
+            parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+            label=[0]*12
+            for label_id in parts[0].strip().split():  # keep label be 0 or 1
+                label[int(label_id)] =1
+            sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+            if i == 1:
+                all_other_labels.append(map(int, parts[3].strip().split()))
+
+            labels.append(label)
+            sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
+            sents.append(sent_idlist)
+            sents_masks.append(sent_masklist)
+
+        if i == 1:
+            assert len(all_other_labels) == len(labels)
+        all_sentences.append(sents)
+        all_masks.append(sents_masks)
+        all_labels.append(labels)
+        print '\t\t\t size:', len(labels)
+        print 'dataset loaded over, totally ', len(word2id), 'words'
+    return all_sentences, all_masks, all_labels, all_other_labels,word2id
+
+def load_trainingData_types(word2id, maxlen):
+    BBN_path = '/save/wenpeng/datasets/LORELEI/'
+    files = [
+    'SF-BBN-Mark-split/full_BBN_multi.txt'
+    # ,'ReliefWeb_subset_id_label_text.txt'
+    ]
+    all_sentences=[]
+    all_masks=[]
+    all_labels=[]
+    for fil in files:
+        print 'loading file:', BBN_path+fil, '...'
+        size = 0
+        readfile=codecs.open(BBN_path+fil, 'r', 'utf-8')
+        for line in readfile:
+            parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+            if len(parts)==3:
+                label=[0]*12
+                for label_id in parts[0].strip().split():  # keep label be 0 or 1
+                    label[int(label_id)] =1
+                # print 'parts:',parts
+                sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+                all_labels.append(label)
+                sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
+                all_sentences.append(sent_idlist)
+                all_masks.append(sent_masklist)
+                size+=1
+        print '\t\t\t size:', size
+    print 'dataset loaded over, totally ', len(all_labels), 'instances, and ', len(word2id), 'words'
+    return all_sentences, all_masks, all_labels,word2id
+
+
+def load_trainingData_types_plus_others(word2id, maxlen):
+    root="/save/wenpeng/datasets/LORELEI/"
+    # files=['SF-BBN-Mark-split/train.mark.multi.12labels.txt', 'SF-BBN-Mark-split/dev.mark.multi.12labels.txt', 'il5_labeled_as_training_seg_level.txt']
+    # files=['il5_translated_seg_level_as_training_all_fields_w1.txt'] #'il5_translated_seg_level_as_training_all_fields.txt'
+    files=[
+    'il5_translated_seg_level_as_training_all_fields.txt'
+    # 'il6_translated_seg_level_as_training_all_fields_w1.txt'
+    # 'il5_translated_seg_level_as_training_all_fields_w1.txt'
+    ]
+    all_sentences=[]
+    all_masks=[]
+    all_labels=[]
+    all_other_labels = []
+    for fil in files:
+        print 'loading file:', root+fil, '...'
+
+        readfile=codecs.open(root+fil, 'r', 'utf-8')
+        size = 0
+        for line in readfile:
+            parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+            label=[0]*12
+            for label_id in parts[0].strip().split():  # keep label be 0 or 1
+                label[int(label_id)] =1
+            sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+            sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
+            all_sentences.append(sent_idlist)
+            all_masks.append(sent_masklist)
+            all_labels.append(label)
+            all_other_labels.append(map(int, parts[3].strip().split()))
+            size+=1
+
+        print '\t\t\t size:', size
+    assert len(all_other_labels) == len(all_labels)
+    print 'dataset loaded over, totally ', len(all_labels), 'instances, and ', len(word2id), 'words'
+    return all_sentences, all_masks, all_labels, all_other_labels,word2id
+
+def load_official_testData(word2id, maxlen, fullpath):
+    all_sentences=[]
+    all_masks=[]
+    print 'loading file:', fullpath, '...'
+    co =0
+    readfile=codecs.open(fullpath, 'r', 'utf-8')
+    lines=[]
+
+    for line in readfile:
+        lines.append(line.strip())
+        parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+        sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+        sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
+        all_sentences.append(sent_idlist)
+        all_masks.append(sent_masklist)
+        co+=1
+    print '\t\t\t size:', len(all_sentences)
+    print 'dataset loaded over, totally ', len(word2id), 'words'
+    return all_sentences, all_masks,lines, word2id#, all_labels, all_other_labels,word2id
+
+
+def load_BBN_il5Trans_il5_dataset(maxlen=40):
+    root="/save/wenpeng/datasets/LORELEI/"
+    files=['SF-BBN-Mark-split/full_BBN_multi.txt','NYT-Mark-top10-id-label-text.txt', 'il5_translated_seg_level_as_training_all_fields.txt', 'il5_labeled_as_training_seg_level.txt']
+    # files=['SF-BBN-Mark-split/full_BBN_multi.txt', 'il5_translated_seg_level_as_training_all_fields.txt', 'il5_labeled_as_training_seg_level.txt']
+    word2id={}  # store vocabulary, each word map to a id
+    all_sentences=[]
+    all_masks=[]
+    all_labels=[]
+    all_other_labels = []
+    for i in range(len(files)):
+        print 'loading file:', root+files[i], '...'
+
+        sents=[]
+        sents_masks=[]
+        labels=[]
+
+        readfile=codecs.open(root+files[i], 'r', 'utf-8')
+        for line in readfile:
+            parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+            if len(parts)>=3:
+                label=[0]*12
+                for label_id in parts[0].strip().split():  # keep label be 0 or 1
+                    label[int(label_id)] =1
+                sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+                if i == 2:
+                    all_other_labels.append(map(int, parts[3].strip().split()))
+
+                labels.append(label)
+                sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist[:maxlen*2], word2id, maxlen)
+                sents.append(sent_idlist)
+                sents_masks.append(sent_masklist)
+
+        if i == 2:
+            assert len(all_other_labels) == len(labels)
+        all_sentences.append(sents)
+        all_masks.append(sents_masks)
+        all_labels.append(labels)
+        print '\t\t\t size:', len(labels)
+        print 'dataset loaded over, totally ', len(word2id), 'words'
+    return all_sentences, all_masks, all_labels, all_other_labels,word2id
+
 def load_BBN_multi_labels_dataset(maxlen=40):
     root="/save/wenpeng/datasets/LORELEI/"
     # files=['SF-BBN-Mark-split/train.mark.multi.12labels.txt', 'SF-BBN-Mark-split/dev.mark.multi.12labels.txt', 'il5_labeled_as_training_seg_level.txt']
-    files=['SF-BBN-Mark-split/full_BBN_multi.txt', 'SF-BBN-Mark-split/full_BBN_multi.txt', 'il5_labeled_as_training_seg_level.txt']
+    files=['SF-BBN-Mark-split/full_BBN_multi.txt', 'il5_translated_seg_level_as_training_all_fields.txt', 'il5_labeled_as_training_seg_level.txt']
     word2id={}  # store vocabulary, each word map to a id
     all_sentences=[]
     all_masks=[]

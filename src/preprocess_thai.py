@@ -2,33 +2,121 @@ import codecs
 import json
 from pprint import pprint
 import nltk
-from collections import defaultdict,Counter
+from collections import defaultdict
 import os
 import xml.etree.ElementTree as ET
-from preprocess_common import IL_into_test_filteredby_NER,SF_annotated_docSet
 
-def il5_into_text_corpus_for_word2vec_training():
-    folder = '/save/wenpeng/datasets/LORELEI/il5_setE_monolingual_text/ltf/'
-    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/multi-lingual-emb/il5_monolingual_text.txt', 'w', 'utf-8')
+
+def valid_seg(doc_id, seg_id,doc2remain_seglist):
+
+    if doc_id in doc2remain_seglist:
+        seg_list = doc2remain_seglist.get(doc_id)
+        for gold_seg_id in seg_list:
+
+            if seg_id == gold_seg_id:
+                return True
+                break
+    return False
+def Thai_into_test_filteredby_NER(doc2remain_seglist):
+    folder = '/save/wenpeng/datasets/LORELEI/Thai/setE/'
+    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/Thai/thai-setE-as-test-input_ner_filtered.txt', 'w', 'utf-8')
     vocab=set()
     re=0
 
     files= os.listdir(folder)
     print 'folder file sizes: ', len(files)
+    co=0
     for fil in files:
         sent_list = []
-        f = ET.parse(folder+'/'+fil)
+        # print folder+'/'+fil
+        f = ET.parse(folder+fil)
         # f = codecs.open(folder+'/'+fil, 'r', 'utf-8')
 
         root = f.getroot()
+        for doc in root.iter('DOC'):
+            doc_id  = doc.attrib.get('id')
         for seg in root.iter('SEG'):
-            sent_i = seg.find('ORIGINAL_TEXT').text
-            vocab=vocab|set(sent_i.split())
-            writefile.write(sent_i.strip()+'\n')
+            sent_wordlist = []
+            seg_id = seg.attrib.get('id')
+            for word in seg.iter('TOKEN'):
+                word_str = word.text
+                sent_wordlist.append(word_str)
+            if valid_seg(doc_id, seg_id,doc2remain_seglist):
+                writefile.write(doc_id+'\t'+seg_id+'\t'+' '.join(sent_wordlist)+'\n')
+                co+=1
+                if co % 1000 == 0:
+                    print 'co...', co
     writefile.close()
-    print 'load il5 text over, size: ', len(vocab)
+    print 'Thai_into_test over'
 
-def load_il5():
+def Thai_into_test():
+    folder = '/save/wenpeng/datasets/LORELEI/Thai/setE/'
+    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/Thai/thai-setE-as-test-input.txt', 'w', 'utf-8')
+    vocab=set()
+    re=0
+
+    files= os.listdir(folder)
+    print 'folder file sizes: ', len(files)
+    co=0
+    for fil in files:
+        sent_list = []
+        # print folder+'/'+fil
+        f = ET.parse(folder+fil)
+        # f = codecs.open(folder+'/'+fil, 'r', 'utf-8')
+
+        root = f.getroot()
+        for doc in root.iter('DOC'):
+            doc_id  = doc.attrib.get('id')
+        for seg in root.iter('SEG'):
+            sent_wordlist = []
+            seg_id = seg.attrib.get('id')
+            for word in seg.iter('TOKEN'):
+                word_str = word.text
+                sent_wordlist.append(word_str)
+            writefile.write(doc_id+'\t'+seg_id+'\t'+' '.join(sent_wordlist)+'\n')
+            co+=1
+            if co % 1000 == 0:
+                print 'co...', co
+    writefile.close()
+    print 'Thai_into_test over'
+
+def Thai_rich_info():
+    folder = '/save/wenpeng/datasets/LORELEI/Thai/setE/'
+    doc2seglist=defaultdict(list)
+    files= os.listdir(folder)
+    print 'folder file sizes: ', len(files)
+    co=0
+    for fil in files:
+        f = ET.parse(folder+fil)
+        root = f.getroot()
+        for doc in root.iter('DOC'):
+            doc_id  = doc.attrib.get('id')
+        for seg in root.iter('SEG'):
+            seg_instance = {}
+            sent_wordlist = []
+            seg_id = seg.attrib.get('id')
+            seg_start = int(seg.attrib.get('start_char'))
+            seg_end = int(seg.attrib.get('end_char'))
+            for word in seg.iter('TOKEN'):
+                word_str = word.text
+                sent_wordlist.append(word_str)
+            seg_instance['id'] = seg_id
+            seg_instance['seg_start'] = seg_start
+            seg_instance['seg_end'] = seg_end
+            seg_instance['text'] = ' '.join(sent_wordlist)
+            doc2seglist[doc_id].append(seg_instance)
+
+            co+=1
+            # if co % 1000 == 0:
+            #     print 'co...', co
+    print 'Thai seg boundary info loaded over, seg_instance size', co
+    return doc2seglist
+
+def denoise(text):
+    http_pos = text.find('https')
+    return text[:http_pos].strip()
+
+def load_Thai_annotations():
     '''
     monolingual_text: doc_id: sent_list:['...','...'], boundary_list:[(1,12),(14,23)...]
     ground truth:
@@ -38,7 +126,7 @@ def load_il5():
     '''
 
     #first load il5 sent list
-    folder = '/save/wenpeng/datasets/LORELEI/il5_setE_monolingual_text/ltf/'
+    folder = '/save/wenpeng/datasets/LORELEI/Thai/setE/'
     docid2text={}
     re=0
 
@@ -59,7 +147,11 @@ def load_il5():
             seg_id = seg.attrib.get('id')
             start = int(seg.attrib.get('start_char'))
             end = int(seg.attrib.get('end_char'))
-            sent_i = seg.find('ORIGINAL_TEXT').text
+            sent_wordlist = []
+            for word in seg.iter('TOKEN'):
+                word_str = word.text
+                sent_wordlist.append(word_str)
+            sent_i = ' '.join(sent_wordlist)
             # sent+=' '+sent_i
             sent_list.append(sent_i)
             boundary_list.append((start,end))
@@ -78,7 +170,7 @@ def load_il5():
     load issues
     '''
     docid2issue = {}
-    folder = '/save/wenpeng/datasets/LORELEI/il5_unseq/setE/data/annotation/situation_frame/issues/'
+    folder = '/save/wenpeng/datasets/LORELEI/Thai/annotation/situation_frame/issues/'
     files= os.listdir(folder)
     print 'issues file sizes: ', len(files)
     for fil in files:
@@ -115,7 +207,7 @@ def load_il5():
     load mentions
     mentions: doc_id:[{'entity_id': place_id, 'entity_type': GPE, 'start_char':12,'end_char':15}]
     '''
-    folder = '/save/wenpeng/datasets/LORELEI/il5_unseq/setE/data/annotation/situation_frame/mentions/'
+    folder = '/save/wenpeng/datasets/LORELEI/Thai/annotation/situation_frame/mentions/'
     files= os.listdir(folder)
     print 'mentions file sizes: ', len(files)
     docid2mention = {}
@@ -159,7 +251,7 @@ def load_il5():
     user_id doc_id  frame_id        frame_type      need_type       place_id        proxy_status    need_status     urgency_status  resolution_status       reported_by     resolved_by     description
     '''
     docid2need = {}
-    folder = '/save/wenpeng/datasets/LORELEI/il5_unseq/setE/data/annotation/situation_frame/needs/'
+    folder = '/save/wenpeng/datasets/LORELEI/Thai/annotation/situation_frame/needs/'
     files= os.listdir(folder)
     print 'needs file sizes: ', len(files)
     for fil in files:
@@ -202,6 +294,7 @@ def load_il5():
             f.close()
     return docid2text, docid2issue, docid2mention, docid2need
 
+
 def entity_id_2_sentID(sent_list, boundary_list, docid2mention, doc_id, entity_id):
 
     mention_entity_instance_list = docid2mention.get(doc_id)
@@ -235,16 +328,19 @@ def generate_entity_focused_trainingset(docid2text, docid2issue, docid2mention, 
     '''
     type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2, 'water':7, 'shelter':5,
     'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
-    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/il5_labeled_as_training_seg_level.txt', 'w', 'utf-8')
+    other_field2index = {'current':0,'not_current':1,'future':1,'past':2,  'sufficient':0,'insufficient':1,'True':0,'False':1}
+    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/Thai/thai_test_with_full_labels_seg_level.txt', 'w', 'utf-8')
     write_size = 0
+    doc_union_issue_and_needs = set(docid2issue.keys())| set(docid2need.keys())
     for doc_id, doc_instance in docid2text.iteritems():
+
         sent_list = doc_instance.get('sent_list')
+        # trans_v1_sent_list = trans_instance.get('sent_list_version1')
+        # trans_v2_sent_list = trans_instance.get('sent_list_version2')
         boundary_list = doc_instance.get('boundary_list')
-        doc_uninion_issue_and_mentions = set(docid2issue.keys())| set(docid2need.keys())
-        if doc_id  in doc_uninion_issue_and_mentions: #this doc has SF type labels
-            # iddlist=[]
-            # labelstrlist = []
+        if doc_id  in doc_union_issue_and_needs: #this doc has SF type labels
             sentID_2_labelstrlist=defaultdict(list)
+            other_fields=[3]*4 #need_status, issue_status, need_relief, need_urgency, defalse "2" denotes no label
             issue_list = docid2issue.get(doc_id)
             if issue_list is not None:
                 for i in range(len(issue_list)):
@@ -257,6 +353,11 @@ def generate_entity_focused_trainingset(docid2text, docid2issue, docid2mention, 
 
                     issue_type = issue_dict_instance.get('issue_type')
                     sentID_2_labelstrlist[sent_id].append(issue_type)
+                    issue_status = issue_dict_instance.get('issue_status')
+                    if other_field2index.get(issue_status) is None:
+                        print 'issue_status:',issue_status
+                    other_fields[1] = other_field2index.get(issue_status,3)
+
 
             need_list = docid2need.get(doc_id)
             if need_list is not None:
@@ -270,14 +371,27 @@ def generate_entity_focused_trainingset(docid2text, docid2issue, docid2mention, 
                     need_type = need_dict_instance.get('need_type')
                     sentID_2_labelstrlist[sent_id].append(need_type)
 
+                    need_status = need_dict_instance.get('need_status')
+                    need_relief = need_dict_instance.get('resolution_status')
+                    need_urgency = need_dict_instance.get('urgency_status')
+                    if other_field2index.get(need_urgency) is None:
+                        print 'need_urgency:',need_urgency
+                    if other_field2index.get(need_status) is None:
+                        print 'need_status:',need_status
+                    if other_field2index.get(need_relief) is None:
+                        print 'need_relief:',need_relief
+                    other_fields[0] = other_field2index.get(need_status,3)
+                    other_fields[2] = other_field2index.get(need_relief,3)
+                    other_fields[3] = other_field2index.get(need_urgency,3)
+
 
             for sent_ids, labelstrlist in sentID_2_labelstrlist.iteritems():
                 sent = ''
                 idlist = sent_ids.split('-')
                 for id in idlist:
                     sent+=' '+sent_list[int(id)]
-                iddlist=[]
 
+                iddlist=[]
                 labelstrlist_delete_duplicate = list(set(labelstrlist))
                 for  labelstr in labelstrlist_delete_duplicate:
                     idd = type2label_id.get(labelstr)
@@ -285,96 +399,10 @@ def generate_entity_focused_trainingset(docid2text, docid2issue, docid2mention, 
                         print 'labelstr is None:', labelstr
                         exit(0)
                     iddlist.append(idd)
-
-                writefile.write(' '.join(map(str, iddlist))+'\t'+' '.join(labelstrlist_delete_duplicate)+'\t'+sent.strip()+'\n')
+                writefile.write(' '.join(map(str, iddlist))+'\t'+' '.join(labelstrlist_delete_duplicate)+'\t'+denoise(sent.strip())+'\t'+' '.join(map(str,other_fields))+'\n')
                 write_size+=1
     writefile.close()
     print 'write_size:', write_size
-
-
-
-
-
-
-def load_docID_2_labelStr():
-
-    folder = '/save/wenpeng/datasets/LORELEI/il5_unseq/setE/data/annotation/situation_frame/'
-    subfoldernames = ['issues', 'needs']
-    docid2labelstr=defaultdict(list)
-    re=0
-    for subfolder in subfoldernames:
-        true_folder = folder+subfolder
-
-        files= os.listdir(true_folder)
-        print 'folder file sizes: ', len(files)
-        for fil in files:
-            if not os.path.isdir(fil):
-                f = codecs.open(true_folder+'/'+fil, 'r', 'utf-8')
-                line_co = 0
-                for line in f:
-                    if line_co == 0:
-                        line_co+=1
-                        continue
-                    else:
-                        parts = line.strip().split('\t')
-                        doc_id = parts[1]
-                        issue_str = parts[4]
-                        if doc_id in docid2labelstr:
-                            re+=1
-                        docid2labelstr[doc_id].append(issue_str)
-                        line_co+=1
-                        break
-                f.close()
-    print 'load load_docID_2_labelStr over, size: ', len(docid2labelstr), 're size: ', re
-    return docid2labelstr
-
-def load_text_given_docvocab(doc_set):
-    folder = '/save/wenpeng/datasets/LORELEI/il5_setE_monolingual_text/ltf/'
-    docid2text={}
-    re=0
-
-    files= os.listdir(folder)
-    print 'folder file sizes: ', len(files)
-    for fil in files:
-
-        doc_id = fil[:fil.find('.')]
-        if doc_id in doc_set:
-            sent = ''
-            f = ET.parse(folder+'/'+fil)
-            # f = codecs.open(folder+'/'+fil, 'r', 'utf-8')
-            root = f.getroot()
-            for seg in root.iter('SEG'):
-                sent_i = seg.find('ORIGINAL_TEXT').text
-                sent+=' '+sent_i
-            docid2text[doc_id] = sent
-            # f.close()
-    print 'load load_text_given_docvocab over, size: ', len(docid2text)
-    return docid2text
-
-def store_il5_as_trainingformat(doc_2_labelstrlist,doc_2_text ):
-    type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2, 'water':7, 'shelter':5,
-    'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
-    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/il5_labeled_as_training.txt', 'w', 'utf-8')
-    for doc in doc_2_text:
-        labelstrlist = doc_2_labelstrlist.get(doc)
-        if labelstrlist is not None:
-            # print 'labelstr: ', labelstr
-            iddlist=[]
-            for  labelstr in labelstrlist:
-                idd = type2label_id.get(labelstr)
-                if idd is None:
-                    print 'labelstr is None:', labelstr
-                    exit(0)
-                iddlist.append(idd)
-
-            writefile.write(' '.join(map(str, iddlist))+'\t'+' '.join(labelstrlist)+'\t'+doc_2_text.get(doc)+'\n')
-    writefile.close()
-    print 'store labeled il5 over'
-
-
-def train_monolingual_emb_il5():
-    os.system("./word2vec -train /save/wenpeng/datasets/LORELEI/multi-lingual-emb/il5_monolingual_text.txt -output /save/wenpeng/datasets/LORELEI/multi-lingual-emb/il5_300d_word2vec.txt -cbow 0 -size 300 -window 5 -negative 5 -hs 0 -iter 5 -sample 1e-3 -threads 12 -binary 0 -min-count 1")
-
 
 def get_need_other_fields(matrix):
     #matrix (4,4)
@@ -413,16 +441,39 @@ def get_issue_other_fields(matrix):
     else:
         urgency = False
     return    status, urgency
-def generate_2017_official_output(lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame):
+
+def valid_SF(new_dict,doc2remain_seglist):
+    # print 'new_dict:', new_dict
+
+    doc_id = new_dict.get('DocumentID')
+    # print 'doc2remain_seglist:', doc2remain_seglist.get(doc_id)
+    # exit(0)
+    seg_id = new_dict.get('Justification')
+    if doc_id in doc2remain_seglist:
+        seg_list = doc2remain_seglist.get(doc_id)
+        seg_set = set()
+        for gold_seg_id in seg_list:
+            # gold_seg_id = seg.get('id')
+            if seg_id == gold_seg_id:
+                return True
+                break
+    return False
+
+def generate_official_output(pred_types, pred_confs, pred_others, min_mean_frame):
     #pred_others (#instance, 4, 3)
-    # thai_root = '/save/wenpeng/datasets/LORELEI/Thai/'
+    thai_root = '/save/wenpeng/datasets/LORELEI/Thai/'
     instance_size = len(pred_types)
     type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2,
     'water':7, 'shelter':5, 'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
 
     id2type = {y:x for x,y in type2label_id.iteritems()}
+    readfile = codecs.open(thai_root+'thai-setE-as-test-input_ner_filtered.txt', 'r', 'utf-8')
 
     output_dict_list = []
+    lines=[]
+    for line in readfile:
+        lines.append(line.strip())
+    readfile.close()
     assert instance_size == len(pred_others)
     assert instance_size == len(pred_confs)
     assert instance_size == len(lines)
@@ -435,8 +486,7 @@ def generate_2017_official_output(lines, output_file_path, pred_types, pred_conf
 
     #needs
     for i in range(instance_size):
-        # print 'lines[i]:', lines[i].split('\t')
-        entity_pos_list = lines[i].split('\t')[3].split()
+        # print 'line...', i
         pred_vec = list(pred_types[i])
         text_parts = lines[i].split('\t')
         doc_id = text_parts[0]
@@ -444,151 +494,103 @@ def generate_2017_official_output(lines, output_file_path, pred_types, pred_conf
         for x, y in enumerate(pred_vec):
             if y == 1:
                 if x < 8: # is a need type
-                    for entity_pos in entity_pos_list:
-                        ent_start = int(entity_pos.split('-')[0])
-                        ent_end = int(entity_pos.split('-')[1])
-                        ent_type = entity_pos.split('-')[2]
-                        new_dict={}
-                        new_dict['DocumentID'] = doc_id
-                        hit_need_type = id2type.get(x)
-                        new_dict['Type'] = hit_need_type
-                        new_dict['PlaceMention'] =  {'EntityType':ent_type, 'Start':ent_start, 'End':ent_end}
-                        status,  relief,urgency = get_need_other_fields(pred_others[i])
-                        new_dict['Status'] = {'Need':status, 'Relief':relief,'Urgent':urgency}
-                        new_dict['TypeConfidence'] = float(pred_confs[i][x])
-                        if new_dict.get('TypeConfidence') > 0.4:
-                            output_dict_list.append(new_dict)
+                    new_dict={}
+                    new_dict['DocumentID'] = doc_id
+                    hit_need_type = id2type.get(x)
+                    new_dict['Type'] = hit_need_type
+                    new_dict['Place_KB_ID'] = 'TBD'
+                    status,  relief,urgency = get_need_other_fields(pred_others[i])
+                    new_dict['Status'] = status
+                    new_dict['Confidence'] = float(pred_confs[i][x])
+                    new_dict['Justification_ID'] = seg_id
+                    new_dict['Resolution'] = relief
+                    new_dict['Urgent'] = urgency
+                    output_dict_list.append(new_dict)
                 elif x ==8 or x > 9: # is issue
-                    for entity_pos in entity_pos_list:
-                        ent_start = int(entity_pos.split('-')[0])
-                        ent_end = int(entity_pos.split('-')[1])
-                        ent_type = entity_pos.split('-')[2]
-                        new_dict={}
-                        new_dict['DocumentID'] = doc_id
-                        hit_issue_type = id2type.get(x)
-                        new_dict['Type'] = hit_issue_type
-                        new_dict['PlaceMention'] =  {'EntityType':ent_type, 'Start':ent_start, 'End':ent_end}
-                        status, urgency = get_issue_other_fields(pred_others[i])
-                        new_dict['Status'] = {'Issue':status}
-                        new_dict['TypeConfidence'] = float(pred_confs[i][x])
-                        if new_dict.get('TypeConfidence') > 0.4:
-                            output_dict_list.append(new_dict)
+                    new_dict={}
+                    new_dict['DocumentID'] = doc_id
+                    hit_issue_type = id2type.get(x)
+                    new_dict['Type'] = hit_issue_type
+                    new_dict['Place_KB_ID'] = 'TBD'
+                    status, urgency = get_issue_other_fields(pred_others[i])
+                    new_dict['Status'] = status
+                    new_dict['Confidence'] = float(pred_confs[i][x])
+                    new_dict['Justification_ID'] = seg_id
+                    new_dict['Urgent'] = urgency
+                    output_dict_list.append(new_dict)
 
-
-    refine_output_dict_list, doc_size = de_duplicate(output_dict_list)
-    frame_size = len(refine_output_dict_list)
-    mean_frame = frame_size*1.0/doc_size
-    # if mean_frame < min_mean_frame:
-    writefile = codecs.open(output_file_path ,'w', 'utf-8')
-    json.dump(refine_output_dict_list, writefile)
-    writefile.close()
-    print '............new loweast written over'
+    frame_size = len(output_dict_list)
+    mean_frame = frame_size*1.0/instance_size
+    if mean_frame < min_mean_frame:
+        writefile = codecs.open(thai_root+'system_output_forfun.json' ,'w', 'utf-8')
+        json.dump(output_dict_list, writefile)
+        writefile.close()
+        print '............new loweast written over'
 
     print 'official output succeed...Frame size:', frame_size, 'average:', mean_frame
     return mean_frame
 
-def de_duplicate(output_dict_list):
-    need_type_set = set([ 'med','search','food','infra','water','shelter','evac','utils'])
-    issue_type_set = set(['regimechange','crimeviolence','terrorism'])
-    new_dict_list=[]
-    key2dict_list = defaultdict(list)
+
+def preprocess_NER_results():
+    readfile = codecs.open('/save/wenpeng/datasets/LORELEI/Thai/NerResult/LDC2018E03_UpennEDL_2018-06-18-21-25.tab', 'r', 'utf-8')
+    doc2entitylist=defaultdict(list)
     doc_set = set()
-    for dic in output_dict_list:
-        doc_id = dic.get('DocumentID')
-        doc_set.add(doc_id)
-        type = dic.get('Type')
-        ent_start = dic.get('PlaceMention').get('Start')
-        ent_end = dic.get('PlaceMention').get('End')
-        key = (doc_id, type, ent_start,ent_end)
-        key2dict_list[key].append(dic)
-    for key, dict_list in key2dict_list.iteritems():
-        #compute status, confidence
-        if dict_list[0].get('Type') in need_type_set:
-            status=[]
-            relief=[]
-            urgency=[]
-            conf = []
-
-            for dic in dict_list:
-                status.append(dic.get('Status').get('Need'))
-                relief.append(dic.get('Status').get('Relief'))
-                urgency.append(dic.get('Status').get('Urgent'))
-                conf.append(dic.get('TypeConfidence'))
-            status = majority_ele_in_list(status)
-            relief = majority_ele_in_list(relief)
-            urgency = majority_ele_in_list(urgency)
-            conf = max(conf)
-            new_dict={}
-            new_dict['DocumentID'] = dict_list[0].get('DocumentID')
-            new_dict['Type'] = dict_list[0].get('Type')
-            new_dict['PlaceMention'] =  dict_list[0].get('PlaceMention')
-            new_dict['Status'] = {'Need':status, 'Relief':relief,'Urgent':urgency}
-            new_dict['TypeConfidence'] = conf
-            new_dict_list.append(new_dict)
-        elif dict_list[0].get('Type') in issue_type_set:
-            status=[]
-            conf = []
-
-            for dic in dict_list:
-                status.append(dic.get('Status').get('Issue'))
-                conf.append(dic.get('TypeConfidence'))
-            status = majority_ele_in_list(status)
-            conf = max(conf)
-            new_dict={}
-            new_dict['DocumentID'] = dict_list[0].get('DocumentID')
-            new_dict['Type'] = dict_list[0].get('Type')
-            new_dict['PlaceMention'] =  dict_list[0].get('PlaceMention')
-            new_dict['Status'] = {'Issue':status}
-            new_dict['TypeConfidence'] = conf
-            new_dict_list.append(new_dict)
-        else:
-            print 'wring detected SF type:', dict_list[0].get('Type')
-            exit(0)
-    return       new_dict_list, len(doc_set)
-
-
-
-
-
-def majority_ele_in_list(lis):
-    c = Counter(lis)
-    return c.most_common()[0][0]
-
-
-
-
-def load_EDL2017_output():
-    readfile = codecs.open('/save/wenpeng/datasets/LORELEI/2017_best_run10-final.tab', 'r', 'utf-8')
-    # readfile = codecs.open('/save/wenpeng/datasets/LORELEI/finalsubmission.tab', 'r', 'utf-8')
-    docid2poslist = defaultdict(list)
+    valid_size = 0
     for line in readfile:
         parts = line.strip().split('\t')
+        doc_id = parts[1][:parts[1].find('-')]
+        doc_set.add(doc_id)
+        span = parts[3][parts[3].find(':')+1:].split('-')
+        start = int(span[0])
+        end = int(span[1])
         type = parts[5]
-        if type == 'GPE' or type == 'LOC':
-            comma_pos = parts[3].find(':')
-            doc_id = parts[3][:comma_pos]
-            pos_pair = parts[3][comma_pos+1:]
-            docid2poslist[doc_id].append(pos_pair+'-'+type)
+        if type == 'GPE':
+            entity_instance = {}
+            entity_instance['start'] = start
+            entity_instance['end'] = end
+            doc2entitylist[doc_id].append(entity_instance)
+            valid_size+=1
     readfile.close()
-    print 'load EDL2017 over, size:', len(docid2poslist)
-    return docid2poslist
+    print 'load ner results over, size:', valid_size, 'doc size:', len(doc_set)
+    return doc2entitylist
+
+
+def filter_ner_results():
+    doc2entitylist = preprocess_NER_results()
+    doc2seglist = Thai_rich_info()
+    size = 0
+    doc2remain_seglist=defaultdict(list)
+    for doc_id in doc2entitylist:
+        if doc_id in doc2seglist:
+            ent_list = doc2entitylist.get(doc_id)
+            seg_list = doc2seglist.get(doc_id)
+            for ent_instance in ent_list:
+                start = ent_instance.get('start')
+                end= ent_instance.get('end')
+                for seg in seg_list:
+                    seg_start = seg.get('seg_start')
+                    seg_end = seg.get('seg_end')
+                    seg_id = seg.get('id')
+                    if start >=seg_start and end <=seg_end:
+                        doc2remain_seglist[doc_id].append(seg_id)
+                        size+=1
+    print 'remain doc size:', len(doc2remain_seglist), ' seg size:', size
+    return doc2remain_seglist
+
+
 
 
 if __name__ == '__main__':
-    # doc_2_labelstrlist = load_docID_2_labelStr()
-    # doc_2_text = load_text_given_docvocab(set(doc_2_labelstrlist.keys()))
-    # store_il5_as_trainingformat(doc_2_labelstrlist, doc_2_text)
+    # Thai_into_test()
     '''
-    above not useful anymore
+    the following method to create annotated test data does not make sense
     '''
-    # docid2text, docid2issue, docid2mention, docid2need = load_il5()
-    # generate_entity_focused_trainingset(docid2text, docid2issue, docid2mention, docid2need)
-    # il5_into_text_corpus_for_word2vec_training()
-    # train_monolingual_emb_il5()
+    docid2text, docid2issue, docid2mention, docid2need = load_Thai_annotations()
+    generate_entity_focused_trainingset(docid2text, docid2issue, docid2mention, docid2need)
 
-    '''
-    need the annotated docs and EDL docs to filter uncovered docs
-    '''
-    docset = SF_annotated_docSet('/save/wenpeng/datasets/LORELEI/official_scorer/annotated_filelist_SF.tab')
-    docid2entity_pos_list = load_EDL2017_output()
-    IL_into_test_filteredby_NER('/save/wenpeng/datasets/LORELEI/il5_setE_monolingual_text/ltf/',docset, '/save/wenpeng/datasets/LORELEI/il5-setE-as-test-input_ner_filtered', docid2entity_pos_list, 2)
+    # doc2entitylist = preprocess_NER_results()
+    # doc2seglist = Thai_rich_info()
+    # filter_ner_results(doc2entitylist, doc2seglist)
+
+    # doc2remain_seglist = filter_ner_results()
+    # Thai_into_test_filteredby_NER(doc2remain_seglist)

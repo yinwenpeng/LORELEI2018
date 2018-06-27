@@ -4,7 +4,8 @@ from pprint import pprint
 import nltk
 from collections import defaultdict
 
-
+label2id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2, 'water':7, 'shelter':5,
+'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
 def denoise_text(text):
     wordlist = []
     for word in text.strip().split():
@@ -14,24 +15,71 @@ def denoise_text(text):
     tokenized_text = nltk.word_tokenize(text)
     return ' '.join(tokenized_text)
 
+
+def subset_reliefweb(label_size):
+    readfile = codecs.open('/save/wenpeng/datasets/LORELEI/ReliefWeb_id_label_text.txt', 'r', 'utf-8')
+    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/ReliefWeb_subset_id_label_text.txt', 'w', 'utf-8')
+    co=0
+    for line in readfile:
+        parts =  line.strip().split('\t')
+        if len(parts[0].split())>=label_size:
+            writefile.write(line.strip()+'\n')
+            co+=1
+    writefile.close()
+    readfile.close()
+    print 'subset reliefweb over with size:', co
+
+
+
+def reformat_multilabel_reliefweb_json2txt():
+    relief_data = json.load(codecs.open('/save/wenpeng/datasets/LORELEI/multilabel-relief.json', 'r', 'utf-8'))
+    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/ReliefWeb_id_label_text.txt', 'w', 'utf-8')
+    size = len(relief_data)
+    # label2id={}
+    # id2amout=defaultdict(int)
+    co=0
+    multi_label_size = 0
+    for i in range(size):
+        label_list = relief_data[i]['labels']   # we found only one label per text
+        if len(label_list) > 1:
+            multi_label_size+=1
+        text = denoise_text(relief_data[i]['body'])
+        # print label, label2id
+        ids = []
+        for label in label_list:
+            id = label2id.get(label)
+            if id is None:
+                print 'id',  id
+                exit(0)
+            ids.append(id)
+
+        writefile.write(' '.join(map(str,ids))+'\t'+' '.join(label_list)+'\t'+text+'\n')
+        co+=1
+        if co % 1000 == 0:
+            print co, '/', size
+    print 'all done, multi_label_size:', multi_label_size
+    writefile.close()
 def reformat_reliefweb_json2txt():
     relief_data = json.load(codecs.open('/save/wenpeng/datasets/LORELEI/corpus-11.json', 'r', 'utf-8'))
     writefile = codecs.open('/save/wenpeng/datasets/LORELEI/ReliefWeb_id_label_text.txt', 'w', 'utf-8')
     size = len(relief_data)
-    label2id={}
-    id2amout=defaultdict(int)
+    # label2id={}
+    # id2amout=defaultdict(int)
+    co=0
     for i in range(size):
         label_list = relief_data[i]['labels']   # we found only one label per text
         label = label_list[0]
         text = denoise_text(relief_data[i]['body'])
-        print label, label2id
+        # print label, label2id
         id = label2id.get(label)
         if id is None:
-            id = len(label2id)
-            label2id[label] = id
-        id2amout[id]+=1
+            print 'id',  id
+            exit(0)
         writefile.write(str(id)+'\t'+label+'\t'+text+'\n')
-    print 'all done', id2amout, sum(id2amout)
+        co+=1
+        if co % 1000 == 0:
+            print co, '/', size
+    print 'all done'
     writefile.close()
 
 def split_reliefweb_train_test():
@@ -87,4 +135,6 @@ def split_reliefweb_train_test_balanced():
 if __name__ == '__main__':
     # reformat_reliefweb_json2txt()
     # split_reliefweb_train_test()
-    split_reliefweb_train_test_balanced()
+    # split_reliefweb_train_test_balanced()
+    # reformat_multilabel_reliefweb_json2txt()
+    subset_reliefweb(3)

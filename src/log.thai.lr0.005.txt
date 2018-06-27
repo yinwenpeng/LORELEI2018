@@ -1,0 +1,2157 @@
+model options {'describ_max_len': 20, 'learning_rate': 0.005, 'batch_size': 50, 'n_epochs': 100, 'emb_size': 300, 'filter_size': [3, 5], 'maxSentLen': 100, 'hidden_size': [300, 300], 'type_size': 12}
+loading file: /save/wenpeng/datasets/LORELEI/SF-BBN-Mark-split/full_BBN_multi.txt ...
+			 size: 4000
+dataset loaded over, totally  13154 words
+loading file: /save/wenpeng/datasets/LORELEI/il5_translated_seg_level_as_training_all_fields.txt ...
+			 size: 1088
+dataset loaded over, totally  17853 words
+loading file: /save/wenpeng/datasets/LORELEI/Thai/thai-setE-as-test-input_ner_filtered.txt ...
+			 size: 3284
+dataset loaded over, totally  26596 words
+/save/wenpeng/datasets/LORELEI/Thai/bilingualEmb/vectors-en.txt ==> loading 300d word2vec
+==> word2vec is loaded over
+/save/wenpeng/datasets/LORELEI/Thai/bilingualEmb/vectors-th.txt ==> loading 300d word2vec
+==> word2vec is loaded over
+==> use word2vec initialization over...fail  8120
+... building the model
+... training
+Epoch  1 iter 20 average cost: 1.61123418808 6.08174207211 uses  0.299445366859 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 30595 average: 9.31638246041
+			 test thai over, min_mean_frame: 9.31638246041
+Epoch  1 iter 40 average cost: 1.25387322903 3.13656424284 uses  0.345038835208 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 28481 average: 8.67265529842
+			 test thai over, min_mean_frame: 8.67265529842
+Epoch  1 iter 60 average cost: 1.09411384463 2.09104282856 uses  0.319632148743 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 28618 average: 8.7143727162
+			 test thai over, min_mean_frame: 8.67265529842
+Epoch  1 iter 80 average cost: 1.00971805528 1.56828212142 uses  0.294679717223 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 30148 average: 9.1802679659
+			 test thai over, min_mean_frame: 8.67265529842
+Epoch  1 iter 100 average cost: 0.959007955194 1.25462569714 uses  0.2981396993 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 27638 average: 8.41595615104
+			 test thai over, min_mean_frame: 8.41595615104
+Epoch  1 uses  1.75869710048 min
+Epoch  2 iter 120 average cost: 0.956037747363 1.64781814019 uses  0.462428414822 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 27041 average: 8.23416565164
+			 test thai over, min_mean_frame: 8.23416565164
+Epoch  2 iter 140 average cost: 0.922632195268 1.46100365945 uses  0.337937231859 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 24996 average: 7.61144945189
+			 test thai over, min_mean_frame: 7.61144945189
+Epoch  2 iter 160 average cost: 0.894543791562 1.27837820202 uses  0.32076305151 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 23921 average: 7.2841047503
+			 test thai over, min_mean_frame: 7.2841047503
+Epoch  2 iter 180 average cost: 0.869382965565 1.13633617957 uses  0.312440832456 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 23579 average: 7.1799634592
+			 test thai over, min_mean_frame: 7.1799634592
+Epoch  2 iter 200 average cost: 0.850864778459 1.02270256162 uses  0.320336349805 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 24914 average: 7.58647990256
+			 test thai over, min_mean_frame: 7.1799634592
+Epoch  2 uses  1.73819828431 min
+Epoch  3 iter 220 average cost: 0.844756790183 1.19914498654 uses  0.430283749104 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 23951 average: 7.29323995128
+			 test thai over, min_mean_frame: 7.1799634592
+Epoch  3 iter 240 average cost: 0.832445148875 1.13767080307 uses  0.314271533489 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 22529 average: 6.86023142509
+			 test thai over, min_mean_frame: 6.86023142509
+Epoch  3 iter 260 average cost: 0.816757890582 1.05015766437 uses  0.314674631755 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 21025 average: 6.40225334957
+			 test thai over, min_mean_frame: 6.40225334957
+Epoch  3 iter 280 average cost: 0.806640278654 0.975146402631 uses  0.311841249466 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 20608 average: 6.27527405603
+			 test thai over, min_mean_frame: 6.27527405603
+Epoch  3 iter 300 average cost: 0.794844090541 0.910136642456 uses  0.317428950469 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 21271 average: 6.47716199756
+			 test thai over, min_mean_frame: 6.27527405603
+Epoch  3 uses  1.69064638217 min
+Epoch  4 iter 320 average cost: 0.789341664501 1.00940920115 uses  0.416456766923 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 25042 average: 7.62545676005
+			 test thai over, min_mean_frame: 6.27527405603
+Epoch  4 iter 340 average cost: 0.779564771231 0.985641207415 uses  0.318683830897 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 24353 average: 7.41565164434
+			 test thai over, min_mean_frame: 6.27527405603
+Epoch  4 iter 360 average cost: 0.771134996083 0.930883362558 uses  0.293092719714 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 20443 average: 6.22503045067
+			 test thai over, min_mean_frame: 6.22503045067
+Epoch  4 iter 380 average cost: 0.763473471215 0.881889501371 uses  0.307591331005 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 20444 average: 6.22533495737
+			 test thai over, min_mean_frame: 6.22503045067
+Epoch  4 iter 400 average cost: 0.754865583703 0.837795026302 uses  0.296038818359 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 19055 average: 5.80237515225
+			 test thai over, min_mean_frame: 5.80237515225
+Epoch  4 uses  1.65611300071 min
+Epoch  5 iter 420 average cost: 0.750284014926 0.906139725731 uses  0.428439048926 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 23019 average: 7.00943970767
+			 test thai over, min_mean_frame: 5.80237515225
+Epoch  5 iter 440 average cost: 0.74428349205 0.895159077102 uses  0.325172980626 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 23292 average: 7.09257003654
+			 test thai over, min_mean_frame: 5.80237515225
+Epoch  5 iter 460 average cost: 0.738010966 0.856239117228 uses  0.295594696204 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 19115 average: 5.8206455542
+			 test thai over, min_mean_frame: 5.80237515225
+Epoch  5 iter 480 average cost: 0.731210209802 0.820562487344 uses  0.289102085431 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 19930 average: 6.06881851401
+			 test thai over, min_mean_frame: 5.80237515225
+Epoch  5 iter 500 average cost: 0.725109650075 0.78773998785 uses  0.296768983205 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17357 average: 5.2853227771
+			 test thai over, min_mean_frame: 5.2853227771
+Epoch  5 uses  1.64581678311 min
+Epoch  6 iter 520 average cost: 0.721620123375 0.832048503711 uses  0.435701596737 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 27588 average: 8.40073081608
+			 test thai over, min_mean_frame: 5.2853227771
+Epoch  6 iter 540 average cost: 0.716307614689 0.829065811634 uses  0.339137685299 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 21027 average: 6.40286236297
+			 test thai over, min_mean_frame: 5.2853227771
+Epoch  6 iter 560 average cost: 0.710764462448 0.799456318361 uses  0.296035250028 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 20952 average: 6.38002436054
+			 test thai over, min_mean_frame: 5.2853227771
+Epoch  6 iter 580 average cost: 0.706119186149 0.771888859108 uses  0.290112066269 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17529 average: 5.33769792935
+			 test thai over, min_mean_frame: 5.2853227771
+Epoch  6 iter 600 average cost: 0.701795286884 0.746159230471 uses  0.295324317614 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16515 average: 5.02892813642
+			 test thai over, min_mean_frame: 5.02892813642
+Epoch  6 uses  1.65958863497 min
+Epoch  7 iter 620 average cost: 0.69856957774 0.780494743393 uses  0.420270498594 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 22655 average: 6.89859926918
+			 test thai over, min_mean_frame: 5.02892813642
+Epoch  7 iter 640 average cost: 0.694606297277 0.78128797859 uses  0.34592474699 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 18327 average: 5.58069427527
+			 test thai over, min_mean_frame: 5.02892813642
+Epoch  7 iter 660 average cost: 0.690575463528 0.757612585299 uses  0.295572249095 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 18219 average: 5.54780755177
+			 test thai over, min_mean_frame: 5.02892813642
+Epoch  7 iter 680 average cost: 0.685949182642 0.735329862202 uses  0.290221683184 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16037 average: 4.88337393423
+			 test thai over, min_mean_frame: 4.88337393423
+Epoch  7 iter 700 average cost: 0.681330816746 0.714320437568 uses  0.308740115166 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14297 average: 4.35353227771
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  7 uses  1.66058198214 min
+Epoch  8 iter 720 average cost: 0.678095557541 0.735291200876 uses  0.40382840236 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 18415 average: 5.6074908648
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  8 iter 740 average cost: 0.675102054469 0.740383784835 uses  0.347803068161 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17967 average: 5.47107186358
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  8 iter 760 average cost: 0.671277417046 0.720900001024 uses  0.296428032716 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14622 average: 4.45249695493
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  8 iter 780 average cost: 0.667029845867 0.702415385613 uses  0.291435734431 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15141 average: 4.61053593179
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  8 iter 800 average cost: 0.663738128468 0.684855000973 uses  0.292577819029 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14925 average: 4.54476248477
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  8 uses  1.63706605037 min
+Epoch  9 iter 820 average cost: 0.661457917494 0.698841791764 uses  0.394506351153 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16303 average: 4.9643727162
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  9 iter 840 average cost: 0.657953682506 0.704964586383 uses  0.355267914136 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17877 average: 5.44366626066
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  9 iter 860 average cost: 0.654827456904 0.688570061118 uses  0.306962052981 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14566 average: 4.43544457978
+			 test thai over, min_mean_frame: 4.35353227771
+Epoch  9 iter 880 average cost: 0.651528687606 0.672920741547 uses  0.294436065356 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13857 average: 4.21954933009
+			 test thai over, min_mean_frame: 4.21954933009
+Epoch  9 iter 900 average cost: 0.647939928737 0.657966947291 uses  0.305046848456 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13624 average: 4.14859926918
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  9 uses  1.66341796716 min
+Epoch  10 iter 920 average cost: 0.645553751646 0.667493565964 uses  0.386611648401 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17098 average: 5.20645554202
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  10 iter 940 average cost: 0.643088359085 0.674362652226 uses  0.360709067186 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16428 average: 5.00243605359
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  10 iter 960 average cost: 0.639882676459 0.660313430304 uses  0.295242520173 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13829 average: 4.21102314251
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  10 iter 980 average cost: 0.636833487086 0.646837646012 uses  0.290520866712 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14895 average: 4.5356272838
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  10 iter 1000 average cost: 0.63393232581 0.633900893092 uses  0.295509084066 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14262 average: 4.34287454324
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  10 uses  1.62582930326 min
+Epoch  11 iter 1020 average cost: 0.63177694953 0.639224363893 uses  0.370794785023 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15981 average: 4.86632155907
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  11 iter 1040 average cost: 0.629588007554 0.64713759812 uses  0.372338668505 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15112 average: 4.60170523752
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  11 iter 1060 average cost: 0.626924187564 0.634927454759 uses  0.298529883226 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14866 average: 4.52679658952
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  11 iter 1080 average cost: 0.624159600393 0.623169538931 uses  0.291465699673 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13702 average: 4.17235079172
+			 test thai over, min_mean_frame: 4.14859926918
+Epoch  11 iter 1100 average cost: 0.621241971254 0.611839183677 uses  0.291984566053 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13248 average: 4.0341047503
+			 test thai over, min_mean_frame: 4.0341047503
+Epoch  11 uses  1.64119298061 min
+Epoch  12 iter 1120 average cost: 0.618919599189 0.615380855118 uses  0.372637983163 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14910 average: 4.54019488429
+			 test thai over, min_mean_frame: 4.0341047503
+Epoch  12 iter 1140 average cost: 0.616656488494 0.622726417424 uses  0.372587780158 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14186 average: 4.3197320341
+			 test thai over, min_mean_frame: 4.0341047503
+Epoch  12 iter 1160 average cost: 0.614032647887 0.611989755055 uses  0.294992264112 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12600 average: 3.83678440926
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  12 iter 1180 average cost: 0.611607389026 0.601617047342 uses  0.300758767128 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13788 average: 4.19853836784
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  12 iter 1200 average cost: 0.609228333235 0.591590096553 uses  0.295682414373 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13203 average: 4.02040194884
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  12 uses  1.63816866875 min
+Epoch  13 iter 1220 average cost: 0.607108783258 0.592326438622 uses  0.363662517071 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13367 average: 4.0703410475
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  13 iter 1240 average cost: 0.605015781642 0.600468233228 uses  0.386153117816 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14454 average: 4.40133982948
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  13 iter 1260 average cost: 0.602797254092 0.59093699143 uses  0.296667933464 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14351 average: 4.36997563946
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  13 iter 1280 average cost: 0.600726585602 0.581703600939 uses  0.291379702091 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13942 average: 4.24543239951
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  13 iter 1300 average cost: 0.598418183671 0.572754314771 uses  0.297783533732 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13794 average: 4.20036540804
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  13 uses  1.64092228413 min
+Epoch  14 iter 1320 average cost: 0.596484808285 0.572436532649 uses  0.354936818282 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13924 average: 4.23995127893
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  14 iter 1340 average cost: 0.594440293423 0.579832848417 uses  0.386771682898 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14348 average: 4.36906211937
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  14 iter 1360 average cost: 0.592231137174 0.571305894764 uses  0.297843933105 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13772 average: 4.19366626066
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  14 iter 1380 average cost: 0.590133035464 0.563026099188 uses  0.292462217808 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13274 average: 4.04202192448
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  14 iter 1400 average cost: 0.588073330649 0.554982869199 uses  0.291754766305 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12918 average: 3.93361753959
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  14 uses  1.63607029915 min
+Epoch  15 iter 1420 average cost: 0.586297439459 0.554081025006 uses  0.353928383191 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14180 average: 4.31790499391
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  15 iter 1440 average cost: 0.584305708648 0.561908130017 uses  0.406038602193 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14831 average: 4.51613885505
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  15 iter 1460 average cost: 0.58237801333 0.554210758373 uses  0.301309732596 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13803 average: 4.20310596833
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  15 iter 1480 average cost: 0.580512965793 0.5467214238 uses  0.293012400468 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15147 average: 4.61236297199
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  15 iter 1500 average cost: 0.578631708503 0.539431804816 uses  0.296059715748 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13903 average: 4.23355663825
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  15 uses  1.65535064936 min
+Epoch  16 iter 1520 average cost: 0.57700435231 0.536999129465 uses  0.34453980128 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12697 average: 3.86632155907
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  16 iter 1540 average cost: 0.575250645446 0.54493981445 uses  0.422426017125 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14357 average: 4.37180267966
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  16 iter 1560 average cost: 0.573413676444 0.537953406572 uses  0.30654815038 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15881 average: 4.83587088916
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  16 iter 1580 average cost: 0.571491721235 0.53114386978 uses  0.294222851594 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13511 average: 4.11419001218
+			 test thai over, min_mean_frame: 3.83678440926
+Epoch  16 iter 1600 average cost: 0.569811360445 0.524504571408 uses  0.294945116838 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12514 average: 3.81059683313
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  16 uses  1.6704665343 min
+Epoch  17 iter 1620 average cost: 0.56807601875 0.521474356416 uses  0.338887317975 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16286 average: 4.95919610231
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  17 iter 1640 average cost: 0.566611211129 0.530168539358 uses  0.408736582597 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16216 average: 4.93788063337
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  17 iter 1660 average cost: 0.564879852713 0.523780966595 uses  0.29366843303 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13903 average: 4.23355663825
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  17 iter 1680 average cost: 0.563159972287 0.517545478897 uses  0.29456085364 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13903 average: 4.23355663825
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  17 iter 1700 average cost: 0.56125364095 0.511456708557 uses  0.296880797545 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13448 average: 4.09500609013
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  17 uses  1.6318833669 min
+Epoch  18 iter 1720 average cost: 0.559704134232 0.507870896542 uses  0.323316601912 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13036 average: 3.96954933009
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  18 iter 1740 average cost: 0.558239930423 0.515682168528 uses  0.418060382207 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15462 average: 4.70828258222
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  18 iter 1760 average cost: 0.556598614867 0.509822143885 uses  0.297157851855 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13606 average: 4.1431181486
+			 test thai over, min_mean_frame: 3.81059683313
+Epoch  18 iter 1780 average cost: 0.554798005237 0.50409380519 uses  0.290383283297 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12000 average: 3.65408038977
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  18 iter 1800 average cost: 0.553191160957 0.49849276291 uses  0.304566566149 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13096 average: 3.98781973203
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  18 uses  1.64407989979 min
+Epoch  19 iter 1820 average cost: 0.551715215156 0.494488352603 uses  0.322281535467 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13013 average: 3.962545676
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  19 iter 1840 average cost: 0.550251518255 0.502435573028 uses  0.429526166121 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13637 average: 4.15255785627
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  19 iter 1860 average cost: 0.548686096248 0.497033039985 uses  0.30143746535 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13159 average: 4.00700365408
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  19 iter 1880 average cost: 0.547017001329 0.491745454453 uses  0.292248586814 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12562 average: 3.82521315469
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  19 iter 1900 average cost: 0.545320120109 0.486569186512 uses  0.298509697119 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12977 average: 3.95158343484
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  19 iter 1920 average cost: 0.543960981475 0.481500757486 uses  0.297102149328 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12724 average: 3.87454323995
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  19 uses  1.8052050511 min
+Epoch  20 iter 1920 average cost: 0.544187773687 0.482218169793 uses  0.171171482404 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12677 average: 3.86023142509
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  20 iter 1940 average cost: 0.542859260507 0.489890909502 uses  0.4396611015 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14722 average: 4.48294762485
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  20 iter 1960 average cost: 0.541281323089 0.484892022671 uses  0.29757818381 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13325 average: 4.05755176614
+			 test thai over, min_mean_frame: 3.65408038977
+Epoch  20 iter 1980 average cost: 0.539681434887 0.479994123452 uses  0.291987566153 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 11738 average: 3.57429963459
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  20 iter 2000 average cost: 0.538175650001 0.475194182217 uses  0.308862113953 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12461 average: 3.79445797808
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  20 iter 2020 average cost: 0.536689741703 0.470489289324 uses  0.297254701455 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13261 average: 4.03806333739
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  20 uses  1.81347393195 min
+Epoch  21 iter 2040 average cost: 0.535617371356 0.477574383102 uses  0.438760983944 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17304 average: 5.26918392205
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  21 iter 2060 average cost: 0.534121584299 0.47352072857 uses  0.300090332826 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13210 average: 4.02253349574
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  21 iter 2080 average cost: 0.532600933958 0.468967644641 uses  0.289277414481 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12782 average: 3.8922046285
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  21 iter 2100 average cost: 0.531034324311 0.464501286121 uses  0.295923014482 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12967 average: 3.94853836784
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  21 iter 2120 average cost: 0.529776140963 0.460119198516 uses  0.296691397826 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13185 average: 4.01492082826
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  21 uses  1.6279442668 min
+Epoch  22 iter 2140 average cost: 0.528671433686 0.466003375466 uses  0.426189116637 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13889 average: 4.22929354446
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  22 iter 2160 average cost: 0.527275506021 0.462727028131 uses  0.305358632406 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13327 average: 4.05816077954
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  22 iter 2180 average cost: 0.525742932115 0.458481826039 uses  0.300276831786 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13112 average: 3.99269183922
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  22 iter 2200 average cost: 0.52449347664 0.454313809438 uses  0.295592049758 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 11859 average: 3.61114494519
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  22 iter 2220 average cost: 0.523083483663 0.450220892236 uses  0.30530936718 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12696 average: 3.86601705238
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  22 uses  1.6375998497 min
+Epoch  23 iter 2240 average cost: 0.521924667739 0.455202678618 uses  0.417957981428 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15100 average: 4.59805115713
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  23 iter 2260 average cost: 0.520613728371 0.452695602073 uses  0.3144307971 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14473 average: 4.40712545676
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  23 iter 2280 average cost: 0.519378431743 0.44872458802 uses  0.295089316368 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12669 average: 3.8577953715
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  23 iter 2300 average cost: 0.517923825318 0.444822635081 uses  0.294631934166 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12612 average: 3.84043848965
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  23 iter 2320 average cost: 0.516664691475 0.440987957192 uses  0.297332533201 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13698 average: 4.17113276492
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  23 uses  1.62587636709 min
+Epoch  24 iter 2340 average cost: 0.515574584265 0.445053233321 uses  0.410564068953 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13970 average: 4.25395858709
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  24 iter 2360 average cost: 0.514403710098 0.442977790762 uses  0.324690365791 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13848 average: 4.21680876979
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  24 iter 2380 average cost: 0.51316472471 0.439255288318 uses  0.297015714645 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14442 average: 4.39768574909
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  24 iter 2400 average cost: 0.511839969965 0.435594827582 uses  0.288267918428 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13532 average: 4.12058465286
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  24 iter 2420 average cost: 0.51048336151 0.43199487033 uses  0.293976553281 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12427 average: 3.7841047503
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  24 uses  1.62633225123 min
+Epoch  25 iter 2440 average cost: 0.509281324156 0.435439181303 uses  0.408288733164 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14130 average: 4.30267965895
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  25 iter 2460 average cost: 0.508105214473 0.434054463932 uses  0.321424547831 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12927 average: 3.93635809988
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  25 iter 2480 average cost: 0.506907489956 0.430554024707 uses  0.289957336585 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13268 average: 4.04019488429
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  25 iter 2500 average cost: 0.505640997362 0.427109592509 uses  0.285291719437 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14591 average: 4.44305724726
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  25 iter 2520 average cost: 0.504539751604 0.423719833839 uses  0.290243780613 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12692 average: 3.86479902558
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  25 uses  1.59775619904 min
+Epoch  26 iter 2540 average cost: 0.50338531803 0.426443711885 uses  0.395298413436 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13734 average: 4.18209500609
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  26 iter 2560 average cost: 0.502345543751 0.425707902946 uses  0.328336048126 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13297 average: 4.04902557856
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  26 iter 2580 average cost: 0.50108211692 0.422407841682 uses  0.289120415847 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12887 average: 3.92417783191
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  26 iter 2600 average cost: 0.499887289646 0.419158550593 uses  0.290110381444 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12055 average: 3.67082825822
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  26 iter 2620 average cost: 0.498774728168 0.415958867 uses  0.297821466128 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13860 average: 4.22046285018
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  26 uses  1.61315604846 min
+Epoch  27 iter 2640 average cost: 0.497809469181 0.41800835171 uses  0.402591383457 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14197 average: 4.3230816078
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  27 iter 2660 average cost: 0.496617061023 0.417595849024 uses  0.343859366576 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 11955 average: 3.64037758831
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  27 iter 2680 average cost: 0.495388859244 0.414479462091 uses  0.298153650761 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12471 average: 3.79750304507
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  27 iter 2700 average cost: 0.494297294683 0.411409243853 uses  0.292140833537 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12044 average: 3.66747868453
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  27 iter 2720 average cost: 0.493174403227 0.408384175883 uses  0.295059967041 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13540 average: 4.12302070646
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  27 uses  1.6406009992 min
+Epoch  28 iter 2740 average cost: 0.492139286194 0.410162471289 uses  0.397553400199 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14707 average: 4.47838002436
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  28 iter 2760 average cost: 0.491062527053 0.410247086982 uses  0.353445430597 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14807 average: 4.50883069428
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  28 iter 2780 average cost: 0.489985530797 0.40729566909 uses  0.298877497514 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12295 average: 3.74390986602
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  28 iter 2800 average cost: 0.48887288315 0.404386414311 uses  0.294637020429 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12865 average: 3.91747868453
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  28 iter 2820 average cost: 0.487830490159 0.401518425557 uses  0.295753586292 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14059 average: 4.28105968331
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  28 uses  1.64459258318 min
+Epoch  29 iter 2840 average cost: 0.486877461953 0.402761800314 uses  0.387614663442 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14601 average: 4.44610231425
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  29 iter 2860 average cost: 0.485856059194 0.402904971705 uses  0.3589889129 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13753 average: 4.18788063337
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  29 iter 2880 average cost: 0.484772380928 0.400107020512 uses  0.301400550207 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13501 average: 4.11114494519
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  29 iter 2900 average cost: 0.483734271239 0.39734766175 uses  0.290075500806 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13632 average: 4.15103532278
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  29 iter 2920 average cost: 0.482666182436 0.394626102423 uses  0.295762650172 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13522 average: 4.11753958587
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  29 uses  1.64492691755 min
+Epoch  30 iter 2940 average cost: 0.48167096491 0.395434140652 uses  0.384913380941 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13620 average: 4.14738124239
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  30 iter 2960 average cost: 0.480706214079 0.395983246714 uses  0.366467686494 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13837 average: 4.2134591961
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  30 iter 2980 average cost: 0.479669572823 0.393325641031 uses  0.299703816573 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13148 average: 4.00365408039
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  30 iter 3000 average cost: 0.478655634701 0.390703470091 uses  0.294749633471 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13390 average: 4.07734470158
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  30 iter 3020 average cost: 0.477659344071 0.388116029892 uses  0.299477318923 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13853 average: 4.21833130329
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  30 uses  1.65080403487 min
+Epoch  31 iter 3040 average cost: 0.476649103657 0.388632486349 uses  0.382432866096 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15614 average: 4.75456760049
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  31 iter 3060 average cost: 0.475797100979 0.389378947779 uses  0.37233303388 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15004 average: 4.56881851401
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  31 iter 3080 average cost: 0.474707161451 0.386850513053 uses  0.298239000638 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14541 average: 4.4278319123
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  31 iter 3100 average cost: 0.473720920547 0.384354703292 uses  0.293199431896 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13646 average: 4.15529841657
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  31 iter 3120 average cost: 0.472761852648 0.381890891091 uses  0.299877051512 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13537 average: 4.12210718636
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  31 uses  1.65029955308 min
+Epoch  32 iter 3140 average cost: 0.471842245947 0.382042334433 uses  0.37106060187 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15551 average: 4.73538367844
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  32 iter 3160 average cost: 0.470982106417 0.383024435198 uses  0.380264151096 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12790 average: 3.8946406821
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  32 iter 3180 average cost: 0.469967369454 0.380615476486 uses  0.300263400873 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12343 average: 3.75852618758
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  32 iter 3200 average cost: 0.468943050867 0.378236629758 uses  0.290378932158 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12100 average: 3.68453105968
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  32 iter 3220 average cost: 0.468017554487 0.375887333921 uses  0.295494870345 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12477 average: 3.79933008526
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  32 uses  1.64381916523 min
+Epoch  33 iter 3240 average cost: 0.467128801838 0.375883792341 uses  0.360415748755 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13148 average: 4.00365408039
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  33 iter 3260 average cost: 0.466218558342 0.376952813319 uses  0.385213398933 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13657 average: 4.15864799026
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  33 iter 3280 average cost: 0.465215248628 0.374654320555 uses  0.295471918583 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13122 average: 3.99573690621
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  33 iter 3300 average cost: 0.464317675702 0.372383688309 uses  0.290358630816 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12883 average: 3.92295980512
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  33 iter 3320 average cost: 0.463356487808 0.370140413078 uses  0.295552102725 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13595 average: 4.13976857491
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  33 uses  1.63659076691 min
+Epoch  34 iter 3340 average cost: 0.462614872307 0.369871271477 uses  0.358696599801 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13719 average: 4.1775274056
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  34 iter 3360 average cost: 0.461705974724 0.371165726334 uses  0.392821566264 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14093 average: 4.29141291108
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  34 iter 3380 average cost: 0.460759569744 0.368969479432 uses  0.295755732059 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13038 average: 3.97015834348
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  34 iter 3400 average cost: 0.459795143004 0.36679907073 uses  0.293601115545 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12256 average: 3.73203410475
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  34 iter 3420 average cost: 0.458914663102 0.364654046924 uses  0.297142167886 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12733 average: 3.87728380024
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  34 uses  1.64153891802 min
+Epoch  35 iter 3440 average cost: 0.45811692407 0.364009474547 uses  0.346290683746 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14298 average: 4.35383678441
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  35 iter 3460 average cost: 0.45724082733 0.365603942954 uses  0.402430983384 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14753 average: 4.49238733252
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  35 iter 3480 average cost: 0.456395732076 0.363502770868 uses  0.301686215401 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13608 average: 4.143727162
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  35 iter 3500 average cost: 0.455434414161 0.361425612177 uses  0.293642433484 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13044 average: 3.97198538368
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  35 iter 3520 average cost: 0.454551032664 0.359372057563 uses  0.295743262768 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12886 average: 3.92387332521
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  35 uses  1.64410765171 min
+Epoch  36 iter 3540 average cost: 0.45380013136 0.358475402031 uses  0.335126852989 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14877 average: 4.53014616322
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  36 iter 3560 average cost: 0.452945289999 0.360238643141 uses  0.405586850643 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14277 average: 4.34744214373
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  36 iter 3580 average cost: 0.452151763926 0.358226136755 uses  0.291134417057 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14198 average: 4.32338611449
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  36 iter 3600 average cost: 0.451304659748 0.356235991551 uses  0.294585466385 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14377 average: 4.37789281364
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  36 iter 3620 average cost: 0.45037801076 0.354267836901 uses  0.294331065814 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13208 average: 4.02192448234
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  36 uses  1.6322358648 min
+Epoch  37 iter 3640 average cost: 0.449582202286 0.353151937664 uses  0.334458982944 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13693 average: 4.16961023143
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  37 iter 3660 average cost: 0.448772783777 0.354995483388 uses  0.414651016394 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13546 average: 4.12484774665
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  37 iter 3680 average cost: 0.44793636566 0.353066160109 uses  0.298056717714 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13954 average: 4.2490864799
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  37 iter 3700 average cost: 0.447095057562 0.351157694378 uses  0.297172816594 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16518 average: 5.02984165652
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  37 iter 3720 average cost: 0.446279295173 0.349269749785 uses  0.292465813955 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13701 average: 4.17204628502
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  37 uses  1.64313633442 min
+Epoch  38 iter 3740 average cost: 0.445440458271 0.347981086772 uses  0.325667162736 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14448 average: 4.39951278928
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  38 iter 3760 average cost: 0.444611480999 0.35003743465 uses  0.425783483187 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15189 average: 4.62515225335
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  38 iter 3780 average cost: 0.443776679662 0.348185384731 uses  0.295821801821 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15389 average: 4.68605359318
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  38 iter 3800 average cost: 0.442989701817 0.346352830074 uses  0.287336734931 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14318 average: 4.35992691839
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  38 iter 3820 average cost: 0.44220709713 0.344539464472 uses  0.293170082569 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13104 average: 3.99025578563
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  38 uses  1.63394443194 min
+Epoch  39 iter 3840 average cost: 0.441462418348 0.343167028716 uses  0.318065234025 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13653 average: 4.15742996346
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  39 iter 3860 average cost: 0.440712885454 0.345266504593 uses  0.423712698619 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15111 average: 4.60140073082
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  39 iter 3880 average cost: 0.439926630347 0.343486780343 uses  0.2983248353 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14365 average: 4.37423873325
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  39 iter 3900 average cost: 0.439118524045 0.341725309675 uses  0.287941265106 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14065 average: 4.28288672351
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  39 iter 3920 average cost: 0.438324823094 0.339981813197 uses  0.291247983774 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14215 average: 4.32856272838
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  39 iter 3940 average cost: 0.437513911682 0.338256017191 uses  0.293428484599 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13302 average: 4.05054811206
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  39 uses  1.77814473311 min
+Epoch  40 iter 3940 average cost: 0.437589576965 0.338468399931 uses  0.170248500506 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13441 average: 4.09287454324
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  40 iter 3960 average cost: 0.436809483453 0.34065058567 uses  0.437883381049 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15238 average: 4.64007308161
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  40 iter 3980 average cost: 0.436008243439 0.338938773682 uses  0.297400414944 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14106 average: 4.29537149817
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  40 iter 4000 average cost: 0.435237783741 0.337244079813 uses  0.291295119127 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13235 average: 4.03014616322
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  40 iter 4020 average cost: 0.434445359717 0.335566248571 uses  0.29598616759 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13840 average: 4.2143727162
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  40 iter 4040 average cost: 0.433685319775 0.333905029518 uses  0.294310367107 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13865 average: 4.22198538368
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  40 uses  1.79348678192 min
+Epoch  41 iter 4060 average cost: 0.433051171022 0.336037473549 uses  0.432784950733 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14032 average: 4.27283800244
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  41 iter 4080 average cost: 0.432306169682 0.334585158162 uses  0.30099953413 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13563 average: 4.13002436054
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  41 iter 4100 average cost: 0.431561661977 0.332953035439 uses  0.288866817951 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14633 average: 4.45584652862
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  41 iter 4120 average cost: 0.430773007913 0.331336758568 uses  0.293560449282 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14315 average: 4.35901339829
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  41 iter 4140 average cost: 0.429982568961 0.329736097898 uses  0.294748783112 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13932 average: 4.24238733252
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  41 uses  1.61825346549 min
+Epoch  42 iter 4160 average cost: 0.429297812888 0.331514747355 uses  0.429750263691 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14180 average: 4.31790499391
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  42 iter 4180 average cost: 0.428591877497 0.330308058801 uses  0.31599594752 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14314 average: 4.3587088916
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  42 iter 4200 average cost: 0.427817439579 0.328735163283 uses  0.298064402739 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14124 average: 4.30085261876
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  42 iter 4220 average cost: 0.427083382681 0.327177176727 uses  0.304913914204 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12623 average: 3.84378806334
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  42 iter 4240 average cost: 0.426347155409 0.325633888157 uses  0.299836746852 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13880 average: 4.22655298417
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  42 uses  1.6553407828 min
+Epoch  43 iter 4260 average cost: 0.425652158893 0.327127117618 uses  0.420736352603 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14475 average: 4.40773447016
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  43 iter 4280 average cost: 0.424883549309 0.326155731347 uses  0.319323817889 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14172 average: 4.31546894032
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  43 iter 4300 average cost: 0.42417523197 0.324638727945 uses  0.294529084365 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13492 average: 4.1084043849
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  43 iter 4320 average cost: 0.423418031347 0.323135770871 uses  0.296017499765 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14256 average: 4.34104750305
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  43 iter 4340 average cost: 0.422745638811 0.321646665936 uses  0.300827900569 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14283 average: 4.34926918392
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  43 uses  1.63742069801 min
+Epoch  44 iter 4360 average cost: 0.422073743455 0.322928527955 uses  0.414458250999 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15045 average: 4.58130328867
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  44 iter 4380 average cost: 0.421315945678 0.32215546077 uses  0.317298813661 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14068 average: 4.28380024361
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  44 iter 4400 average cost: 0.420608500876 0.320691117766 uses  0.293003050486 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14919 average: 4.54293544458
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  44 iter 4420 average cost: 0.419937806179 0.319240026736 uses  0.295770498117 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13752 average: 4.18757612667
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  44 iter 4440 average cost: 0.419262084006 0.317802008597 uses  0.299156900247 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14224 average: 4.33130328867
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  44 uses  1.62720655203 min
+Epoch  45 iter 4460 average cost: 0.418633787738 0.318919974926 uses  0.406017883619 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16022 average: 4.87880633374
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  45 iter 4480 average cost: 0.41791902261 0.318298844009 uses  0.329221983751 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14378 average: 4.37819732034
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  45 iter 4500 average cost: 0.417225527197 0.31688418248 uses  0.294626251856 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14089 average: 4.29019488429
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  45 iter 4520 average cost: 0.416517468852 0.315482040079 uses  0.287716666857 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14049 average: 4.27801461632
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  45 iter 4540 average cost: 0.415837408494 0.314092251356 uses  0.291498831908 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14361 average: 4.37302070646
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  45 uses  1.62096983194 min
+Epoch  46 iter 4560 average cost: 0.415216604277 0.315181481172 uses  0.405566434066 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13943 average: 4.24573690621
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  46 iter 4580 average cost: 0.414559936839 0.314771259339 uses  0.330792299906 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14460 average: 4.40316686967
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  46 iter 4600 average cost: 0.413897929192 0.313402688646 uses  0.295831346512 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13847 average: 4.21650426309
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  46 iter 4620 average cost: 0.413258479384 0.31204596705 uses  0.297281118234 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14375 average: 4.37728380024
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  46 iter 4640 average cost: 0.412591330225 0.31070094133 uses  0.291129267216 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13701 average: 4.17204628502
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  46 uses  1.6251546979 min
+Epoch  47 iter 4660 average cost: 0.411991541957 0.311436640027 uses  0.397535582383 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14014 average: 4.26735688185
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  47 iter 4680 average cost: 0.411294572469 0.311101578482 uses  0.345652584235 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14588 average: 4.44214372716
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  47 iter 4700 average cost: 0.410572939756 0.309777741978 uses  0.295007753372 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14613 average: 4.44975639464
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  47 iter 4720 average cost: 0.409949056103 0.308465124427 uses  0.294752601782 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14326 average: 4.36236297199
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  47 iter 4740 average cost: 0.409307110637 0.307163583817 uses  0.298398534457 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13895 average: 4.23112058465
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  47 uses  1.64271939993 min
+Epoch  48 iter 4760 average cost: 0.408684106863 0.307695585902 uses  0.392422052224 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14511 average: 4.41869671133
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  48 iter 4780 average cost: 0.408058237119 0.307542309913 uses  0.345316835244 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15598 average: 4.7496954933
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  48 iter 4800 average cost: 0.407411861056 0.306260883622 uses  0.296515599887 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13367 average: 4.0703410475
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  48 iter 4820 average cost: 0.406821916376 0.304990091574 uses  0.298774615924 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13254 average: 4.0359317905
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  48 iter 4840 average cost: 0.40618276951 0.303729801939 uses  0.29302705129 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14553 average: 4.43148599269
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  48 uses  1.62420770327 min
+Epoch  49 iter 4860 average cost: 0.405590837979 0.304126388006 uses  0.389082948367 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14289 average: 4.35109622412
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  49 iter 4880 average cost: 0.405002314665 0.304154223766 uses  0.362105751038 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14128 average: 4.30207064555
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  49 iter 4900 average cost: 0.404364769434 0.302912777954 uses  0.300365797679 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13640 average: 4.15347137637
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  49 iter 4920 average cost: 0.403718651789 0.301681425198 uses  0.300207297007 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13687 average: 4.16778319123
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  49 iter 4940 average cost: 0.403097007122 0.30046004291 uses  0.295548013846 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14271 average: 4.34561510353
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  49 uses  1.65403064887 min
+Epoch  50 iter 4960 average cost: 0.402493929208 0.300730491994 uses  0.385276448727 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13891 average: 4.22990255786
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  50 iter 4980 average cost: 0.401898079671 0.300837787986 uses  0.367917001247 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14459 average: 4.40286236297
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  50 iter 5000 average cost: 0.401272801995 0.299634436834 uses  0.291038397948 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14846 average: 4.52070645554
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  50 iter 5020 average cost: 0.400659140487 0.298440674137 uses  0.297126917044 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14390 average: 4.38185140073
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  50 iter 5040 average cost: 0.400052163345 0.297256385748 uses  0.292398746808 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14679 average: 4.46985383678
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  50 uses  1.64105488459 min
+Epoch  51 iter 5060 average cost: 0.399500869877 0.297344662078 uses  0.372391653061 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14012 average: 4.26674786845
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  51 iter 5080 average cost: 0.398915992844 0.297573627168 uses  0.370850233237 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15428 average: 4.69792935445
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  51 iter 5100 average cost: 0.398278473738 0.296406671767 uses  0.293805217743 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15114 average: 4.60231425091
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  51 iter 5120 average cost: 0.397672377891 0.295248833206 uses  0.290264713764 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13662 average: 4.16017052375
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  51 iter 5140 average cost: 0.397049244113 0.294100005061 uses  0.288728880882 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13688 average: 4.16808769793
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  51 uses  1.61908100049 min
+Epoch  52 iter 5160 average cost: 0.396484721004 0.294044451854 uses  0.359559520086 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14206 average: 4.32582216809
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  52 iter 5180 average cost: 0.395885280948 0.294417975676 uses  0.373136202494 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14579 average: 4.43940316687
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  52 iter 5200 average cost: 0.395314055991 0.293285598847 uses  0.28942391475 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15134 average: 4.6084043849
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  52 iter 5220 average cost: 0.394731365915 0.292161899234 uses  0.298312632243 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14569 average: 4.43635809988
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  52 iter 5240 average cost: 0.394132488821 0.291046777481 uses  0.290820686022 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14852 average: 4.52253349574
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  52 uses  1.62470893462 min
+Epoch  53 iter 5260 average cost: 0.393568991603 0.290897036698 uses  0.361056331793 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15946 average: 4.8556638246
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  53 iter 5280 average cost: 0.393008955272 0.291352390577 uses  0.381260550022 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14683 average: 4.47107186358
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  53 iter 5300 average cost: 0.392448090585 0.290252947594 uses  0.294580717882 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14945 average: 4.55085261876
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  53 iter 5320 average cost: 0.391849578547 0.289161771099 uses  0.297664415836 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14523 average: 4.42235079172
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  53 iter 5340 average cost: 0.391288979977 0.288078768211 uses  0.288726385434 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15254 average: 4.64494518879
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  53 uses  1.62752414942 min
+Epoch  54 iter 5360 average cost: 0.390722706427 0.287813459859 uses  0.35301596721 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16044 average: 4.88550548112
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  54 iter 5380 average cost: 0.390133632276 0.288371258708 uses  0.399530382951 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16005 average: 4.87362971985
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  54 iter 5400 average cost: 0.389591306878 0.287303217009 uses  0.295738915602 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16047 average: 4.88641900122
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  54 iter 5420 average cost: 0.389034722616 0.286243057537 uses  0.302196617921 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15865 average: 4.83099878197
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  54 iter 5440 average cost: 0.388458195449 0.285190693355 uses  0.29611026446 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15682 average: 4.77527405603
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  54 uses  1.65731091897 min
+Epoch  55 iter 5460 average cost: 0.387937694796 0.284778578836 uses  0.34453163147 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14980 average: 4.56151035323
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  55 iter 5480 average cost: 0.387438463031 0.285668495765 uses  0.41099858284 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16106 average: 4.90438489647
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  55 iter 5500 average cost: 0.386901962421 0.284629701235 uses  0.295041700204 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15344 average: 4.67235079172
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  55 iter 5520 average cost: 0.38632541108 0.283598434202 uses  0.292781964938 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15076 average: 4.59074299635
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  55 iter 5540 average cost: 0.385794033683 0.28257461314 uses  0.293706432978 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15109 average: 4.60079171742
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  55 uses  1.64284031789 min
+Epoch  56 iter 5560 average cost: 0.3852690417 0.282090753563 uses  0.336388619741 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14554 average: 4.43179049939
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  56 iter 5580 average cost: 0.384742969015 0.282848941703 uses  0.413582281272 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15482 average: 4.7143727162
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  56 iter 5600 average cost: 0.384209955321 0.281838766911 uses  0.301999251048 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15551 average: 4.73538367844
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  56 iter 5620 average cost: 0.383676574082 0.280835781976 uses  0.294621086121 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15028 average: 4.57612667479
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  56 iter 5640 average cost: 0.38311872388 0.279839910408 uses  0.294511000315 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14462 average: 4.40377588307
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  56 uses  1.64299056927 min
+Epoch  57 iter 5660 average cost: 0.382599679433 0.279243955311 uses  0.323738785585 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14228 average: 4.33252131547
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  57 iter 5680 average cost: 0.382076120489 0.280129765425 uses  0.417486302058 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14533 average: 4.42539585871
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  57 iter 5700 average cost: 0.381560295757 0.279146853968 uses  0.292391033967 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14318 average: 4.35992691839
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  57 iter 5720 average cost: 0.381008060519 0.278170816017 uses  0.287772115072 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14218 average: 4.32947624848
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  57 iter 5740 average cost: 0.380504663777 0.277201579724 uses  0.290670784314 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13708 average: 4.17417783191
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  57 uses  1.61671809753 min
+Epoch  58 iter 5760 average cost: 0.379995411197 0.276551529424 uses  0.314805702368 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14541 average: 4.4278319123
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  58 iter 5780 average cost: 0.379460443476 0.277406451152 uses  0.417778066794 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14547 average: 4.4296589525
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  58 iter 5800 average cost: 0.378963044381 0.276449877183 uses  0.29515264829 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13937 average: 4.24390986602
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  58 iter 5820 average cost: 0.378420617869 0.275499877605 uses  0.293272101879 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14263 average: 4.34317904994
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  58 iter 5840 average cost: 0.377891951325 0.274556384874 uses  0.290724817912 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13911 average: 4.23599269184
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  58 uses  1.62057764928 min
+Epoch  59 iter 5860 average cost: 0.377398684669 0.273826611678 uses  0.309405831496 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14619 average: 4.45158343484
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  59 iter 5880 average cost: 0.376864392442 0.274758827276 uses  0.439410316944 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13954 average: 4.2490864799
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  59 iter 5900 average cost: 0.376333838588 0.273827441421 uses  0.305744083722 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14283 average: 4.34926918392
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  59 iter 5920 average cost: 0.375810432583 0.272902348713 uses  0.291405034065 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14133 average: 4.30359317905
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  59 iter 5940 average cost: 0.375289507684 0.271983485586 uses  0.292647949855 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14526 average: 4.42326431181
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  59 iter 5960 average cost: 0.374787757181 0.271070789326 uses  0.299329702059 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14107 average: 4.29567600487
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  59 uses  1.81148306529 min
+Epoch  60 iter 5960 average cost: 0.374824004658 0.27118364652 uses  0.170387649536 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14552 average: 4.43118148599
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  60 iter 5980 average cost: 0.374302085815 0.27215328701 uses  0.440226280689 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14624 average: 4.45310596833
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  60 iter 6000 average cost: 0.373800257867 0.271246109386 uses  0.307460268339 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13500 average: 4.11084043849
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  60 iter 6020 average cost: 0.37324849258 0.270344959521 uses  0.298379115264 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14016 average: 4.26796589525
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  60 iter 6040 average cost: 0.372765862616 0.269449777536 uses  0.291669281324 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14413 average: 4.38885505481
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  60 iter 6060 average cost: 0.372259446666 0.268560504343 uses  0.297777966658 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14659 average: 4.4637637028
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  60 uses  1.81285743316 min
+Epoch  61 iter 6080 average cost: 0.371803255497 0.269536947336 uses  0.435907316208 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14723 average: 4.48325213155
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  61 iter 6100 average cost: 0.371305699791 0.268735693991 uses  0.300306049983 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14142 average: 4.30633373934
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  61 iter 6120 average cost: 0.370793186978 0.267857472769 uses  0.289796916644 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15001 average: 4.56790499391
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  61 iter 6140 average cost: 0.370266012304 0.266984972858 uses  0.292148284117 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14900 average: 4.5371498173
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  61 iter 6160 average cost: 0.369776557625 0.26611813853 uses  0.298869931698 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13762 average: 4.19062119367
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  61 uses  1.62286943197 min
+Epoch  62 iter 6180 average cost: 0.369277348015 0.266992331559 uses  0.432254064083 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14121 average: 4.29993909866
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  62 iter 6200 average cost: 0.368811776696 0.266280250751 uses  0.30919803381 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13773 average: 4.19397076736
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  62 iter 6220 average cost: 0.36828669886 0.265424044157 uses  0.296633748213 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13513 average: 4.11479902558
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  62 iter 6240 average cost: 0.367828510577 0.264573326067 uses  0.290159114202 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14080 average: 4.287454324
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  62 iter 6260 average cost: 0.367377460534 0.263728043875 uses  0.296168700854 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14838 average: 4.51827040195
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  62 uses  1.63323134979 min
+Epoch  63 iter 6280 average cost: 0.366921712684 0.264476882519 uses  0.423655498028 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15072 average: 4.58952496955
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  63 iter 6300 average cost: 0.366440909751 0.263893337198 uses  0.312962269783 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13607 average: 4.1434226553
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  63 iter 6320 average cost: 0.366034389026 0.2630582317 uses  0.287127033869 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14625 average: 4.45341047503
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  63 iter 6340 average cost: 0.36558529109 0.262228395007 uses  0.29376638333 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14863 average: 4.52588306943
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  63 iter 6360 average cost: 0.365090504715 0.261403777413 uses  0.293588713805 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14723 average: 4.48325213155
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  63 uses  1.61605276664 min
+Epoch  64 iter 6380 average cost: 0.364739323669 0.262355936868 uses  0.409095366796 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16124 average: 4.90986601705
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  64 iter 6400 average cost: 0.364276640532 0.261868003965 uses  0.319112896919 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15752 average: 4.79658952497
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  64 iter 6420 average cost: 0.363804296557 0.261052215791 uses  0.294821135203 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15173 average: 4.62028014616
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  64 iter 6440 average cost: 0.363337016022 0.260241494624 uses  0.28815681537 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14810 average: 4.50974421437
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  64 iter 6460 average cost: 0.362889737426 0.259435793402 uses  0.293928865592 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14740 average: 4.48842874543
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  64 uses  1.62040030162 min
+Epoch  65 iter 6480 average cost: 0.362476984267 0.259963408182 uses  0.413445651531 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14565 average: 4.43514007308
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  65 iter 6500 average cost: 0.362002312353 0.259602862014 uses  0.322734268506 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14454 average: 4.40133982948
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  65 iter 6520 average cost: 0.361525551767 0.258806534217 uses  0.299216532707 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14894 average: 4.5353227771
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  65 iter 6540 average cost: 0.361063734697 0.258015076925 uses  0.291482484341 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14774 average: 4.4987819732
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  65 iter 6560 average cost: 0.360619096835 0.257228445593 uses  0.29474375248 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15068 average: 4.58830694275
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  65 uses  1.62567421595 min
+Epoch  66 iter 6580 average cost: 0.360176836491 0.257664888232 uses  0.408198082447 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15100 average: 4.59805115713
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  66 iter 6600 average cost: 0.359718144568 0.257357475008 uses  0.335938580831 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15228 average: 4.63702801462
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  66 iter 6620 average cost: 0.359262355476 0.256579959978 uses  0.30246048371 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14690 average: 4.47320341048
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  66 iter 6640 average cost: 0.358816606915 0.255807128773 uses  0.29587849776 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14667 average: 4.46619975639
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  66 iter 6660 average cost: 0.358358513736 0.255038939197 uses  0.292365964254 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14282 average: 4.34896467722
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  66 uses  1.64087851445 min
+Epoch  67 iter 6680 average cost: 0.357932649515 0.255366317776 uses  0.402863550186 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14898 average: 4.5365408039
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  67 iter 6700 average cost: 0.35746795792 0.255143465168 uses  0.346453050772 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14722 average: 4.48294762485
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  67 iter 6720 average cost: 0.3570129282 0.254384109617 uses  0.300202131271 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15063 average: 4.58678440926
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  67 iter 6740 average cost: 0.356555904775 0.253629260627 uses  0.295223931472 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14418 average: 4.39037758831
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  67 iter 6760 average cost: 0.356100353193 0.252878878199 uses  0.291709029675 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14626 average: 4.45371498173
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  67 uses  1.64428050121 min
+Epoch  68 iter 6780 average cost: 0.355679226904 0.253135123699 uses  0.392172451814 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14532 average: 4.42509135201
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  68 iter 6800 average cost: 0.355211660463 0.252992805891 uses  0.348004098733 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15183 average: 4.62332521315
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  68 iter 6820 average cost: 0.35477869442 0.252250891504 uses  0.295024013519 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15049 average: 4.58252131547
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  68 iter 6840 average cost: 0.354358687653 0.251513315798 uses  0.290047216415 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14162 average: 4.31242387333
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  68 iter 6860 average cost: 0.353918551899 0.250780040825 uses  0.290999782085 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13685 average: 4.16717417783
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  68 uses  1.6219519496 min
+Epoch  69 iter 6880 average cost: 0.353509911024 0.25099739606 uses  0.382612053553 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13834 average: 4.212545676
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  69 iter 6900 average cost: 0.353083043457 0.250894122737 uses  0.353716349602 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14245 average: 4.33769792935
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  69 iter 6920 average cost: 0.352666091773 0.250168995215 uses  0.293897219499 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14504 average: 4.41656516443
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  69 iter 6940 average cost: 0.352245333361 0.249448047102 uses  0.289545297623 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14726 average: 4.48416565164
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  69 iter 6960 average cost: 0.35179309165 0.248731242369 uses  0.294759563605 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14233 average: 4.33404384896
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  69 uses  1.62019770145 min
+Epoch  70 iter 6980 average cost: 0.35139965652 0.248815214809 uses  0.376055431366 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15469 average: 4.71041412911
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  70 iter 7000 average cost: 0.350984789352 0.248837063445 uses  0.359394649665 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14965 average: 4.55694275274
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  70 iter 7020 average cost: 0.3505453541 0.248128125942 uses  0.289562217395 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15037 average: 4.57886723508
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  70 iter 7040 average cost: 0.35010630169 0.247423216493 uses  0.289581799507 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14662 average: 4.4646772229
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  70 iter 7060 average cost: 0.349664007262 0.246722300866 uses  0.294300433 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14605 average: 4.44732034105
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  70 uses  1.62532396714 min
+Epoch  71 iter 7080 average cost: 0.349258855537 0.246738942523 uses  0.387365802129 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14536 average: 4.42630937881
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  71 iter 7100 average cost: 0.348824790269 0.246816831756 uses  0.366386731466 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14534 average: 4.42570036541
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  71 iter 7120 average cost: 0.348410378166 0.246123526049 uses  0.294441783428 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14629 average: 4.45462850183
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  71 iter 7140 average cost: 0.347974817181 0.245434104407 uses  0.295054066181 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14852 average: 4.52253349574
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  71 iter 7160 average cost: 0.347549789108 0.244748534283 uses  0.295873530706 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14903 average: 4.53806333739
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  71 uses  1.63612708251 min
+Epoch  72 iter 7180 average cost: 0.347175887794 0.244642225086 uses  0.366020166874 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14649 average: 4.46071863581
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  72 iter 7200 average cost: 0.346771969327 0.244823977281 uses  0.375757900874 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14721 average: 4.48264311815
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  72 iter 7220 average cost: 0.346344749085 0.244145794518 uses  0.298797798157 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14558 average: 4.43300852619
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  72 iter 7240 average cost: 0.345940871306 0.243471358622 uses  0.295709733168 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13970 average: 4.25395858709
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  72 iter 7260 average cost: 0.34553518697 0.242800638626 uses  0.295547584693 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14735 average: 4.48690621194
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  72 uses  1.63740650018 min
+Epoch  73 iter 7280 average cost: 0.345139518933 0.242670237723 uses  0.359068115552 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15019 average: 4.57338611449
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  73 iter 7300 average cost: 0.344735839663 0.242873545273 uses  0.380513715744 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15122 average: 4.60475030451
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  73 iter 7320 average cost: 0.344324175741 0.242209956351 uses  0.298256619771 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14627 average: 4.45401948843
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  73 iter 7340 average cost: 0.343920633723 0.241549983718 uses  0.297334865729 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15335 average: 4.66961023143
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  73 iter 7360 average cost: 0.343487617143 0.240893597893 uses  0.293359367053 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14662 average: 4.4646772229
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  73 uses  1.63667991559 min
+Epoch  74 iter 7380 average cost: 0.343104372727 0.240707058276 uses  0.349127268791 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15181 average: 4.62271619976
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  74 iter 7400 average cost: 0.342698942042 0.240982807786 uses  0.388284365336 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14940 average: 4.54933008526
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  74 iter 7420 average cost: 0.342296091827 0.240333258439 uses  0.296443450451 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15698 average: 4.78014616322
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  74 iter 7440 average cost: 0.341891096649 0.239687201293 uses  0.292557215691 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14563 average: 4.43453105968
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  74 iter 7460 average cost: 0.341485952965 0.23904460826 uses  0.298270781835 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15112 average: 4.60170523752
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  74 uses  1.63385391633 min
+Epoch  75 iter 7480 average cost: 0.341102607002 0.238781725149 uses  0.346887664 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14726 average: 4.48416565164
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  75 iter 7500 average cost: 0.340708300038 0.239118801415 uses  0.396171065172 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14930 average: 4.54628501827
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  75 iter 7520 average cost: 0.340311949345 0.238482847156 uses  0.291494969527 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14637 average: 4.45706455542
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  75 iter 7540 average cost: 0.339918395244 0.237850266659 uses  0.291445283095 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14753 average: 4.49238733252
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  75 iter 7560 average cost: 0.339532613179 0.23722103315 uses  0.295780285199 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13632 average: 4.15103532278
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  75 uses  1.63588166634 min
+Epoch  76 iter 7580 average cost: 0.339159650407 0.236903724641 uses  0.346185135841 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14076 average: 4.2862362972
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  76 iter 7600 average cost: 0.338788426442 0.237287528676 uses  0.405329386393 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14476 average: 4.40803897686
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  76 iter 7620 average cost: 0.338375301509 0.236664726763 uses  0.304251714547 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14509 average: 4.41808769793
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  76 iter 7640 average cost: 0.337983854825 0.236045185594 uses  0.292420601845 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14640 average: 4.45797807552
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  76 iter 7660 average cost: 0.337596541511 0.235428879626 uses  0.298599183559 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14504 average: 4.41656516443
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  76 uses  1.6396032691 min
+Epoch  77 iter 7680 average cost: 0.337208004176 0.235067156171 uses  0.325334699949 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14481 average: 4.40956151035
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  77 iter 7700 average cost: 0.33681980088 0.235503628378 uses  0.406552100182 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15350 average: 4.67417783191
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  77 iter 7720 average cost: 0.336436474588 0.234893515351 uses  0.29628106753 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14976 average: 4.56029232643
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  77 iter 7740 average cost: 0.336066831288 0.234286555363 uses  0.293984850248 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15212 average: 4.63215590743
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  77 iter 7760 average cost: 0.335691673512 0.233682724035 uses  0.302971069018 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15078 average: 4.59135200974
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  77 uses  1.64325523376 min
+Epoch  78 iter 7780 average cost: 0.335337115799 0.233247662797 uses  0.331537501017 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14601 average: 4.44610231425
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  78 iter 7800 average cost: 0.33496683635 0.233746241599 uses  0.434671715895 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14648 average: 4.46041412911
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  78 iter 7820 average cost: 0.334584384747 0.233148425124 uses  0.293831467628 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15489 average: 4.71650426309
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  78 iter 7840 average cost: 0.334221184972 0.232553658733 uses  0.289895816644 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15395 average: 4.68788063337
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  78 iter 7860 average cost: 0.333837238919 0.231961919144 uses  0.295948549112 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15484 average: 4.7149817296
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  78 uses  1.640480268 min
+Epoch  79 iter 7880 average cost: 0.333473480028 0.231490620044 uses  0.310916582743 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15281 average: 4.65316686967
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  79 iter 7900 average cost: 0.333113333253 0.232022662797 uses  0.416576230526 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14748 average: 4.49086479903
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  79 iter 7920 average cost: 0.33272514293 0.231436746981 uses  0.290967452526 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15693 average: 4.77862362972
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  79 iter 7940 average cost: 0.332365851956 0.230853782883 uses  0.290582096577 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15286 average: 4.65468940317
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  79 iter 7960 average cost: 0.331999670688 0.230273748253 uses  0.294478150209 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14930 average: 4.54628501827
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  79 iter 7980 average cost: 0.331613976238 0.229696621064 uses  0.292777566115 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14980 average: 4.56151035323
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  79 uses  1.76802123388 min
+Epoch  80 iter 7980 average cost: 0.331642734284 0.229752670916 uses  0.169013301531 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14739 average: 4.48812423873
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  80 iter 8000 average cost: 0.331279271357 0.230338394295 uses  0.436305248737 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14632 average: 4.45554202192
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  80 iter 8020 average cost: 0.330926867535 0.229763984335 uses  0.297352250417 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15398 average: 4.68879415347
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  80 iter 8040 average cost: 0.330536704711 0.229192432135 uses  0.29369541804 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14954 average: 4.55359317905
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  80 iter 8060 average cost: 0.330161489787 0.228623716422 uses  0.292265768846 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14814 average: 4.51096224117
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  80 iter 8080 average cost: 0.32979921487 0.228057816134 uses  0.291682716211 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15087 average: 4.59409257004
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  80 uses  1.79024598598 min
+Epoch  81 iter 8100 average cost: 0.329447224893 0.228623374307 uses  0.440105164051 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14364 average: 4.37393422655
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  81 iter 8120 average cost: 0.329098685067 0.228111830108 uses  0.304688731829 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14767 average: 4.49665042631
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  81 iter 8140 average cost: 0.328743136601 0.227551358781 uses  0.294280183315 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14455 average: 4.40164433618
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  81 iter 8160 average cost: 0.328379188116 0.226993634862 uses  0.291706351439 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14705 average: 4.47777101096
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  81 iter 8180 average cost: 0.328016704795 0.2264386382 uses  0.293459566434 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14739 average: 4.48812423873
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  81 uses  1.63516765038 min
+Epoch  82 iter 8200 average cost: 0.327670403092 0.226931448012 uses  0.437111147245 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15073 average: 4.58982947625
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  82 iter 8220 average cost: 0.327302894038 0.226490890447 uses  0.308554418882 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13994 average: 4.26126674787
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  82 iter 8240 average cost: 0.326958218662 0.225941155276 uses  0.298665265242 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14479 average: 4.40895249695
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  82 iter 8260 average cost: 0.326593933278 0.225394082261 uses  0.288197632631 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14565 average: 4.43514007308
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  82 iter 8280 average cost: 0.326253913384 0.22484965211 uses  0.297127783298 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13570 average: 4.13215590743
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  82 uses  1.63747698466 min
+Epoch  83 iter 8300 average cost: 0.325938167504 0.225263544077 uses  0.429814501603 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14920 average: 4.54323995128
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  83 iter 8320 average cost: 0.325616382822 0.224896377049 uses  0.312355268002 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14628 average: 4.45432399513
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  83 iter 8340 average cost: 0.32524763149 0.2243570572 uses  0.294001134237 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14384 average: 4.38002436054
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  83 iter 8360 average cost: 0.324886078421 0.223820317829 uses  0.288906800747 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14188 average: 4.3203410475
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  83 iter 8380 average cost: 0.324549990304 0.223286140459 uses  0.292896982034 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15484 average: 4.7149817296
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  83 uses  1.62467871904 min
+Epoch  84 iter 8400 average cost: 0.324238364805 0.223646675575 uses  0.417657681306 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14710 average: 4.47929354446
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  84 iter 8420 average cost: 0.323894168362 0.223339705176 uses  0.320539851983 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14884 average: 4.53227771011
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  84 iter 8440 average cost: 0.323539897162 0.222810464169 uses  0.299849851926 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14883 average: 4.53197320341
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  84 iter 8460 average cost: 0.323210532104 0.222283725483 uses  0.293294668198 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14761 average: 4.49482338611
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  84 iter 8480 average cost: 0.322852330539 0.221759471413 uses  0.296644465129 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14495 average: 4.41382460414
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  84 uses  1.64002264738 min
+Epoch  85 iter 8500 average cost: 0.322561397396 0.222089465709 uses  0.425294180711 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13793 average: 4.20006090134
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  85 iter 8520 average cost: 0.322254217019 0.221841836675 uses  0.33404935201 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14372 average: 4.37637028015
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  85 iter 8540 average cost: 0.321924837733 0.221322300758 uses  0.298849582672 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14687 average: 4.47228989038
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  85 iter 8560 average cost: 0.321572082458 0.220805192579 uses  0.290816851457 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14003 average: 4.26400730816
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  85 iter 8580 average cost: 0.321226364345 0.22029049516 uses  0.297693602244 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14427 average: 4.3931181486
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  85 uses  1.64344434738 min
+Epoch  86 iter 8600 average cost: 0.320930755222 0.220539126098 uses  0.401217881838 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15026 average: 4.57551766139
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  86 iter 8620 average cost: 0.320598205843 0.220328275565 uses  0.335903569063 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14495 average: 4.41382460414
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  86 iter 8640 average cost: 0.320273028178 0.219818256409 uses  0.296553850174 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13879 average: 4.22624847747
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  86 iter 8660 average cost: 0.319937821015 0.219310592999 uses  0.287769798438 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13954 average: 4.2490864799
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  86 iter 8680 average cost: 0.31960924727 0.218805269052 uses  0.29125216802 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14408 average: 4.38733252132
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  86 uses  1.62437591553 min
+Epoch  87 iter 8700 average cost: 0.319280394013 0.219004011733 uses  0.404202799002 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14386 average: 4.38063337393
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  87 iter 8720 average cost: 0.318948867179 0.218841901756 uses  0.350364502271 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14397 average: 4.38398294762
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  87 iter 8740 average cost: 0.318625533707 0.218341119373 uses  0.293403466543 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14461 average: 4.40347137637
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  87 iter 8760 average cost: 0.318288400951 0.217842623666 uses  0.290876698494 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14483 average: 4.41017052375
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  87 iter 8780 average cost: 0.317954817469 0.217346399011 uses  0.290731835365 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14254 average: 4.34043848965
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  87 uses  1.63146238327 min
+Epoch  88 iter 8800 average cost: 0.317660503462 0.217454208258 uses  0.387361347675 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14081 average: 4.28775883069
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  88 iter 8820 average cost: 0.317336660017 0.217375383829 uses  0.349076616764 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13950 average: 4.24786845311
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  88 iter 8840 average cost: 0.317002872324 0.216883584318 uses  0.292704153061 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13999 average: 4.26278928136
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  88 iter 8860 average cost: 0.316684215583 0.21639400512 uses  0.292495298386 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14200 average: 4.32399512789
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  88 iter 8880 average cost: 0.316361786331 0.215906631235 uses  0.294181950887 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13769 average: 4.19275274056
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  88 uses  1.62416109641 min
+Epoch  89 iter 8900 average cost: 0.316240779682 0.21680201948 uses  0.389837900798 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 12700 average: 3.86723507917
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  89 iter 8920 average cost: 0.316099571291 0.217021532317 uses  0.349385201931 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 18863 average: 5.74390986602
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  89 iter 8940 average cost: 0.315859687823 0.216536025533 uses  0.296239284674 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17069 average: 5.19762484775
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  89 iter 8960 average cost: 0.315604296312 0.21605268619 uses  0.292655630906 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16218 average: 4.93848964677
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  89 iter 8980 average cost: 0.31536543587 0.215571499807 uses  0.296678968271 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16708 average: 5.08769792935
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  89 uses  1.63161453406 min
+Epoch  90 iter 9000 average cost: 0.315105007191 0.215701959468 uses  0.384125200907 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16872 average: 5.13763702801
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  90 iter 9020 average cost: 0.314828349513 0.215713631624 uses  0.365814399719 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16099 average: 4.90225334957
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  90 iter 9040 average cost: 0.314547102987 0.215236389077 uses  0.299329650402 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16295 average: 4.96193666261
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  90 iter 9060 average cost: 0.314256496463 0.21476125356 uses  0.291128381093 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15811 average: 4.81455542022
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  90 iter 9080 average cost: 0.313952614224 0.214288211151 uses  0.291914248466 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15834 average: 4.8215590743
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  90 uses  1.64329256614 min
+Epoch  91 iter 9100 average cost: 0.313668651212 0.214281693127 uses  0.378425117334 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16066 average: 4.8922046285
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  91 iter 9120 average cost: 0.31336647367 0.214355884519 uses  0.369996901353 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15824 average: 4.81851400731
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  91 iter 9140 average cost: 0.313064269655 0.213886834443 uses  0.294488433997 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15866 average: 4.83130328867
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  91 iter 9160 average cost: 0.312765448793 0.213419832621 uses  0.291882634163 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16210 average: 4.93605359318
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  91 iter 9180 average cost: 0.312472600987 0.212954865665 uses  0.298675266902 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15407 average: 4.69153471376
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  91 uses  1.63692369858 min
+Epoch  92 iter 9200 average cost: 0.312188829993 0.212902313976 uses  0.366689697901 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16085 average: 4.89799025579
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  92 iter 9220 average cost: 0.311892813851 0.212998584992 uses  0.377356866995 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15640 average: 4.76248477467
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  92 iter 9240 average cost: 0.311586252856 0.212537549094 uses  0.294483534495 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15323 average: 4.66595615104
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  92 iter 9260 average cost: 0.311293310933 0.212078504712 uses  0.300347483158 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15320 average: 4.66504263094
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  92 iter 9280 average cost: 0.310984257776 0.211621438969 uses  0.295407581329 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15291 average: 4.65621193666
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  92 uses  1.63751964966 min
+Epoch  93 iter 9300 average cost: 0.310709243087 0.211520623363 uses  0.356359783808 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14986 average: 4.56333739342
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  93 iter 9320 average cost: 0.310403477293 0.211647690564 uses  0.381498698394 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15239 average: 4.64037758831
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  93 iter 9340 average cost: 0.310120738443 0.211194483518 uses  0.298565749327 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15433 average: 4.69945188794
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  93 iter 9360 average cost: 0.309818303101 0.210743213254 uses  0.293337817987 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15237 average: 4.63976857491
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  93 iter 9380 average cost: 0.30951956908 0.210293867383 uses  0.297330268224 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15447 average: 4.70371498173
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  93 uses  1.6377489686 min
+Epoch  94 iter 9400 average cost: 0.309231605801 0.210163196126 uses  0.352379933993 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15133 average: 4.6080998782
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  94 iter 9420 average cost: 0.308941269887 0.210318902799 uses  0.40528708299 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14780 average: 4.5006090134
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  94 iter 9440 average cost: 0.308636588535 0.209873311904 uses  0.298284916083 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14891 average: 4.534409257
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  94 iter 9460 average cost: 0.308331150415 0.209429605113 uses  0.291002400716 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14355 average: 4.37119366626
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  94 iter 9480 average cost: 0.308076325678 0.208987770503 uses  0.295855549971 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14952 average: 4.55298416565
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  94 uses  1.65407786767 min
+Epoch  95 iter 9500 average cost: 0.307824972026 0.208832984369 uses  0.353025166194 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16134 average: 4.91291108404
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  95 iter 9520 average cost: 0.307533712504 0.209050277514 uses  0.398605215549 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15754 average: 4.79719853837
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  95 iter 9540 average cost: 0.307241013341 0.208612016974 uses  0.296341951688 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15087 average: 4.59409257004
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  95 iter 9560 average cost: 0.306956265941 0.208175590161 uses  0.287764815489 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15715 average: 4.7853227771
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  95 iter 9580 average cost: 0.30667956267 0.207740985588 uses  0.289854200681 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14993 average: 4.56546894032
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  95 uses  1.62385393381 min
+Epoch  96 iter 9600 average cost: 0.306393274338 0.207526744458 uses  0.333742201328 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15132 average: 4.6077953715
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  96 iter 9620 average cost: 0.306106987984 0.207767099179 uses  0.396112648646 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15236 average: 4.63946406821
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  96 iter 9640 average cost: 0.305827616847 0.207336047106 uses  0.290465283394 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15797 average: 4.81029232643
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  96 iter 9660 average cost: 0.305533183574 0.206906779928 uses  0.293687736988 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14677 average: 4.46924482339
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  96 iter 9680 average cost: 0.305242327341 0.206479286581 uses  0.294476385911 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14634 average: 4.45615103532
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  96 uses  1.61675431728 min
+Epoch  97 iter 9700 average cost: 0.30496914263 0.206221901436 uses  0.329051403205 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15223 average: 4.63550548112
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  97 iter 9720 average cost: 0.304938516678 0.207017483688 uses  0.403449849288 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14813 average: 4.51065773447
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  97 iter 9740 average cost: 0.304957558052 0.206592396452 uses  0.295258347193 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15430 average: 4.69853836784
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  97 iter 9760 average cost: 0.304915959905 0.206169051378 uses  0.292176914215 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16953 average: 5.16230207065
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  97 iter 9780 average cost: 0.304837599425 0.205747437776 uses  0.300370717049 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17594 average: 5.3574908648
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  97 uses  1.63457166354 min
+Epoch  98 iter 9800 average cost: 0.304752099162 0.205563795244 uses  0.328978586197 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 17810 average: 5.42326431181
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  98 iter 9820 average cost: 0.304590384793 0.206232548846 uses  0.41604158481 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 18248 average: 5.55663824604
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  98 iter 9840 average cost: 0.304386378801 0.205813376999 uses  0.293888517221 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16612 average: 5.05846528624
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  98 iter 9860 average cost: 0.30416514871 0.205395905646 uses  0.290260501703 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 16204 average: 4.93422655298
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  98 iter 9880 average cost: 0.303934471257 0.204980124461 uses  0.296525899569 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 15827 average: 4.81942752741
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  98 uses  1.62511914968 min
+Epoch  99 iter 9900 average cost: 0.303714378522 0.204650901384 uses  0.31733640035 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14972 average: 4.55907429963
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  99 iter 9920 average cost: 0.303452666001 0.205054522561 uses  0.426183966796 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14578 average: 4.43909866017
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  99 iter 9940 average cost: 0.303211491775 0.204641938009 uses  0.294430649281 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14805 average: 4.50822168088
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  99 iter 9960 average cost: 0.302956093264 0.204231010422 uses  0.287691100438 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13884 average: 4.22777101096
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  99 iter 9980 average cost: 0.30269069685 0.20382172984 uses  0.287319767475 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14035 average: 4.27375152253
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  99 iter 10000 average cost: 0.302428395116 0.203414086381 uses  0.293790650368 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14287 average: 4.35048721072
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  99 uses  1.77418798208 min
+Epoch  100 iter 10000 average cost: 0.302444757091 0.203447259876 uses  0.169821031888 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14309 average: 4.3571863581
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  100 iter 10020 average cost: 0.302180086428 0.203857357622 uses  0.431102097034 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 14358 average: 4.37210718636
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  100 iter 10040 average cost: 0.301902190867 0.203451267268 uses  0.294094765186 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13955 average: 4.2493909866
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  100 iter 10060 average cost: 0.301637105898 0.203046791587 uses  0.286462450027 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13579 average: 4.13489646772
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  100 iter 10080 average cost: 0.301374868295 0.202643920969 uses  0.28963859876 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13709 average: 4.17448233861
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  100 iter 10100 average cost: 0.301113510214 0.202242645878 uses  0.293158400059 min
+seg size to pred:  3284 full file size: 3284
+official output succeed...Frame size: 13476 average: 4.10353227771
+			 test thai over, min_mean_frame: 3.57429963459
+Epoch  100 uses  1.77112780015 min

@@ -140,11 +140,11 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     prob_pos = T.where( labels < 1, 1.0-score_matrix, score_matrix)
     loss = -T.mean(T.log(prob_pos))
 
-    other_U_a, other_LR_b = create_LR_para(rng,LR_input_size, 12)
+    other_U_a, other_LR_b = create_LR_para(rng,LR_input_size, 16)
     other_LR_para=[other_U_a, other_LR_b]
-    other_layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=12, W=other_U_a, b=other_LR_b)
-    other_prob_matrix = T.nnet.softmax(other_layer_LR.before_softmax.reshape((batch_size*4,3)) )
-    other_prob_tensor3 = other_prob_matrix.reshape((batch_size, 4, 3))
+    other_layer_LR=LogisticRegression(rng, input=LR_input, n_in=LR_input_size, n_out=16, W=other_U_a, b=other_LR_b)
+    other_prob_matrix = T.nnet.softmax(other_layer_LR.before_softmax.reshape((batch_size*4,4)) )
+    other_prob_tensor3 = other_prob_matrix.reshape((batch_size, 4, 4))
     other_prob = other_prob_tensor3[T.repeat(T.arange(batch_size), 4), T.tile(T.arange(4), (batch_size)), other_labels.flatten()]
     other_field_loss = -T.mean(T.log(other_prob))
     '''
@@ -167,11 +167,11 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     att_prob_pos = T.where( labels < 1, 1.0-att_score_matrix, att_score_matrix)
     att_loss = -T.mean(T.log(att_prob_pos))
 
-    att_other_U_a, att_other_LR_b = create_LR_para(rng,LR_att_input_size, 12)
+    att_other_U_a, att_other_LR_b = create_LR_para(rng,LR_att_input_size, 16)
     att_other_LR_para=[att_other_U_a, att_other_LR_b]
-    att_other_layer_att_LR=LogisticRegression(rng, input=LR_att_input, n_in=LR_att_input_size, n_out=12, W=att_other_U_a, b=att_other_LR_b)
-    att_other_prob_matrix = T.nnet.softmax(att_other_layer_att_LR.before_softmax.reshape((batch_size*4,3)) )
-    att_other_prob_tensor3 = att_other_prob_matrix.reshape((batch_size, 4, 3))
+    att_other_layer_att_LR=LogisticRegression(rng, input=LR_att_input, n_in=LR_att_input_size, n_out=16, W=att_other_U_a, b=att_other_LR_b)
+    att_other_prob_matrix = T.nnet.softmax(att_other_layer_att_LR.before_softmax.reshape((batch_size*4,4)) )
+    att_other_prob_tensor3 = att_other_prob_matrix.reshape((batch_size, 4, 4))
     att_other_prob = att_other_prob_tensor3[T.repeat(T.arange(batch_size), 4), T.tile(T.arange(4), (batch_size)), other_labels.flatten()]
     att_other_field_loss = -T.mean(T.log(att_other_prob))
     '''
@@ -216,11 +216,11 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     acnn_prob_pos = T.where( labels < 1, 1.0-acnn_score_matrix, acnn_score_matrix)
     acnn_loss = -T.mean(T.log(acnn_prob_pos))
 
-    acnn_other_U_a, acnn_other_LR_b = create_LR_para(rng,acnn_LR_input_size, 12)
+    acnn_other_U_a, acnn_other_LR_b = create_LR_para(rng,acnn_LR_input_size, 16)
     acnn_other_LR_para=[acnn_other_U_a, acnn_other_LR_b]
-    acnn_other_layer_LR=LogisticRegression(rng, input=acnn_LR_input, n_in=acnn_LR_input_size, n_out=12, W=acnn_other_U_a, b=acnn_other_LR_b)
-    acnn_other_prob_matrix = T.nnet.softmax(acnn_other_layer_LR.before_softmax.reshape((batch_size*4,3)) )
-    acnn_other_prob_tensor3 = acnn_other_prob_matrix.reshape((batch_size, 4, 3))
+    acnn_other_layer_LR=LogisticRegression(rng, input=acnn_LR_input, n_in=acnn_LR_input_size, n_out=16, W=acnn_other_U_a, b=acnn_other_LR_b)
+    acnn_other_prob_matrix = T.nnet.softmax(acnn_other_layer_LR.before_softmax.reshape((batch_size*4,4)) )
+    acnn_other_prob_tensor3 = acnn_other_prob_matrix.reshape((batch_size, 4, 4))
     acnn_other_prob = acnn_other_prob_tensor3[T.repeat(T.arange(batch_size), 4), T.tile(T.arange(4), (batch_size)), other_labels.flatten()]
     acnn_other_field_loss = -T.mean(T.log(acnn_other_prob))
 
