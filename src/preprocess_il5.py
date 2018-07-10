@@ -475,16 +475,16 @@ def generate_2017_official_output(lines, output_file_path, pred_types, pred_conf
                             output_dict_list.append(new_dict)
 
 
-    refine_output_dict_list, doc_size = de_duplicate(output_dict_list)
+    refine_output_dict_list, ent_size = de_duplicate(output_dict_list)
     frame_size = len(refine_output_dict_list)
-    mean_frame = frame_size*1.0/doc_size
+    mean_frame = frame_size*1.0/ent_size
     # if mean_frame < min_mean_frame:
     writefile = codecs.open(output_file_path ,'w', 'utf-8')
     json.dump(refine_output_dict_list, writefile)
     writefile.close()
     print '............new loweast written over'
 
-    print 'official output succeed...Frame size:', frame_size, 'average:', mean_frame
+    print 'official output succeed...Frame size:', frame_size, 'average:', mean_frame, 'ent_size:',ent_size
     return mean_frame
 
 def de_duplicate(output_dict_list):
@@ -492,14 +492,14 @@ def de_duplicate(output_dict_list):
     issue_type_set = set(['regimechange','crimeviolence','terrorism'])
     new_dict_list=[]
     key2dict_list = defaultdict(list)
-    doc_set = set()
+    ent_set = set()
     for dic in output_dict_list:
         doc_id = dic.get('DocumentID')
-        doc_set.add(doc_id)
         type = dic.get('Type')
         ent_start = dic.get('PlaceMention').get('Start')
         ent_end = dic.get('PlaceMention').get('End')
         key = (doc_id, type, ent_start,ent_end)
+        ent_set.add((doc_id, ent_start,ent_end))
         key2dict_list[key].append(dic)
     for key, dict_list in key2dict_list.iteritems():
         #compute status, confidence
@@ -544,11 +544,76 @@ def de_duplicate(output_dict_list):
         else:
             print 'wring detected SF type:', dict_list[0].get('Type')
             exit(0)
-    return       new_dict_list, len(doc_set)
+    return       new_dict_list, len(ent_set)
 
 
 
+def generate_output_for_EDL(lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame):
+    #pred_others (#instance, 4, 3)
+    # thai_root = '/save/wenpeng/datasets/LORELEI/Thai/'
+    instance_size = len(pred_types)
+    type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2,
+    'water':7, 'shelter':5, 'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
 
+    id2type = {y:x for x,y in type2label_id.iteritems()}
+
+    output_dict_list = []
+    assert instance_size == len(pred_others)
+    assert instance_size == len(pred_confs)
+    assert instance_size == len(lines)
+    print 'seg size to pred: ', instance_size, 'full file size:', len(lines)
+    # assert instance_size == len(lines)
+
+
+    # pred_needs = pred_types[:,:8]
+    # pred_issues = np.concatenate([pred_types[:,8:9], pred_types[:, 10:]),axis=1)  #(all, 3)
+
+    #needs
+    for i in range(instance_size):
+        # print 'lines[i]:', lines[i].split('\t')
+        entity_pos_list = lines[i].split('\t')[3].split()
+        pred_vec = list(pred_types[i])
+        text_parts = lines[i].split('\t')
+        doc_id = text_parts[0]
+        seg_id = text_parts[1]
+        for x, y in enumerate(pred_vec):
+            if y == 1:
+                if x < 8: # is a need type
+                    for entity_pos in entity_pos_list:
+                        ent_start = int(entity_pos.split('-')[0])
+                        ent_end = int(entity_pos.split('-')[1])
+                        ent_type = entity_pos.split('-')[2]
+                        new_dict={}
+                        new_dict['DocumentID'] = doc_id
+                        hit_need_type = id2type.get(x)
+                        new_dict['Type'] = hit_need_type
+                        new_dict['Mid-seg-id'] =  i
+                        new_dict['TypeConfidence'] = float(pred_confs[i][x])
+                        if new_dict.get('TypeConfidence') > 0.4:
+                            output_dict_list.append(new_dict)
+                elif x ==8 or x > 9: # is issue
+                    for entity_pos in entity_pos_list:
+                        ent_start = int(entity_pos.split('-')[0])
+                        ent_end = int(entity_pos.split('-')[1])
+                        ent_type = entity_pos.split('-')[2]
+                        new_dict={}
+                        new_dict['DocumentID'] = doc_id
+                        hit_issue_type = id2type.get(x)
+                        new_dict['Type'] = hit_issue_type
+                        new_dict['Mid-seg-id'] =  i
+                        new_dict['TypeConfidence'] = float(pred_confs[i][x])
+                        if new_dict.get('TypeConfidence') > 0.4:
+                            output_dict_list.append(new_dict)
+
+
+
+    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/il5_system_output_for_EDL.json' ,'w', 'utf-8')
+    json.dump(output_dict_list, writefile)
+    writefile.close()
+    print '............new loweast written over, size:', len(output_dict_list)
+
+    # print 'official output succeed...Frame size:', frame_size, 'average:', mean_frame, 'ent_size:',ent_size
+    return 0.0
 
 def majority_ele_in_list(lis):
     c = Counter(lis)

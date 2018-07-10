@@ -17,62 +17,62 @@ from theano.tensor.signal import downsample
 from random import shuffle
 from theano.tensor.nnet.bn import batch_normalization
 
-from load_data import  load_fasttext_multiple_word2vec_given_file,load_word2vec_to_init, load_BBN_il5Trans_il5_dataset,load_SF_type_descriptions
+from load_data import  load_trainingData_types,load_trainingData_types_plus_others,load_official_testData,load_fasttext_multiple_word2vec_given_file,load_word2vec_to_init, load_BBN_il5Trans_il5_dataset,load_SF_type_descriptions
 from common_functions import create_LR_para,normalize_matrix_rowwise,normalize_tensor3_colwise,store_model_to_file,Conv_with_Mask, create_conv_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, GRU_Batch_Tensor_Input_with_Mask,Gradient_Cost_Para, Attentive_Conv_for_Pair, create_GRU_para,create_LSTM_para
+from preprocess_common import generate_2018_official_output
 
 
-
-def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=200, hidden_size=[300,300]):
+def evaluate_lenet5(learning_rate=0.001, n_epochs=3, emb_size=100, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
-    emb_root = '/save/wenpeng/datasets/LORELEI/multi-lingual-emb/'
+    emb_root = '/save/wenpeng/datasets/LORELEI/multi-lingual-emb/2018-il9-il10/'
+    test_file_path = '/save/wenpeng/datasets/LORELEI/il10/il10-setE-as-test-input_ner_filtered_w2.txt'
+    output_file_path = '/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_epoch3.json'
     seed=1234
     np.random.seed(seed)
     rng = np.random.RandomState(seed)    #random seed, control the model generates the same results
     srng = T.shared_randomstreams.RandomStreams(rng.randint(seed))
+    word2id={}
+    # all_sentences, all_masks, all_labels, all_other_labels, word2id=load_BBN_il5Trans_il5_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
+    train_p1_sents, train_p1_masks, train_p1_labels,word2id = load_trainingData_types(word2id, maxSentLen)
+    train_p2_sents, train_p2_masks, train_p2_labels, train_p2_other_labels,word2id = load_trainingData_types_plus_others(word2id, maxSentLen)
+    test_sents, test_masks, test_lines,word2id = load_official_testData(word2id, maxSentLen, test_file_path)
 
-    all_sentences, all_masks, all_labels, all_other_labels, word2id=load_BBN_il5Trans_il5_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
     label_sent, label_mask = load_SF_type_descriptions(word2id, type_size, describ_max_len)
     label_sent=np.asarray(label_sent, dtype='int32')
     label_mask=np.asarray(label_mask, dtype=theano.config.floatX)
 
 
-    train_sents=np.asarray(all_sentences[0], dtype='int32')
-    train_masks=np.asarray(all_masks[0], dtype=theano.config.floatX)
-    train_labels=np.asarray(all_labels[0], dtype='int32')
-    train_size=len(train_labels)
+    train_p1_sents=np.asarray(train_p1_sents, dtype='int32')
+    train_p1_masks=np.asarray(train_p1_masks, dtype=theano.config.floatX)
+    train_p1_labels=np.asarray(train_p1_labels, dtype='int32')
+    train_p1_size=len(train_p1_labels)
 
-    train_sents2=np.asarray(all_sentences[1], dtype='int32')
-    train_masks2=np.asarray(all_masks[1], dtype=theano.config.floatX)
-    train_labels2=np.asarray(all_labels[1], dtype='int32')
-    train_size2=len(train_labels2)
-
-
-    dev_sents=np.asarray(all_sentences[2], dtype='int32')
-    dev_masks=np.asarray(all_masks[2], dtype=theano.config.floatX)
-    dev_labels=np.asarray(all_labels[2], dtype='int32')
-    dec_other_labels = np.asarray(all_other_labels, dtype='int32')
-    dev_size=len(dev_labels)
+    train_p2_sents=np.asarray(train_p2_sents, dtype='int32')
+    train_p2_masks=np.asarray(train_p2_masks, dtype=theano.config.floatX)
+    train_p2_labels=np.asarray(train_p2_labels, dtype='int32')
+    train_p2_other_labels = np.asarray(train_p2_other_labels, dtype='int32')
+    train_p2_size=len(train_p2_labels)
     '''
-    combine train and dev
+    combine train_p1 and train_p2
     '''
-    train_sents=np.concatenate([train_sents,train_sents2,dev_sents],axis=0)
-    train_masks=np.concatenate([train_masks,train_masks2,dev_masks],axis=0)
-    train_labels=np.concatenate([train_labels,train_labels2,dev_labels],axis=0)
-    train_size=train_size+train_size2+dev_size
+    train_sents=np.concatenate([train_p1_sents,train_p2_sents],axis=0)
+    train_masks=np.concatenate([train_p1_masks,train_p2_masks],axis=0)
+    train_labels=np.concatenate([train_p1_labels,train_p2_labels],axis=0)
+    train_size=train_p1_size+train_p2_size
 
-    test_sents=np.asarray(all_sentences[3], dtype='int32')
-    test_masks=np.asarray(all_masks[3], dtype=theano.config.floatX)
-    test_labels=np.asarray(all_labels[3], dtype='int32')
-    test_size=len(test_labels)
+    test_sents=np.asarray(test_sents, dtype='int32')
+    test_masks=np.asarray(test_masks, dtype=theano.config.floatX)
+    # test_labels=np.asarray(all_labels[2], dtype='int32')
+    test_size=len(test_sents)
 
     vocab_size=  len(word2id)+1 # add one zero pad index
 
     rand_values=rng.normal(0.0, 0.01, (vocab_size, emb_size))   #generate a matrix by Gaussian distribution
     rand_values[0]=np.array(np.zeros(emb_size),dtype=theano.config.floatX)
     id2word = {y:x for x,y in word2id.iteritems()}
-    word2vec=load_fasttext_multiple_word2vec_given_file([emb_root+'IL5-cca-wiki-lorelei-d40.eng.vec',emb_root+'IL5-cca-wiki-lorelei-d40.IL5.vec'], 40)
+    word2vec=load_fasttext_multiple_word2vec_given_file([emb_root+'100k-IL10-cca.d100.eng.txt',emb_root+'100k-IL10-cca.d100.IL10.txt'], 100)
     rand_values=load_word2vec_to_init(rand_values, id2word, word2vec)
     embeddings=theano.shared(value=np.array(rand_values,dtype=theano.config.floatX), borrow=True)   #wrap up the python variable "rand_values" into theano variable
 
@@ -170,6 +170,17 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
              W_context=conv_W_context2, b_context=conv_b_context2)
     sent_att_embeddings2 = attentive_conv_layer2.attentive_maxpool_vec_l
 
+    '''
+    cross-DNN-dataless
+    '''
+    #first map label emb into hidden space
+    HL_layer_1_W, HL_layer_1_b = create_HiddenLayer_para(rng, emb_size, hidden_size[0])
+    HL_layer_1_params = [HL_layer_1_W, HL_layer_1_b]
+    HL_layer_1=HiddenLayer(rng, input=bow_des, n_in=emb_size, n_out=hidden_size[0], W=HL_layer_1_W, b=HL_layer_1_b, activation=T.tanh)
+    des_rep_hidden = HL_layer_1.output #(type_size, hidden_size)
+    dot_dnn_dataless_1 = T.tanh(sent_embeddings.dot(des_rep_hidden.T)) #(batch_size, type_size)
+    dot_dnn_dataless_2 = T.tanh(sent_embeddings2.dot(des_rep_hidden.T))
+
 
     '''
     dataless cosine
@@ -192,8 +203,8 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
 
 
 
-    acnn_LR_input = T.concatenate([cosine_score_matrix,top_k_score_matrix,sent_embeddings,sent_embeddings2, gru_sent_embeddings,sent_att_embeddings,sent_att_embeddings2, bow_emb], axis=1)
-    acnn_LR_input_size = hidden_size[0]*5+emb_size+2*type_size
+    acnn_LR_input = T.concatenate([dot_dnn_dataless_1, dot_dnn_dataless_2,cosine_score_matrix,top_k_score_matrix,sent_embeddings,sent_embeddings2, gru_sent_embeddings,sent_att_embeddings,sent_att_embeddings2, bow_emb], axis=1)
+    acnn_LR_input_size = hidden_size[0]*5+emb_size+4*type_size
     #classification layer, it is just mapping from a feature vector of size "hidden_size" to a vector of only two values: positive, negative
     acnn_U_a, acnn_LR_b = create_LR_para(rng,acnn_LR_input_size, 12)
     acnn_LR_para=[acnn_U_a, acnn_LR_b]
@@ -213,8 +224,8 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
 
 
 
-    params = multiCNN_para  + GRU_NN_para   +ACNN_para +acnn_LR_para# put all model parameters together
-    cost=acnn_loss+   1e-4*((conv_W**2).sum()+(conv_W2**2).sum())
+    params = multiCNN_para  + GRU_NN_para   +ACNN_para +acnn_LR_para + HL_layer_1_params# put all model parameters together
+    cost=acnn_loss+   1e-4*((conv_W**2).sum()+(conv_W2**2).sum()+(conv_att_W**2).sum()+(conv_att_W2**2).sum())
     updates =   Gradient_Cost_Para(cost,params, learning_rate)
 
 
@@ -246,12 +257,15 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
     '''
     ensemble_scores = ensemble_NN_scores#0.6*ensemble_NN_scores+0.4*0.5*(cosine_score_matrix+top_k_score_matrix)
     binarize_prob = T.where(ensemble_scores > 0.3, 1, 0)
-
+    '''
+    test for other fields
+    '''
+    sum_tensor3 = acnn_other_prob_tensor3 #(batch, 4, 3)
 
     #train_model = theano.function([sents_id_matrix, sents_mask, labels], cost, updates=updates, on_unused_input='ignore')
-    train_model = theano.function([sents_id_matrix, sents_mask, labels, des_id_matrix, des_mask], cost, updates=updates, allow_input_downcast=True, on_unused_input='ignore')
-    other_model = theano.function([sents_id_matrix, sents_mask, labels,des_id_matrix, des_mask,other_labels], cost_other, updates=other_updates,allow_input_downcast=True, on_unused_input='ignore')
-    test_model = theano.function([sents_id_matrix, sents_mask, des_id_matrix, des_mask], binarize_prob, allow_input_downcast=True, on_unused_input='ignore')
+    train_p1_model = theano.function([sents_id_matrix, sents_mask, labels, des_id_matrix, des_mask], cost, updates=updates, allow_input_downcast=True, on_unused_input='ignore')
+    train_p2_model = theano.function([sents_id_matrix, sents_mask, labels,des_id_matrix, des_mask,other_labels], cost_other, updates=other_updates,allow_input_downcast=True, on_unused_input='ignore')
+    test_model = theano.function([sents_id_matrix, sents_mask, des_id_matrix, des_mask], [binarize_prob,ensemble_scores,sum_tensor3], allow_input_downcast=True, on_unused_input='ignore')
 
     ###############
     # TRAIN MODEL #
@@ -267,23 +281,25 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
 
     n_train_batches=train_size/batch_size
     train_batch_start=list(np.arange(n_train_batches)*batch_size)+[train_size-batch_size]
-    n_dev_batches=dev_size/batch_size
-    dev_batch_start=list(np.arange(n_dev_batches)*batch_size)+[dev_size-batch_size]
+    n_train_p2_batches=train_p2_size/batch_size
+    train_p2_batch_start=list(np.arange(n_train_p2_batches)*batch_size)+[train_p2_size-batch_size]
     n_test_batches=test_size/batch_size
+    n_test_remain=test_size%batch_size
     test_batch_start=list(np.arange(n_test_batches)*batch_size)+[test_size-batch_size]
 
-    dev_batch_start_set = set(dev_batch_start)
+    train_p2_batch_start_set = set(train_p2_batch_start)
     # max_acc_dev=0.0
-    max_meanf1_test=0.0
-    max_weightf1_test=0.0
+    # max_meanf1_test=0.0
+    # max_weightf1_test=0.0
     train_indices = range(train_size)
-    dev_indices = range(dev_size)
+    train_p2_indices = range(train_p2_size)
     cost_i=0.0
     other_cost_i = 0.0
+    min_mean_frame = 100.0
     while epoch < n_epochs:
         epoch = epoch + 1
         random.Random(100).shuffle(train_indices)
-        random.Random(100).shuffle(dev_indices)
+        random.Random(100).shuffle(train_p2_indices)
         iter_accu=0
 
         for batch_id in train_batch_start: #for each batch
@@ -292,53 +308,66 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
             iter_accu+=1
             train_id_batch = train_indices[batch_id:batch_id+batch_size]
 
-            cost_i+= train_model(
+            cost_i+= train_p1_model(
                                 train_sents[train_id_batch],
                                 train_masks[train_id_batch],
                                 train_labels[train_id_batch],
                                 label_sent,
                                 label_mask)
 
-            if batch_id in dev_batch_start_set:
-                dev_id_batch = dev_indices[batch_id:batch_id+batch_size]
-                other_cost_i+= other_model(
-                                    dev_sents[dev_id_batch],
-                                    dev_masks[dev_id_batch],
-                                    dev_labels[dev_id_batch],
+            if batch_id in train_p2_batch_start_set:
+                train_p2_id_batch = train_p2_indices[batch_id:batch_id+batch_size]
+                other_cost_i+=train_p2_model(
+                                    train_p2_sents[train_p2_id_batch],
+                                    train_p2_masks[train_p2_id_batch],
+                                    train_p2_labels[train_p2_id_batch],
                                     label_sent,
                                     label_mask,
-                                    dec_other_labels[dev_id_batch]
+                                    train_p2_other_labels[train_p2_id_batch]
                                     )
-
+            # else:
+            #     random_batch_id = random.choice(train_p2_batch_start)
+            #     train_p2_id_batch = train_p2_indices[random_batch_id:random_batch_id+batch_size]
+            #     other_cost_i+=train_p2_model(
+            #                         train_p2_sents[train_p2_id_batch],
+            #                         train_p2_masks[train_p2_id_batch],
+            #                         train_p2_labels[train_p2_id_batch],
+            #                         label_sent,
+            #                         label_mask,
+            #                         train_p2_other_labels[train_p2_id_batch]
+            #                         )
             #after each 1000 batches, we test the performance of the model on all test data
             if  iter%20==0:
                 print 'Epoch ', epoch, 'iter '+str(iter)+' average cost: '+str(cost_i/iter),str(other_cost_i/iter), 'uses ', (time.time()-past_time)/60.0, 'min'
                 past_time = time.time()
 
-                error_sum=0.0
-                all_pred_labels = []
-                all_gold_labels = []
-                for test_batch_id in test_batch_start: # for each test batch
-                    pred_labels=test_model(
+                pred_types = []
+                pred_confs = []
+                pred_others = []
+                for i, test_batch_id in enumerate(test_batch_start): # for each test batch
+                    pred_types_i, pred_conf_i, pred_fields_i=test_model(
                                 test_sents[test_batch_id:test_batch_id+batch_size],
                                 test_masks[test_batch_id:test_batch_id+batch_size],
                                 label_sent,
-                                label_mask)
-                    gold_labels = test_labels[test_batch_id:test_batch_id+batch_size]
-                    # print 'pred_labels:', pred_labels
-                    # print 'gold_labels;', gold_labels
-                    all_pred_labels.append(pred_labels)
-                    all_gold_labels.append(gold_labels)
-                all_pred_labels = np.concatenate(all_pred_labels)
-                all_gold_labels = np.concatenate(all_gold_labels)
+                                label_mask
+                                )
+                    if i < len(test_batch_start)-1:
+                        pred_types.append(pred_types_i)
+                        pred_confs.append(pred_conf_i)
+                        pred_others.append(pred_fields_i)
+                    else:
+                        pred_types.append(pred_types_i[-n_test_remain:])
+                        pred_confs.append(pred_conf_i[-n_test_remain:])
+                        pred_others.append(pred_fields_i[-n_test_remain:])
+                pred_types = np.concatenate(pred_types, axis=0)
+                pred_confs = np.concatenate(pred_confs, axis=0)
+                pred_others = np.concatenate(pred_others, axis=0)
+                mean_frame = generate_2018_official_output(test_lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame)
+                if mean_frame < min_mean_frame:
+                    min_mean_frame = mean_frame
+                print '\t\t\t test  over, min_mean_frame:', min_mean_frame
 
 
-                test_mean_f1, test_weight_f1 =average_f1_two_array_by_col(all_pred_labels, all_gold_labels)
-                if test_weight_f1 > max_weightf1_test:
-                    max_weightf1_test=test_weight_f1
-                if test_mean_f1 > max_meanf1_test:
-                    max_meanf1_test=test_mean_f1
-                print '\t\t\t\t\t\t\t\tcurrent f1s:', test_mean_f1, test_weight_f1, '\t\tmax_f1:', max_meanf1_test, max_weightf1_test
 
 
         print 'Epoch ', epoch, 'uses ', (time.time()-mid_time)/60.0, 'min'

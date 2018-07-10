@@ -2,10 +2,9 @@ import codecs
 import json
 from pprint import pprint
 import nltk
-from collections import defaultdict
+from collections import defaultdict,Counter
 import os
 import xml.etree.ElementTree as ET
-
 
 
 
@@ -58,17 +57,17 @@ def find_entities_for_window(entity_pos_list, seg_start, seg_end):
     if no entity detected in this seg, whether or not search the nearest entity
     '''
     # print 'pos_list:',pos_list
-    # if len(pos_list) == 0:
-    #     '''
-    #     means we have to search the nearest entity for this segments
-    #     '''
-    #     assert nearest_pos != ' '
-    #     pos_list.append(nearest_pos)
+    if len(pos_list) == 0:
+        '''
+        means we have to search the nearest entity for this segments
+        '''
+        assert nearest_pos != ' '
+        pos_list.append(nearest_pos)
     return pos_list
 
-def IL_into_test_filteredby_NER(ltf_path, docSet, writefile_path, docid2entity_pos_list, window):
+def IL_eng_into_test_filteredby_NER_2018(ltf_path, writefile_path, window):
     '''
-    docid2entity_pos_list: doc_id: ['12-14', '34-67', ...]
+    docid2entity_pos_list: doc_id: ['12-14-kbid', '34-67-kbid', ...]
     '''
     writefile_path=writefile_path+'_w'+str(window)+'.txt'
     writefile = codecs.open(writefile_path, 'w', 'utf-8')
@@ -88,8 +87,82 @@ def IL_into_test_filteredby_NER(ltf_path, docSet, writefile_path, docid2entity_p
 
         for doc in root.iter('DOC'):
             doc_id  = doc.attrib.get('id')
-        if doc_id in docSet and doc_id in docid2entity_pos_list:
-        # if doc_id in docid2entity_pos_list:
+        if True:#doc_id in docid2entity_pos_list:
+        # if True:#doc_id in docid2entity_pos_list:
+
+            list_docSegSent=[]
+            for seg in root.iter('SEG'):
+                sent_wordlist = []
+                seg_id = seg.attrib.get('id')
+                seg_start = seg.attrib.get('start_char')
+                seg_end = seg.attrib.get('end_char')
+                for word in seg.iter('TOKEN'):
+                    word_str = word.text
+                    if word_str.find('https') <0:
+                        sent_wordlist.append(word_str)
+                if len(sent_wordlist) > 0:
+                    list_docSegSent.append((doc_id,seg_id, seg_start,seg_end, ' '.join(sent_wordlist)))
+            #scan window to write
+            if len(list_docSegSent) <=2*window+1:
+                sent=''
+                for ele in list_docSegSent:
+                    sent+= ' '+ele[4]
+                # pos_list = docid2entity_pos_list.get(doc_id)
+                writefile.write(doc_id+'\t'+list_docSegSent[0][1]+'\t'+sent.strip()+'\n')
+                # writefile.write(doc_id+'\t'+list_docSegSent[0][1]+'\t'+sent.strip()+'\n')
+            else:
+                for i, trip in enumerate(list_docSegSent):
+                    doc_idd = trip[0]
+                    # entity_pos_list = docid2entity_pos_list.get(doc_idd)
+                    seg_idd = trip[1]
+                    seg_start = trip[2]
+                    seg_end  = trip[3]
+                    print 'B seg_start, seg_end:',len(list_docSegSent), doc_idd, seg_start, seg_end
+                    sent = trip[4]
+                    for j in range(i-1, i-window-1, -1):
+                        if j>=0:
+                            sent = list_docSegSent[j][4]+' '+sent
+                            seg_start = list_docSegSent[j][2]
+                    for j in range(i+1, i+window+1):
+                        if j < len(list_docSegSent):
+                            sent=sent +' '+list_docSegSent[j][4]
+                            seg_end = list_docSegSent[j][3]
+                    print 'A seg_start, seg_end:',len(list_docSegSent), doc_idd, seg_start, seg_end
+                    # pos_list = find_entities_for_window(entity_pos_list, seg_start, seg_end)
+                    # if len(pos_list) > 0:
+                    writefile.write(doc_idd+'\t'+seg_idd+'\t'+sent+'\n')
+                    # writefile.write(doc_idd+'\t'+seg_idd+'\t'+sent+'\n')
+            co+=1
+            if co % 1000 == 0:
+                print 'generating standard test instances...', co
+    writefile.close()
+
+    print 'over'
+
+def IL_into_test_filteredby_NER_2018(ltf_path, writefile_path, docid2entity_pos_list, window):
+    '''
+    docid2entity_pos_list: doc_id: ['12-14-kbid', '34-67-kbid', ...]
+    '''
+    writefile_path=writefile_path+'_w'+str(window)+'.txt'
+    writefile = codecs.open(writefile_path, 'w', 'utf-8')
+    # write_wp_file = codecs.open('/save/wenpeng/datasets/LORELEI/wp_filelist.txt', 'w', 'utf-8')
+    # for docc in docSet:
+    #     write_wp_file.write(docc+'\tTRUE\n')
+    # write_wp_file.close()
+    vocab=set()
+    re=0
+
+    files= os.listdir(ltf_path)
+    print 'folder file sizes: ', len(files)
+    co=0
+    for fil in files:
+        f = ET.parse(ltf_path+fil)
+        root = f.getroot()
+
+        for doc in root.iter('DOC'):
+            doc_id  = doc.attrib.get('id')
+        if doc_id in docid2entity_pos_list:
+        # if True:#doc_id in docid2entity_pos_list:
 
             list_docSegSent=[]
             for seg in root.iter('SEG'):
@@ -110,6 +183,7 @@ def IL_into_test_filteredby_NER(ltf_path, docSet, writefile_path, docid2entity_p
                     sent+= ' '+ele[4]
                 pos_list = docid2entity_pos_list.get(doc_id)
                 writefile.write(doc_id+'\t'+list_docSegSent[0][1]+'\t'+sent.strip()+'\t'+' '.join(pos_list)+'\n')
+                # writefile.write(doc_id+'\t'+list_docSegSent[0][1]+'\t'+sent.strip()+'\n')
             else:
                 for i, trip in enumerate(list_docSegSent):
                     doc_idd = trip[0]
@@ -131,6 +205,7 @@ def IL_into_test_filteredby_NER(ltf_path, docSet, writefile_path, docid2entity_p
                     pos_list = find_entities_for_window(entity_pos_list, seg_start, seg_end)
                     if len(pos_list) > 0:
                         writefile.write(doc_idd+'\t'+seg_idd+'\t'+sent+'\t'+' '.join(pos_list)+'\n')
+                    # writefile.write(doc_idd+'\t'+seg_idd+'\t'+sent+'\n')
             co+=1
             if co % 1000 == 0:
                 print 'generating standard test instances...', co
@@ -214,3 +289,313 @@ def filter_ner_results():
                         size+=1
     print 'remain doc size:', len(doc2remain_seglist), ' seg size:', size
     return doc2remain_seglist
+
+
+def get_need_other_fields(matrix):
+    #matrix (4,4)
+    # other_field2index = {'current':0,'not_current':1, 'sufficient':0,'insufficient':1,'True':0,'False':1}
+    # other_fields=[2]*4 #need_status, issue_status, need_relief, need_urgency, defalse "2" denotes no label
+    fields_size = len(matrix)
+    assert fields_size ==4
+    if matrix[0][0]>matrix[0][1] and matrix[0][0]>matrix[0][2]:
+        status = 'current'
+    elif matrix[0][1]>matrix[0][0] and matrix[0][1]>matrix[0][2]:
+        status = 'future'
+    elif matrix[0][2]>matrix[0][0] and matrix[0][2]>matrix[0][1]:
+        status = 'past'
+    if matrix[2][0]>matrix[2][1]:
+        relief = 'sufficient'
+    else:
+        relief = 'insufficient'
+    if matrix[3][0]>matrix[3][1]:
+        urgency = True
+    else:
+        urgency = False
+    return    status,  relief,urgency
+
+def get_issue_other_fields(matrix):
+    #matrix (4,3)
+    # other_field2index = {'current':0,'not_current':1, 'sufficient':0,'insufficient':1,'True':0,'False':1}
+    # other_fields=[2]*4 #need_status, issue_status, need_relief, need_urgency, defalse "2" denotes no label
+    fields_size = len(matrix)
+    assert fields_size ==4
+    if matrix[1][0]>matrix[1][1]:
+        status = 'current'
+    else:
+        status = 'not_current'
+    if matrix[3][0]>matrix[3][1]:
+        urgency = True
+    else:
+        urgency = False
+    return    status, urgency
+
+def generate_2018_official_output_english(lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame):
+    #pred_others (#instance, 4, 3)
+    # thai_root = '/save/wenpeng/datasets/LORELEI/Thai/'
+    instance_size = len(pred_types)
+    type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2,
+    'water':7, 'shelter':5, 'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
+
+    id2type = {y:x for x,y in type2label_id.iteritems()}
+
+    output_dict_list = []
+    assert instance_size == len(pred_others)
+    assert instance_size == len(pred_confs)
+    assert instance_size == len(lines)
+    print 'seg size to pred: ', instance_size, 'full file size:', len(lines)
+    # assert instance_size == len(lines)
+
+
+    # pred_needs = pred_types[:,:8]
+    # pred_issues = np.concatenate([pred_types[:,8:9], pred_types[:, 10:]),axis=1)  #(all, 3)
+
+    #needs
+    for i in range(instance_size):
+        # print 'lines[i]:', lines[i].split('\t')
+        # entity_pos_list = ['10-13-GPE']# lines[i].split('\t')[3].split()
+        pred_vec = list(pred_types[i])
+        text_parts = lines[i].split('\t')
+        doc_id = text_parts[0]
+        seg_id = text_parts[1]
+        # entity_pos_list = text_parts[3].split() #116-123-6252001 125-130-49518 198-203-49518
+        for x, y in enumerate(pred_vec):
+            if y == 1:
+                if x < 8: # is a need type
+                    # for entity_pos in entity_pos_list:
+                        # kb_id = entity_pos.split('-')[2]
+                    new_dict={}
+                    new_dict['DocumentID'] = doc_id
+                    hit_need_type = id2type.get(x)
+                    new_dict['Type'] = hit_need_type
+                    new_dict['Place_KB_ID'] = 'TBD'
+                    status,  relief,urgency = get_need_other_fields(pred_others[i])
+                    new_dict['Status'] = status
+                    new_dict['Confidence'] = float(pred_confs[i][x])
+                    new_dict['Justification_ID'] = seg_id
+                    new_dict['Resolution'] = relief
+                    new_dict['Urgent'] = urgency
+                    if new_dict.get('Confidence') > 0.4:
+                        output_dict_list.append(new_dict)
+
+                elif x ==8 or x > 9: # is issue
+                    # for entity_pos in entity_pos_list:
+                        # kb_id = entity_pos.split('-')[2]
+                    new_dict={}
+                    new_dict['DocumentID'] = doc_id
+                    hit_issue_type = id2type.get(x)
+                    new_dict['Type'] = hit_issue_type
+                    new_dict['Place_KB_ID'] = 'TBD'
+                    # new_dict['Place_'] = 14.0
+                    status, urgency = get_issue_other_fields(pred_others[i])
+                    new_dict['Status'] = status
+                    new_dict['Confidence'] = float(pred_confs[i][x])
+                    new_dict['Justification_ID'] = seg_id
+                    new_dict['Urgent'] = urgency
+                    if new_dict.get('TypeConfidence') > 0.4:
+                        output_dict_list.append(new_dict)
+
+
+    # refine_output_dict_list, ent_size = de_duplicate(output_dict_list)
+    frame_size = len(output_dict_list)
+    mean_frame = frame_size*1.0/instance_size
+    # if mean_frame < min_mean_frame:
+    writefile = codecs.open(output_file_path ,'w', 'utf-8')
+    json.dump(output_dict_list, writefile)
+    writefile.close()
+    print 'official output succeed...Frame size:', frame_size, 'average:', mean_frame, 'instance_size:',instance_size
+    return mean_frame
+
+def generate_2018_official_output(lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame):
+    #pred_others (#instance, 4, 3)
+    # thai_root = '/save/wenpeng/datasets/LORELEI/Thai/'
+    instance_size = len(pred_types)
+    type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domain':9, 'infra':2,
+    'water':7, 'shelter':5, 'regimechange':10, 'evac':0, 'terrorism':11, 'utils':6}
+
+    id2type = {y:x for x,y in type2label_id.iteritems()}
+
+    output_dict_list = []
+    assert instance_size == len(pred_others)
+    assert instance_size == len(pred_confs)
+    assert instance_size == len(lines)
+    print 'seg size to pred: ', instance_size, 'full file size:', len(lines)
+    # assert instance_size == len(lines)
+
+
+    # pred_needs = pred_types[:,:8]
+    # pred_issues = np.concatenate([pred_types[:,8:9], pred_types[:, 10:]),axis=1)  #(all, 3)
+
+    #needs
+    for i in range(instance_size):
+        # print 'lines[i]:', lines[i].split('\t')
+        # entity_pos_list = ['10-13-GPE']# lines[i].split('\t')[3].split()
+        pred_vec = list(pred_types[i])
+        text_parts = lines[i].split('\t')
+        doc_id = text_parts[0]
+        seg_id = text_parts[1]
+        entity_pos_list = text_parts[3].split() #116-123-6252001 125-130-49518 198-203-49518
+        for x, y in enumerate(pred_vec):
+            if y == 1:
+                if x < 8: # is a need type
+                    for entity_pos in entity_pos_list:
+                        kb_id = entity_pos.split('-')[2]
+                        new_dict={}
+                        new_dict['DocumentID'] = doc_id
+                        hit_need_type = id2type.get(x)
+                        new_dict['Type'] = hit_need_type
+                        new_dict['Place_KB_ID'] = kb_id
+                        status,  relief,urgency = get_need_other_fields(pred_others[i])
+                        new_dict['Status'] = status
+                        new_dict['Confidence'] = float(pred_confs[i][x])
+                        new_dict['Justification_ID'] = seg_id
+                        new_dict['Resolution'] = relief
+                        new_dict['Urgent'] = urgency
+                        if new_dict.get('Confidence') > 0.4:
+                            output_dict_list.append(new_dict)
+
+                elif x ==8 or x > 9: # is issue
+                    for entity_pos in entity_pos_list:
+                        kb_id = entity_pos.split('-')[2]
+                        new_dict={}
+                        new_dict['DocumentID'] = doc_id
+                        hit_issue_type = id2type.get(x)
+                        new_dict['Type'] = hit_issue_type
+                        new_dict['Place_KB_ID'] = kb_id
+                        # new_dict['Place_'] = 14.0
+                        status, urgency = get_issue_other_fields(pred_others[i])
+                        new_dict['Status'] = status
+                        new_dict['Confidence'] = float(pred_confs[i][x])
+                        new_dict['Justification_ID'] = seg_id
+                        new_dict['Urgent'] = urgency
+                        if new_dict.get('TypeConfidence') > 0.4:
+                            output_dict_list.append(new_dict)
+
+
+    refine_output_dict_list, ent_size = de_duplicate(output_dict_list)
+    frame_size = len(refine_output_dict_list)
+    mean_frame = frame_size*1.0/ent_size
+    # if mean_frame < min_mean_frame:
+    writefile = codecs.open(output_file_path ,'w', 'utf-8')
+    json.dump(refine_output_dict_list, writefile)
+    writefile.close()
+    print 'official output succeed...Frame size:', frame_size, 'average:', mean_frame, 'ent_size:',ent_size
+    return mean_frame
+
+def best_seg_id(segs, window):
+    #[segment-2, segment-7, ...]
+    #window =2
+    id_list = []
+    for seg in segs:
+        id_list.append(int(seg.split('-')[1]))
+    min_seg = min(id_list)
+    max_seg = max(id_list)
+    extend_list = []
+    for idd in id_list:
+        for i in range(idd-window, idd+window+1):
+            if i >= min_seg and i <=max_seg:
+                extend_list.append(i)
+
+    majority_id = majority_ele_in_list(extend_list)
+    return 'segment-'+str(majority_id)
+
+
+def de_duplicate(output_dict_list):
+    need_type_set = set([ 'med','search','food','infra','water','shelter','evac','utils'])
+    issue_type_set = set(['regimechange','crimeviolence','terrorism'])
+    new_dict_list=[]
+    key2dict_list = defaultdict(list)
+    ent_set = set()
+    for dic in output_dict_list:
+        doc_id = dic.get('DocumentID')
+        type = dic.get('Type')
+        kb_id = dic.get('Place_KB_ID')
+        key = (doc_id, type, kb_id)
+        ent_set.add((doc_id, kb_id))
+        key2dict_list[key].append(dic)
+    for key, dict_list in key2dict_list.iteritems():
+        #compute status, confidence
+        doc_id = key[0]
+        SF_type = key[1]
+        kb_id = key[2]
+        if dict_list[0].get('Type') in need_type_set:
+            status=[]
+            relief=[]
+            urgency=[]
+            conf = []
+            segs = []
+
+            for dic in dict_list:
+                status.append(dic.get('Status'))
+                relief.append(dic.get('Resolution'))
+                urgency.append(dic.get('Urgent'))
+                conf.append(dic.get('Confidence'))
+                segs.append(dic.get('Justification_ID'))
+            status = majority_ele_in_list(status)
+            relief = majority_ele_in_list(relief)
+            urgency = majority_ele_in_list(urgency)
+            conf = max(conf)
+            seg_id = best_seg_id(segs,2)
+
+            new_dict={}
+            new_dict['DocumentID'] = doc_id
+            new_dict['Type'] = SF_type
+            new_dict['Place_KB_ID'] =  kb_id
+            new_dict['Status'] = status
+            new_dict['Confidence'] = conf
+            new_dict['Justification_ID'] = seg_id
+            new_dict['Resolution'] = relief
+            new_dict['Urgent'] = urgency
+            new_dict_list.append(new_dict)
+        elif dict_list[0].get('Type') in issue_type_set:
+            status=[]
+            urgency=[]
+            conf = []
+            segs = []
+
+            for dic in dict_list:
+                status.append(dic.get('Status'))
+                urgency.append(dic.get('Urgent'))
+                conf.append(dic.get('Confidence'))
+                segs.append(dic.get('Justification_ID'))
+            status = majority_ele_in_list(status)
+            urgency = majority_ele_in_list(urgency)
+            conf = max(conf)
+            seg_id = best_seg_id(segs,2)
+            new_dict={}
+            new_dict['DocumentID'] = doc_id
+            new_dict['Type'] = SF_type
+            new_dict['Place_KB_ID'] =  kb_id
+            new_dict['Status'] = status
+            new_dict['Confidence'] = conf
+            new_dict['Justification_ID'] = seg_id
+            new_dict['Urgent'] = urgency
+            new_dict_list.append(new_dict)
+        else:
+            print 'wring detected SF type:', dict_list[0].get('Type')
+            exit(0)
+    return       new_dict_list, len(ent_set)
+
+
+def majority_ele_in_list(lis):
+    c = Counter(lis)
+    return c.most_common()[0][0]
+
+def load_EDL2018_output(filename):
+    '''
+    Penn    IL9_NW_020591_20151021_I0040QK2J-7       [Kameruni]|Kameruni    IL9_NW_020591_20151021_I0040QK2J:411-418        2233387 GPE     NAM     1.0
+    '''
+    readfile = codecs.open(filename, 'r', 'utf-8')
+    # readfile = codecs.open('/save/wenpeng/datasets/LORELEI/finalsubmission.tab', 'r', 'utf-8')
+    docid2poslist = defaultdict(list)
+    for line in readfile:
+        parts = line.strip().split('\t')
+        type = parts[5]
+        kb_id = parts[4]
+        if type == 'GPE' or type == 'LOC':
+            comma_pos = parts[3].find(':')
+            doc_id = parts[3][:comma_pos]
+            pos_pair = parts[3][comma_pos+1:]
+            docid2poslist[doc_id].append(pos_pair+'-'+kb_id)
+    readfile.close()
+    print 'load EDL2018 over, size:', len(docid2poslist)
+    return docid2poslist

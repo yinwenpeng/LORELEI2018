@@ -470,6 +470,7 @@ def load_trainingData_types(word2id, maxlen):
     BBN_path = '/save/wenpeng/datasets/LORELEI/'
     files = [
     'SF-BBN-Mark-split/full_BBN_multi.txt'
+    # ,'NYT-Mark-top10-id-label-text.txt'
     # ,'ReliefWeb_subset_id_label_text.txt'
     ]
     all_sentences=[]

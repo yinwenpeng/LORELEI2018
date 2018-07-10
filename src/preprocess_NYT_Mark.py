@@ -23,19 +23,21 @@ type2label_id = {'crimeviolence':8, 'med':3, 'search':4, 'food':1, 'out-of-domai
 # -rw-rw-r-- 1 mssammon cs_danr 61000 Jun 17 17:53 water.txt_mrg.txt
 def preprocess_nyt():
     folder = '/shared/experiments/mssammon/lorelei/2018/keywords-for-sf/nyt-docs-from-keywords-origmspluscb/'
-    filelist=['evac.txt_mrg.txt',
+    filelist=[
+    # 'evac.txt_mrg.txt',
     'food.txt_mrg.txt',
-    'infra.txt_mrg.txt',
+    # 'infra.txt_mrg.txt',
     'med.txt_mrg.txt',
     'search.txt_mrg.txt',
-    'shelter.txt_mrg.txt',
-    'util.txt_mrg.txt',
-    'water.txt_mrg.txt',
-    'crimeviolence.txt_mrg.txt',
+    # 'shelter.txt_mrg.txt',
+    # 'util.txt_mrg.txt',
+    # 'water.txt_mrg.txt',
+    # 'crimeviolence.txt_mrg.txt',
     'distractor.txt_mrg.txt',
-    'regimechange.txt_mrg.txt',
+    # 'regimechange.txt_mrg.txt',
     'terrorism.txt_mrg.txt'
     ]
+    preferred_classes = set(['food', 'med', 'search' , 'terrorism'])
 
     id2label = {y:x for x,y in type2label_id.iteritems()}
     writefile = codecs.open('/home/wyin3/Datasets/NYT-Mark-top10-id-label-text.txt', 'w', 'utf-8')

@@ -29,6 +29,9 @@ ruby LoReHLT_Frame_Scorer.rb -p LoReHLT17 -L /shared/corpora/corporaWeb/lorelei/
 ruby LoReHLT_Frame_Scorer.rb -p LoReHLT17 -L /Users/yinwenpeng/Downloads/LORELEI/ltf/ltf -R /Users/yinwenpeng/Downloads/LORELEI/situation_frame/situation_frame/ -s /Users/yinwenpeng/Downloads/LORELEI/il5_system_output_forfun.json -f /Users/yinwenpeng/Downloads/LORELEI/wp_filelist.txt -F /Users/yinwenpeng/Downloads/LORELEI/annotated_filelist_SF.tab -o /Users/yinwenpeng/Downloads/LORELEI/Scores
 
 
+{"Confidence": 0.4801243543624878, "DocumentID": "IL9_NW_020576_20180503_I0040RL1P", "Justification_ID": "segment-5", "Place_KB_ID": "49518", "Resolution": "insufficient", "Status": "current", "Type": "shelter", "Urgent": false},
+{"Confidence": 0.4801243543624878, "DocumentID": "IL9_NW_020576_20180503_I0040RL1P", "Justification_ID": "segment-5", "Place_KB_ID": "433561", "Resolution": "insufficient", "Status": "current", "Type": "shelter", "Urgent": false}
+
 gem install nokogiri -v '1.8.3' --source 'https://rubygems.org/
 if __name__ == '__main__':
     load_fasttext_word2vec_given_file(range(100))

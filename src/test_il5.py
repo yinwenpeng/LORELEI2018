@@ -19,10 +19,10 @@ from theano.tensor.nnet.bn import batch_normalization
 
 from load_data import  load_trainingData_types,load_trainingData_types_plus_others,load_official_testData,load_fasttext_multiple_word2vec_given_file,load_word2vec_to_init, load_BBN_il5Trans_il5_dataset,load_SF_type_descriptions
 from common_functions import create_LR_para,normalize_matrix_rowwise,normalize_tensor3_colwise,store_model_to_file,Conv_with_Mask, create_conv_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, GRU_Batch_Tensor_Input_with_Mask,Gradient_Cost_Para, Attentive_Conv_for_Pair, create_GRU_para,create_LSTM_para
-from preprocess_il5 import generate_2017_official_output
+from preprocess_il5 import generate_2017_official_output,generate_output_for_EDL
 
 
-def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
+def evaluate_lenet5(learning_rate=0.01, n_epochs=4, emb_size=40, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
@@ -325,7 +325,17 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
                                     label_mask,
                                     train_p2_other_labels[train_p2_id_batch]
                                     )
-
+            # else:
+            #     random_batch_id = random.choice(train_p2_batch_start)
+            #     train_p2_id_batch = train_p2_indices[random_batch_id:random_batch_id+batch_size]
+            #     other_cost_i+=train_p2_model(
+            #                         train_p2_sents[train_p2_id_batch],
+            #                         train_p2_masks[train_p2_id_batch],
+            #                         train_p2_labels[train_p2_id_batch],
+            #                         label_sent,
+            #                         label_mask,
+            #                         train_p2_other_labels[train_p2_id_batch]
+            #                         )
             #after each 1000 batches, we test the performance of the model on all test data
             if  iter%20==0:
                 print 'Epoch ', epoch, 'iter '+str(iter)+' average cost: '+str(cost_i/iter),str(other_cost_i/iter), 'uses ', (time.time()-past_time)/60.0, 'min'
@@ -352,8 +362,8 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=100, emb_size=40, batch_size=50
                 pred_types = np.concatenate(pred_types, axis=0)
                 pred_confs = np.concatenate(pred_confs, axis=0)
                 pred_others = np.concatenate(pred_others, axis=0)
-                # mean_frame = generate_official_output(pred_types, pred_confs,pred_others, min_mean_frame)
-                mean_frame = generate_2017_official_output(test_lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame)
+                mean_frame = generate_output_for_EDL(test_lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame)
+                # mean_frame = generate_2017_official_output(test_lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame)
                 if mean_frame < min_mean_frame:
                     min_mean_frame = mean_frame
                 print '\t\t\t test  over, min_mean_frame:', min_mean_frame

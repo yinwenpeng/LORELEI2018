@@ -375,11 +375,25 @@ def store_il6_as_trainingformat(doc_2_labelstrlist,doc_2_text ):
     print 'store labeled il6 over'
 
 
+def reformat_il6_dictionary():
+    readfile = codecs.open('/shared/corpora/corporaWeb/lorelei/evaluation-20170804/LDC2017E29_LORELEI_IL6_Incident_Language_Pack_for_Year_2_Eval_V1.1/set0/docs/categoryI_dictionary/orm-eng.lorelei.txt', 'r', 'utf-8')
+    writefile = codecs.open('/shared/corpora/corporaWeb/lorelei/evaluation-upenn-20180402/il6/source/set0/docs/categoryI_dictionary/IL6_dictionary.txt', 'w', 'utf-8')
+    for line in readfile:
+        parts=line.strip().split('\t')
+        eng_token = parts[5]
+        il_token = parts[0]
+        writefile.write(eng_token+'\t'+il_token+'\n')
+    print 'il6 dic reformat over'
+    readfile.close()
+    writefile.close()
 
 
 if __name__ == '__main__':
     # doc_2_labelstrlist = load_docID_2_labelStr()
     # doc_2_text = load_text_given_docvocab(set(doc_2_labelstrlist.keys()))
     # store_il6_as_trainingformat(doc_2_labelstrlist, doc_2_text)
-    docid2text, docid2issue, docid2mention, docid2need = load_il6()
-    generate_entity_focused_trainingset(docid2text, docid2issue, docid2mention, docid2need)
+
+    # docid2text, docid2issue, docid2mention, docid2need = load_il6()
+    # generate_entity_focused_trainingset(docid2text, docid2issue, docid2mention, docid2need)
+
+    reformat_il6_dictionary()
