@@ -22,4 +22,5 @@ if __name__ == '__main__':
     # docid2entity_pos_list = {}#load_EDL2017_output()
     # IL_into_test_filteredby_NER_2018('/save/wenpeng/datasets/LORELEI/il9/monolingual_text/','/save/wenpeng/datasets/LORELEI/il9/il9-setE-as-test-input_ner_filtered', docid2entity_pos_list, 2)
 
-    json_validation('/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_epoch4.json')
+    # json_validation('/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_epoch4.json')
+    json_validation('/save/wenpeng/datasets/LORELEI/il9/il9_system_output_ensemble.json')

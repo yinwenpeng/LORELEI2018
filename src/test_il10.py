@@ -22,13 +22,13 @@ from common_functions import create_LR_para,normalize_matrix_rowwise,normalize_t
 from preprocess_common import generate_2018_official_output
 
 
-def evaluate_lenet5(learning_rate=0.001, n_epochs=3, emb_size=100, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
+def evaluate_lenet5(learning_rate=0.01, n_epochs=4, emb_size=300, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
-    emb_root = '/save/wenpeng/datasets/LORELEI/multi-lingual-emb/2018-il9-il10/'
+    emb_root = '/save/wenpeng/datasets/LORELEI/multi-lingual-emb/2018-il9-il10/multi-emb/'
     test_file_path = '/save/wenpeng/datasets/LORELEI/il10/il10-setE-as-test-input_ner_filtered_w2.txt'
-    output_file_path = '/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_epoch3.json'
+    output_file_path = '/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_BBN_NI_epoch4.json'
     seed=1234
     np.random.seed(seed)
     rng = np.random.RandomState(seed)    #random seed, control the model generates the same results
@@ -72,7 +72,7 @@ def evaluate_lenet5(learning_rate=0.001, n_epochs=3, emb_size=100, batch_size=50
     rand_values=rng.normal(0.0, 0.01, (vocab_size, emb_size))   #generate a matrix by Gaussian distribution
     rand_values[0]=np.array(np.zeros(emb_size),dtype=theano.config.floatX)
     id2word = {y:x for x,y in word2id.iteritems()}
-    word2vec=load_fasttext_multiple_word2vec_given_file([emb_root+'100k-IL10-cca.d100.eng.txt',emb_root+'100k-IL10-cca.d100.IL10.txt'], 100)
+    word2vec=load_fasttext_multiple_word2vec_given_file([emb_root+'100k-ENG-multicca.300.ENG.txt',emb_root+'100k-IL10-multicca.d300.IL10.txt'], 300)
     rand_values=load_word2vec_to_init(rand_values, id2word, word2vec)
     embeddings=theano.shared(value=np.array(rand_values,dtype=theano.config.floatX), borrow=True)   #wrap up the python variable "rand_values" into theano variable
 

@@ -17,20 +17,19 @@ from theano.tensor.signal import downsample
 from random import shuffle
 from theano.tensor.nnet.bn import batch_normalization
 
-from load_data import  load_word2vec,load_trainingData_types,load_trainingData_types_plus_others,load_official_testData,load_fasttext_multiple_word2vec_given_file,load_word2vec_to_init, load_BBN_il5Trans_il5_dataset,load_SF_type_descriptions
+from load_data import  load_trainingData_types,load_trainingData_types_plus_others,load_il10_NI_test,load_fasttext_multiple_word2vec_given_file,load_word2vec_to_init, load_BBN_il5Trans_il5_dataset,load_SF_type_descriptions
 from common_functions import create_LR_para,normalize_matrix_rowwise,normalize_tensor3_colwise,store_model_to_file,Conv_with_Mask, create_conv_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, GRU_Batch_Tensor_Input_with_Mask,Gradient_Cost_Para, Attentive_Conv_for_Pair, create_GRU_para,create_LSTM_para
-from preprocess_common import generate_2018_official_output,generate_2018_official_output_english
+from preprocess_common import generate_2018_official_output
 
 
-def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
+def evaluate_lenet5(learning_rate=0.01, n_epochs=4, emb_size=100, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
-    emb_root = '/save/wenpeng/datasets/'
-    # test_file_path = '/save/wenpeng/datasets/LORELEI/il9-eng/il9-eng-setE-as-test-input_ner_filtered_w2.txt'
-    # output_file_path = '/save/wenpeng/datasets/LORELEI/il9-eng/il9-eng_system_output_epoch4.json'
-    test_file_path = '/save/wenpeng/datasets/LORELEI/il10-eng/il10-eng-setE-as-test-input_ner_filtered_w2.txt'
-    output_file_path = '/save/wenpeng/datasets/LORELEI/il10-eng/il10-eng_system_output_epoch4.json'
+    # emb_root = '/save/wenpeng/datasets/LORELEI/multi-lingual-emb/2018-il9-il10/multi-emb/'
+    emb_root = '/save/wenpeng/datasets/LORELEI/multi-lingual-emb/2018-il9-il10/'
+    test_file_path = '/save/wenpeng/datasets/LORELEI/il9/il9-setE-as-test-input_ner_filtered_w2.txt'
+    output_file_path = '/save/wenpeng/datasets/LORELEI/il9/il9_system_output_noMT_epoch4.json'
     seed=1234
     np.random.seed(seed)
     rng = np.random.RandomState(seed)    #random seed, control the model generates the same results
@@ -39,7 +38,7 @@ def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50
     # all_sentences, all_masks, all_labels, all_other_labels, word2id=load_BBN_il5Trans_il5_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
     train_p1_sents, train_p1_masks, train_p1_labels,word2id = load_trainingData_types(word2id, maxSentLen)
     train_p2_sents, train_p2_masks, train_p2_labels, train_p2_other_labels,word2id = load_trainingData_types_plus_others(word2id, maxSentLen)
-    test_sents, test_masks, test_lines,word2id = load_official_testData(word2id, maxSentLen, test_file_path)
+    test_sents, test_masks, test_labels,word2id = load_il10_NI_test(word2id, maxSentLen)
 
     label_sent, label_mask = load_SF_type_descriptions(word2id, type_size, describ_max_len)
     label_sent=np.asarray(label_sent, dtype='int32')
@@ -66,7 +65,7 @@ def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50
 
     test_sents=np.asarray(test_sents, dtype='int32')
     test_masks=np.asarray(test_masks, dtype=theano.config.floatX)
-    # test_labels=np.asarray(all_labels[2], dtype='int32')
+    test_labels=np.asarray(test_labels, dtype='int32')
     test_size=len(test_sents)
 
     vocab_size=  len(word2id)+1 # add one zero pad index
@@ -74,7 +73,8 @@ def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50
     rand_values=rng.normal(0.0, 0.01, (vocab_size, emb_size))   #generate a matrix by Gaussian distribution
     rand_values[0]=np.array(np.zeros(emb_size),dtype=theano.config.floatX)
     id2word = {y:x for x,y in word2id.iteritems()}
-    word2vec=load_word2vec()
+    # word2vec=load_fasttext_multiple_word2vec_given_file([emb_root+'100k-ENG-multicca.300.ENG.txt',emb_root+'100k-HIN-multicca.d300.HIN.txt',emb_root+'100k-IL10-multicca.d300.IL10.txt'], 300)
+    word2vec=load_fasttext_multiple_word2vec_given_file([emb_root+'100k-IL10-cca.d100.eng.txt',emb_root+'100k-IL10-cca.d100.IL10.txt'], 100)
     rand_values=load_word2vec_to_init(rand_values, id2word, word2vec)
     embeddings=theano.shared(value=np.array(rand_values,dtype=theano.config.floatX), borrow=True)   #wrap up the python variable "rand_values" into theano variable
 
@@ -267,7 +267,7 @@ def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50
     #train_model = theano.function([sents_id_matrix, sents_mask, labels], cost, updates=updates, on_unused_input='ignore')
     train_p1_model = theano.function([sents_id_matrix, sents_mask, labels, des_id_matrix, des_mask], cost, updates=updates, allow_input_downcast=True, on_unused_input='ignore')
     train_p2_model = theano.function([sents_id_matrix, sents_mask, labels,des_id_matrix, des_mask,other_labels], cost_other, updates=other_updates,allow_input_downcast=True, on_unused_input='ignore')
-    test_model = theano.function([sents_id_matrix, sents_mask, des_id_matrix, des_mask], [binarize_prob,ensemble_scores,sum_tensor3], allow_input_downcast=True, on_unused_input='ignore')
+    test_model = theano.function([sents_id_matrix, sents_mask, des_id_matrix, des_mask], binarize_prob, allow_input_downcast=True, on_unused_input='ignore')
 
     ###############
     # TRAIN MODEL #
@@ -285,14 +285,16 @@ def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50
     train_batch_start=list(np.arange(n_train_batches)*batch_size)+[train_size-batch_size]
     n_train_p2_batches=train_p2_size/batch_size
     train_p2_batch_start=list(np.arange(n_train_p2_batches)*batch_size)+[train_p2_size-batch_size]
+
+
     n_test_batches=test_size/batch_size
     n_test_remain=test_size%batch_size
     test_batch_start=list(np.arange(n_test_batches)*batch_size)+[test_size-batch_size]
 
     train_p2_batch_start_set = set(train_p2_batch_start)
     # max_acc_dev=0.0
-    # max_meanf1_test=0.0
-    # max_weightf1_test=0.0
+    max_meanf1_test=0.0
+    max_weightf1_test=0.0
     train_indices = range(train_size)
     train_p2_indices = range(train_p2_size)
     cost_i=0.0
@@ -343,31 +345,31 @@ def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50
                 print 'Epoch ', epoch, 'iter '+str(iter)+' average cost: '+str(cost_i/iter),str(other_cost_i/iter), 'uses ', (time.time()-past_time)/60.0, 'min'
                 past_time = time.time()
 
-                pred_types = []
-                pred_confs = []
-                pred_others = []
-                for i, test_batch_id in enumerate(test_batch_start): # for each test batch
-                    pred_types_i, pred_conf_i, pred_fields_i=test_model(
+                error_sum=0.0
+                all_pred_labels = []
+                all_gold_labels = []
+                for test_batch_id in test_batch_start: # for each test batch
+                    pred_labels=test_model(
                                 test_sents[test_batch_id:test_batch_id+batch_size],
                                 test_masks[test_batch_id:test_batch_id+batch_size],
                                 label_sent,
-                                label_mask
-                                )
-                    if i < len(test_batch_start)-1:
-                        pred_types.append(pred_types_i)
-                        pred_confs.append(pred_conf_i)
-                        pred_others.append(pred_fields_i)
-                    else:
-                        pred_types.append(pred_types_i[-n_test_remain:])
-                        pred_confs.append(pred_conf_i[-n_test_remain:])
-                        pred_others.append(pred_fields_i[-n_test_remain:])
-                pred_types = np.concatenate(pred_types, axis=0)
-                pred_confs = np.concatenate(pred_confs, axis=0)
-                pred_others = np.concatenate(pred_others, axis=0)
-                mean_frame = generate_2018_official_output_english(test_lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame)
-                if mean_frame < min_mean_frame:
-                    min_mean_frame = mean_frame
-                print '\t\t\t test  over, min_mean_frame:', min_mean_frame
+                                label_mask)
+                    gold_labels = test_labels[test_batch_id:test_batch_id+batch_size]
+                    # print 'pred_labels:', pred_labels
+                    # print 'gold_labels;', gold_labels
+                    all_pred_labels.append(pred_labels)
+                    all_gold_labels.append(gold_labels)
+                all_pred_labels = np.concatenate(all_pred_labels)
+                all_gold_labels = np.concatenate(all_gold_labels)
+
+
+                test_mean_f1, test_weight_f1 =average_f1_two_array_by_col(all_pred_labels, all_gold_labels)
+                if test_weight_f1 > max_weightf1_test:
+                    max_weightf1_test=test_weight_f1
+                if test_mean_f1 > max_meanf1_test:
+                    max_meanf1_test=test_mean_f1
+                print '\t\t\t\t\t\t\t\tcurrent f1s:', test_mean_f1, test_weight_f1, '\t\tmax_f1:', max_meanf1_test, max_weightf1_test
+
 
 
 

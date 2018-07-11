@@ -213,6 +213,133 @@ def IL_into_test_filteredby_NER_2018(ltf_path, writefile_path, docid2entity_pos_
 
     print 'over'
 
+
+def load_BBN_MT_folder(mt_path):
+    '''
+    try tokenize
+    '''
+    files= os.listdir(mt_path)
+    print 'BBN MT file sizes: ', len(files)
+    co=0
+    docid2sent_list = {}
+    for fil in files:
+        # print mt_path+fil
+        f = ET.parse(mt_path+fil)
+        root = f.getroot()
+        for doc in root.iter('doc'):
+            doc_id  = doc.attrib.get('docid')
+        sent_list = []
+        for sent_str in root.iter('seg'):
+            raw_sent_str = sent_str.text
+            tokenized_text = nltk.word_tokenize(raw_sent_str)
+            sent_list.append(' '.join(tokenized_text))
+        docid2sent_list[doc_id] = sent_list
+    return docid2sent_list
+
+
+def IL_into_test_withMT_filteredby_NER_2018(ltf_path, mt_path, writefile_path, docid2entity_pos_list, window):
+    '''
+    docid2entity_pos_list: doc_id: ['12-14-kbid', '34-67-kbid', ...]
+    '''
+
+    docid2mt_sent_list = load_BBN_MT_folder(mt_path)
+
+    writefile_path=writefile_path+'_w'+str(window)+'.txt'
+    writefile = codecs.open(writefile_path, 'w', 'utf-8')
+    # write_wp_file = codecs.open('/save/wenpeng/datasets/LORELEI/wp_filelist.txt', 'w', 'utf-8')
+    # for docc in docSet:
+    #     write_wp_file.write(docc+'\tTRUE\n')
+    # write_wp_file.close()
+    vocab=set()
+    re=0
+
+    files= os.listdir(ltf_path)
+    print 'folder file sizes: ', len(files)
+    co=0
+    for fil in files:
+        f = ET.parse(ltf_path+fil)
+        root = f.getroot()
+
+        for doc in root.iter('DOC'):
+            doc_id  = doc.attrib.get('id')
+        if doc_id in docid2entity_pos_list:
+        # if True:#doc_id in docid2entity_pos_list:
+
+            list_docSegSent=[]
+            for seg in root.iter('SEG'):
+                sent_wordlist = []
+                seg_id = seg.attrib.get('id')
+                seg_start = seg.attrib.get('start_char')
+                seg_end = seg.attrib.get('end_char')
+                for word in seg.iter('TOKEN'):
+                    word_str = word.text
+                    # if word_str.find('https') <0:
+                    sent_wordlist.append(word_str)
+                if len(sent_wordlist) > 0:
+                    list_docSegSent.append((doc_id,seg_id, seg_start,seg_end, ' '.join(sent_wordlist)))
+            #scan window to write
+            if len(list_docSegSent) <=2*window+1:
+                sent=''
+                for ele in list_docSegSent:
+                    sent+= ' '+ele[4]
+                pos_list = docid2entity_pos_list.get(doc_id)
+                '''
+                MT
+                '''
+                mt_sent_list = docid2mt_sent_list.get(doc_id)
+                if mt_sent_list is None:
+                    mt_sent = sent
+                else:
+                    mt_sent = ' '.join(mt_sent_list)
+                writefile.write(doc_id+'\t'+list_docSegSent[0][1]+'\t'+sent.strip()+'\t'+mt_sent.strip()+'\t'+' '.join(pos_list)+'\n')
+                # writefile.write(doc_id+'\t'+list_docSegSent[0][1]+'\t'+sent.strip()+'\n')
+            else:
+                for i, trip in enumerate(list_docSegSent):
+                    doc_idd = trip[0]
+                    entity_pos_list = docid2entity_pos_list.get(doc_idd)
+                    seg_idd = trip[1]
+                    seg_start = trip[2]
+                    seg_end  = trip[3]
+                    print 'B seg_start, seg_end:',len(list_docSegSent), doc_idd, seg_start, seg_end
+                    sent = trip[4]
+                    for j in range(i-1, i-window-1, -1):
+                        if j>=0:
+                            sent = list_docSegSent[j][4]+' '+sent
+                            seg_start = list_docSegSent[j][2]
+                    for j in range(i+1, i+window+1):
+                        if j < len(list_docSegSent):
+                            sent=sent +' '+list_docSegSent[j][4]
+                            seg_end = list_docSegSent[j][3]
+                    '''
+                    MT
+                    '''
+                    mt_sent_list = docid2mt_sent_list.get(doc_id)
+                    if mt_sent_list is None:
+                        mt_sent = sent
+                    else:
+                        # print doc_id,len(mt_sent_list), len(list_docSegSent)
+                        assert len(mt_sent_list) == len(list_docSegSent)
+                        mt_sent = mt_sent_list[i]
+                        for j in range(i-1, i-window-1, -1):
+                            if j>=0:
+                                mt_sent = mt_sent_list[j]+' '+mt_sent
+                        for j in range(i+1, i+window+1):
+                            if j < len(mt_sent_list):
+                                mt_sent=mt_sent +' '+mt_sent_list[j]
+
+                    print 'A seg_start, seg_end:',len(list_docSegSent), doc_idd, seg_start, seg_end
+                    pos_list = find_entities_for_window(entity_pos_list, seg_start, seg_end)
+                    if len(pos_list) > 0:
+                        writefile.write(doc_idd+'\t'+seg_idd+'\t'+sent.strip()+'\t'+mt_sent.strip()+'\t'+' '.join(pos_list)+'\n')
+                    # writefile.write(doc_idd+'\t'+seg_idd+'\t'+sent+'\n')
+            co+=1
+            if co % 1000 == 0:
+                print 'generating standard test instances...', co
+    writefile.close()
+
+    print 'over'
+
+
 def preprocess_NER_results():
     readfile = codecs.open('/save/wenpeng/datasets/LORELEI/Thai/NerResult/LDC2018E03_UpennEDL_2018-06-18-21-25.tab', 'r', 'utf-8')
     doc2entitylist=defaultdict(list)
