@@ -17,7 +17,7 @@ from theano.tensor.signal import downsample
 from random import shuffle
 from theano.tensor.nnet.bn import batch_normalization
 
-from load_data import  load_trainingData_types,load_trainingData_types_plus_others,load_official_testData,load_fasttext_multiple_word2vec_given_file,load_word2vec_to_init, load_BBN_il5Trans_il5_dataset,load_SF_type_descriptions
+from load_data import  load_trainingData_types,load_trainingData_types_plus_others,load_official_testData_only_il,load_fasttext_multiple_word2vec_given_file,load_word2vec_to_init, load_BBN_il5Trans_il5_dataset,load_SF_type_descriptions
 from common_functions import create_LR_para,normalize_matrix_rowwise,normalize_tensor3_colwise,store_model_to_file,Conv_with_Mask, create_conv_para, average_f1_two_array_by_col, create_HiddenLayer_para, create_ensemble_para, cosine_matrix1_matrix2_rowwise, Diversify_Reg, GRU_Batch_Tensor_Input_with_Mask,Gradient_Cost_Para, Attentive_Conv_for_Pair, create_GRU_para,create_LSTM_para
 from preprocess_common import generate_2018_official_output
 
@@ -29,6 +29,7 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=4, emb_size=300, batch_size=50,
     emb_root = '/save/wenpeng/datasets/LORELEI/multi-lingual-emb/2018-il9-il10/multi-emb/'
     test_file_path = '/save/wenpeng/datasets/LORELEI/il10/il10-setE-as-test-input_ner_filtered_w2.txt'
     output_file_path = '/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_BBN_NI_epoch4.json'
+    # output_file_path = '/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_BBN_epoch4.json'
     seed=1234
     np.random.seed(seed)
     rng = np.random.RandomState(seed)    #random seed, control the model generates the same results
@@ -37,7 +38,7 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=4, emb_size=300, batch_size=50,
     # all_sentences, all_masks, all_labels, all_other_labels, word2id=load_BBN_il5Trans_il5_dataset(maxlen=maxSentLen)  #minlen, include one label, at least one word in the sentence
     train_p1_sents, train_p1_masks, train_p1_labels,word2id = load_trainingData_types(word2id, maxSentLen)
     train_p2_sents, train_p2_masks, train_p2_labels, train_p2_other_labels,word2id = load_trainingData_types_plus_others(word2id, maxSentLen)
-    test_sents, test_masks, test_lines,word2id = load_official_testData(word2id, maxSentLen, test_file_path)
+    test_sents, test_masks, test_lines,word2id = load_official_testData_only_il(word2id, maxSentLen, test_file_path)
 
     label_sent, label_mask = load_SF_type_descriptions(word2id, type_size, describ_max_len)
     label_sent=np.asarray(label_sent, dtype='int32')

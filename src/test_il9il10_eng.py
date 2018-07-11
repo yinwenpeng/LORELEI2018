@@ -22,7 +22,7 @@ from common_functions import create_LR_para,normalize_matrix_rowwise,normalize_t
 from preprocess_common import generate_2018_official_output,generate_2018_official_output_english
 
 
-def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
+def evaluate_lenet5(learning_rate=0.01, n_epochs=4, emb_size=300, batch_size=50, describ_max_len=20, type_size=12,filter_size=[3,5], maxSentLen=100, hidden_size=[300,300]):
 
     model_options = locals().copy()
     print "model options", model_options
@@ -364,7 +364,8 @@ def evaluate_lenet5(learning_rate=0.005, n_epochs=4, emb_size=300, batch_size=50
                 pred_types = np.concatenate(pred_types, axis=0)
                 pred_confs = np.concatenate(pred_confs, axis=0)
                 pred_others = np.concatenate(pred_others, axis=0)
-                mean_frame = generate_2018_official_output_english(test_lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame)
+                # mean_frame = generate_2018_official_output_english(test_lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame)
+                mean_frame = generate_2018_official_output(test_lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame)
                 if mean_frame < min_mean_frame:
                     min_mean_frame = mean_frame
                 print '\t\t\t test  over, min_mean_frame:', min_mean_frame

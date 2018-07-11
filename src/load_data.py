@@ -471,7 +471,7 @@ def load_trainingData_types(word2id, maxlen):
     files = [
     'SF-BBN-Mark-split/full_BBN_multi.txt'
     # ,'il9/il9-test.txt'
-    # ,'il10/il10-test.txt'
+    ,'il10/il10-test.txt'
     # ,'NYT-Mark-top10-id-label-text.txt'
     # ,'hindi_labeled_as_training_seg_level.txt'
     # ,'ReliefWeb_subset_id_label_text.txt'
@@ -536,6 +536,28 @@ def load_trainingData_types_plus_others(word2id, maxlen):
     assert len(all_other_labels) == len(all_labels)
     print 'dataset loaded over, totally ', len(all_labels), 'instances, and ', len(word2id), 'words'
     return all_sentences, all_masks, all_labels, all_other_labels,word2id
+
+
+def load_official_testData(word2id, maxlen, fullpath):
+    all_sentences=[]
+    all_masks=[]
+    print 'loading file:', fullpath, '...'
+    co =0
+    readfile=codecs.open(fullpath, 'r', 'utf-8')
+    lines=[]
+
+    for line in readfile:
+        lines.append(line.strip())
+        parts=line.strip().split('\t') #lowercase all tokens, as we guess this is not important for sentiment task
+        sentence_wordlist=parts[2].strip().split()#clean_text_to_wordlist(parts[2].strip())
+        sent_idlist, sent_masklist=transfer_wordlist_2_idlist_with_maxlen(sentence_wordlist, word2id, maxlen)
+        all_sentences.append(sent_idlist)
+        all_masks.append(sent_masklist)
+        co+=1
+    print '\t\t\t size:', len(all_sentences)
+    print 'dataset loaded over, totally ', len(word2id), 'words'
+    return all_sentences, all_masks,lines, word2id#, all_labels, all_other_labels,word2id
+
 
 def load_official_testData_only_il(word2id, maxlen, fullpath):
     all_sentences=[]

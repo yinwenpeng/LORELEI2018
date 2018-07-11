@@ -101,17 +101,22 @@ def de_duplicate(output_dict_list, key_count):
     return       new_dict_list
 
 def ensemble_json():
-    # -rw-rw-r-- 1 wenpeng wenpeng   663948 Jul 11 00:31 il9_system_output_concMT_BBN_NI_epoch4.json
-    # -rw-rw-r-- 1 wenpeng wenpeng   467606 Jul 10 20:55 il9_system_output_noMT_BBN_NI_epoch4.json
-    # -rw-rw-r-- 1 wenpeng wenpeng   813210 Jul  3 10:47 il9_system_output_noMT_epoch3.json
-    # -rw-rw-r-- 1 wenpeng wenpeng   888750 Jul  3 10:50 il9_system_output_noMT_epoch4.json
-    # -rw-rw-r-- 1 wenpeng wenpeng   338746 Jul 11 00:00 il9_system_output_onlyMT_BBN_epoch4.json
-    root = '/save/wenpeng/datasets/LORELEI/il9/'
+    # root = '/save/wenpeng/datasets/LORELEI/il9/'
+    # json_list = [
+    #             'il9_system_output_noMT_epoch4.json',
+    #             'il9_system_output_noMT_BBN_NI_epoch4.json',
+    #             'il9_system_output_onlyMT_BBN_epoch4.json',
+    #             'il9_system_output_concMT_BBN_NI_epoch4.json']
+    # root = '/shared/experiments/wyin3/LORELEI2018/cp2/constrained/il9/'
+    # json_list = [
+    #             'sub1.json','sub2.json','sub3.json','sub4.json','sub5.json',
+    #             'submit_0.json','submit_1.json','submit_2.json','submit_3.json'
+    #             ]
+    root = '/shared/experiments/wyin3/LORELEI2018/cp2/constrained/il10/'
     json_list = [
-                'il9_system_output_noMT_epoch4.json',
-                'il9_system_output_noMT_BBN_NI_epoch4.json',
-                'il9_system_output_onlyMT_BBN_epoch4.json',
-                'il9_system_output_concMT_BBN_NI_epoch4.json']
+                'sub1.json','sub2.json','sub3.json','sub4.json','sub5.json',
+                'submit_0.json','submit_1.json','submit_2.json','submit_3.json'
+                ]
     overall_list = []
     key_count = defaultdict(int)
     for json_file in json_list:
@@ -133,7 +138,7 @@ def ensemble_json():
     print 'after key_count size:', len(key_count)
 
     new_dict_list = de_duplicate(overall_list, key_count)
-    writefile = codecs.open(root+'il9_system_output_ensemble.json' ,'w', 'utf-8')
+    writefile = codecs.open(root+'ensemble.json' ,'w', 'utf-8')
     print 'final size:', len(new_dict_list)
     json.dump(new_dict_list, writefile)
     writefile.close()
@@ -144,30 +149,27 @@ def majority_ele_in_list(lis):
     return c.most_common()[0][0]
 
 def concate_json():
-    # il='/save/wenpeng/datasets/LORELEI/il9/il9_system_output_noMT_epoch3.json'
-    # eng= '/save/wenpeng/datasets/LORELEI/il9il10-eng/il9il10-eng_system_output_epoch3.json'
-    # il_data = json.load(codecs.open(il, 'r', 'utf-8'))
-    # eng_data = json.load(codecs.open(eng, 'r', 'utf-8'))
-    # conb = il_data+eng_data
-    # writefile = codecs.open('/save/wenpeng/datasets/LORELEI/il9/il9_system_output_final_epoch3.json' ,'w', 'utf-8')
-    # json.dump(conb, writefile)
-    # writefile.close()
-    # il='/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_epoch4.json'
-    # eng= '/save/wenpeng/datasets/LORELEI/il10-eng/il10-eng_system_output_epoch4.json'
-
-    # il='/save/wenpeng/datasets/LORELEI/il9/il9_system_output_noMT_BBN_NI_epoch4.json'
+    # il_path='/save/wenpeng/datasets/LORELEI/il9/'
     # eng= '/save/wenpeng/datasets/LORELEI/il9-eng/il9-eng_system_output_epoch4.json'
-
-    il='/save/wenpeng/datasets/LORELEI/il10/il10_system_output_noMT_BBN_NI_epoch4.json'
+    # il_files = ['il9_system_output_noMT_BBN_epoch4.json',
+    #             'il9_system_output_noMT_BBN_NI_epoch4.json',
+    #             'il9_system_output_onlyMT_BBN_epoch4.json',
+    #             'il9_system_output_concMT_BBN_NI_epoch4.json']
+    il_path='/save/wenpeng/datasets/LORELEI/il10/'
     eng= '/save/wenpeng/datasets/LORELEI/il10-eng/il10-eng_system_output_epoch4.json'
+    il_files = ['il10_system_output_noMT_BBN_epoch4.json',
+                'il10_system_output_noMT_BBN_NI_epoch4.json',
+                'il10_system_output_onlyMT_BBN_epoch4.json',
+                'il10_system_output_concMT_BBN_NI_epoch4.json']
+    for i, fil in enumerate(il_files):
 
 
-    il_data = json.load(codecs.open(il, 'r', 'utf-8'))
-    eng_data = json.load(codecs.open(eng, 'r', 'utf-8'))
-    conb = il_data+eng_data
-    writefile = codecs.open('/save/wenpeng/datasets/LORELEI/il10/il10_il_and_eng_bbn_ni_epoch4.json' ,'w', 'utf-8')
-    json.dump(conb, writefile)
-    writefile.close()
+        il_data = json.load(codecs.open(il_path+fil, 'r', 'utf-8'))
+        eng_data = json.load(codecs.open(eng, 'r', 'utf-8'))
+        conb = il_data+eng_data
+        writefile = codecs.open(il_path+'submit_'+str(i)+'.json','w', 'utf-8')
+        json.dump(conb, writefile)
+        writefile.close()
 if __name__ == '__main__':
     # concate_json()
     ensemble_json()

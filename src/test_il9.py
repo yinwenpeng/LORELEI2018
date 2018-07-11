@@ -29,6 +29,7 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=4, emb_size=300, batch_size=50,
     emb_root = '/save/wenpeng/datasets/LORELEI/multi-lingual-emb/2018-il9-il10/multi-emb/'
     test_file_path = '/save/wenpeng/datasets/LORELEI/il9/il9-setE-as-test-input_ner_filtered_w2.txt'
     output_file_path = '/save/wenpeng/datasets/LORELEI/il9/il9_system_output_noMT_BBN_NI_epoch4.json'
+    # output_file_path = '/save/wenpeng/datasets/LORELEI/il9/il9_system_output_noMT_BBN_epoch4.json'
     seed=1234
     np.random.seed(seed)
     rng = np.random.RandomState(seed)    #random seed, control the model generates the same results

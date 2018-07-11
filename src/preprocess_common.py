@@ -50,6 +50,8 @@ def find_entities_for_window(entity_pos_list, seg_start, seg_end):
                 distance = seg_start-end
             if start> seg_end:
                 distance = start - seg_end
+            if (start<seg_start and end > seg_start and end<seg_end) or (start>seg_start and start < seg_end and end>seg_end):
+                distance = 0
             if distance < min_distance:
                 min_distance = distance
                 nearest_pos = entity_pos
@@ -522,14 +524,14 @@ def generate_2018_official_output_english(lines, output_file_path, pred_types, p
                         output_dict_list.append(new_dict)
 
 
-    # refine_output_dict_list, ent_size = de_duplicate(output_dict_list)
-    frame_size = len(output_dict_list)
-    mean_frame = frame_size*1.0/instance_size
+    refine_output_dict_list, ent_size = de_duplicate(output_dict_list)
+    frame_size = len(refine_output_dict_list)
+    mean_frame = frame_size*1.0/ent_size
     # if mean_frame < min_mean_frame:
     writefile = codecs.open(output_file_path ,'w', 'utf-8')
-    json.dump(output_dict_list, writefile)
+    json.dump(refine_output_dict_list, writefile)
     writefile.close()
-    print 'official output succeed...Frame size:', frame_size, 'average:', mean_frame, 'instance_size:',instance_size
+    print 'official output succeed...Frame size:', frame_size, 'average:', mean_frame, 'ent_size:',ent_size
     return mean_frame
 
 def generate_2018_official_output(lines, output_file_path, pred_types, pred_confs, pred_others, min_mean_frame):
@@ -718,7 +720,7 @@ def load_EDL2018_output(filename):
         parts = line.strip().split('\t')
         type = parts[5]
         kb_id = parts[4]
-        if type == 'GPE' or type == 'LOC':
+        if (type == 'GPE' or type == 'LOC') and kb_id.find('NULL')<0:
             comma_pos = parts[3].find(':')
             doc_id = parts[3][:comma_pos]
             pos_pair = parts[3][comma_pos+1:]
